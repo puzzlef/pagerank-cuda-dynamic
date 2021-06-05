@@ -14,8 +14,8 @@ using namespace std;
 template <class G, class T>
 auto runPagerankCall(const char *name, const G& xt, const vector<T> *init, const vector<T> *ranks=nullptr) {
   int repeat = name? 5 : 1;
-  auto a = pagerankSeq(xt, init, {repeat});
-  auto e = absError(a.ranks, ranks? *ranks : a.ranks);
+  auto a = pagerankCuda(xt, init, {repeat});
+  auto e = l1Norm(a.ranks, ranks? *ranks : a.ranks);
   if (name) { print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] %s\n", a.time, a.iterations, e, name); }
   return a;
 }

@@ -51,19 +51,19 @@ void tryCuda(cudaError err, const char* exp, const char* func, int line, const c
 
 #ifndef DEFINE_CUDA
 #define DEFINE_CUDA(t, b, B, G) \
-  int t = threadIdx.x; \
-  int b = blockIdx.x; \
-  int B = blockDim.x; \
-  int G = gridDim.x;
+  const int t = threadIdx.x; \
+  const int b = blockIdx.x; \
+  const int B = blockDim.x; \
+  const int G = gridDim.x;
 #define DEFINE_CUDA2D(tx, ty, bx, by, BX, BY, GX, GY) \
-  int tx = threadIdx.x; \
-  int ty = threadIdx.y; \
-  int bx = blockIdx.x; \
-  int by = blockIdx.y; \
-  int BX = blockDim.x; \
-  int BY = blockDim.y; \
-  int GX = gridDim.x;  \
-  int GY = gridDim.y;
+  const int tx = threadIdx.x; \
+  const int ty = threadIdx.y; \
+  const int bx = blockIdx.x; \
+  const int by = blockIdx.y; \
+  const int BX = blockDim.x; \
+  const int BY = blockDim.y; \
+  const int GX = gridDim.x;  \
+  const int GY = gridDim.y;
 #endif
 
 #ifndef DEFINE

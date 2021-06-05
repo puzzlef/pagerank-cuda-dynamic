@@ -17,7 +17,7 @@ using std::move;
 #define GRID_DIM_B  4096
 
 // For pagerank cuda thread-per-vertex
-#define BLOCK_DIM_T 64
+#define BLOCK_DIM_T 128
 #define GRID_DIM_T  4096
 
 
