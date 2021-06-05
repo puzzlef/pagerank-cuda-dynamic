@@ -151,8 +151,6 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   T *e,  *r0;
   T *eD, *r0D, *fD, *rD, *cD, *aD;
   int *vfromD, *efromD, *vdataD;
-  if (q) r = compressContainer(xt, *q, ks);
-  else fill(r, T(1)/N);
   // TRY( cudaProfilerStart() );
   TRY( cudaSetDeviceFlags(cudaDeviceMapHost) );
   TRY( cudaHostAlloc(&e,  G1, cudaHostAllocDefault) );
@@ -166,12 +164,16 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   TRY( cudaMalloc(&vfromD, VFROM1) );
   TRY( cudaMalloc(&efromD, EFROM1) );
   TRY( cudaMalloc(&vdataD, VDATA1) );
-  TRY( cudaMemcpy(rD,     r.data(),     N1,     cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vfromD, vfrom.data(), VFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(efromD, efrom.data(), EFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
 
-  float t = measureDuration([&]() { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, ns, N, p, E, L); }, o.repeat);
+  float t = measureDurationMarked([&](auto mark) {
+    if (q) r = compressContainer(xt, *q, ks);
+    else fill(r, T(1)/N);
+    TRY( cudaMemcpy(rD, r.data(), N1, cudaMemcpyHostToDevice) );
+    mark([&] { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, ns, N, p, E, L); });
+  }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
 
   TRY( cudaFreeHost(e) );

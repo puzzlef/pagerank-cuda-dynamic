@@ -11,15 +11,8 @@ using namespace std;
 
 
 
-template <class G, class T>
-auto runPagerankCall(const char *name, const G& xt, const vector<T> *init, const vector<T> *ranks=nullptr) {
-  int repeat = name? 5 : 1;
-  auto a = pagerankCuda(xt, init, {repeat});
-  auto e = l1Norm(a.ranks, ranks? *ranks : a.ranks);
-  if (name) { print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] %s\n", a.time, a.iterations, e, name); }
-  return a;
-}
 
+#define REPEAT 5
 
 void runPagerankBatch(const string& data, bool show, int batch, int skip) {
   vector<float>  ranksOld, ranksAdj;
@@ -35,18 +28,22 @@ void runPagerankBatch(const string& data, bool show, int batch, int skip) {
     ranksAdj.resize(x.span());
 
     // Find static pagerank of updated graph.
-    auto a1 = runPagerankCall("pagerankStatic", xt, initStatic);
+    auto a1 = pagerankCuda(xt, initStatic, {REPEAT});
+    auto e1 = l1Norm(a1.ranks, a1.ranks);
+    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankStatic\n", a1.time, a1.iterations, e1);
 
     // Find dynamic pagerank, scaling old vertices, and using 1/N for new vertices.
     adjustRanks(ranksAdj, ranksOld, ksOld, ks, 0.0f, float(ksOld.size())/ks.size(), 1.0f/ks.size());
-    auto a2 = runPagerankCall("pagerankDynamic", xt, initDynamic, &a1.ranks);
+    auto a2 = pagerankCuda(xt, initDynamic, {REPEAT});
+    auto e2 = l1Norm(a2.ranks, a1.ranks);
+    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankDynamic\n", a2.time, a2.iterations, e2);
 
     // Skip some edges (to speed up execution)
     if (skip) {
       if (!readSnapTemporal(x, s, skip)) break;
       ks = vertices(x);
       xt = transposeWithDegree(x);
-      a1 = runPagerankCall(nullptr, xt, initStatic);
+      a1 = pagerankCuda(xt, initStatic);
     }
 
     ksOld = move(ks);
@@ -57,12 +54,11 @@ void runPagerankBatch(const string& data, bool show, int batch, int skip) {
 
 void runPagerank(const string& data, bool show) {
   int M = countLines(data), steps = 100;
-  printf("Temporal edges: %d\n\n", M);
+  printf("Temporal edges: %d\n", M);
   for (int batch=1, i=0; batch<M; batch*=i&1? 2:5, i++) {
     int skip = max(M/steps - batch, 0);
-    printf("# Batch size %.0e\n", (double) batch);
+    printf("\n# Batch size %.0e\n", (double) batch);
     runPagerankBatch(data, show, batch, skip);
-    printf("\n");
   }
 }
 
@@ -73,5 +69,6 @@ int main(int argc, char **argv) {
   printf("Using graph %s ...\n", file);
   string d = readFile(file);
   runPagerank(d, show);
+  printf("\n");
   return 0;
 }
