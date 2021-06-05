@@ -52,7 +52,7 @@ void write(ostream& a, const vector<vector<T>>& x) {
   for (const auto& v : x) {
     a << "  "; write(a, v);
   }
-  a << "}";
+  a << "\n}";
 }
 
 

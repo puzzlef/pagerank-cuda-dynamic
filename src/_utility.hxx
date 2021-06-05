@@ -22,6 +22,15 @@ float measureDuration(F fn, int N=1) {
 }
 
 
+template <class F>
+float measureDurationMarked(F fn, int N=1) {
+  float duration = 0;
+  for (int i=0; i<N; i++)
+    fn([&](auto fm) { duration += measureDuration(fm); });
+  return duration/N;
+}
+
+
 
 
 // RETRY

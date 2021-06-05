@@ -26,6 +26,19 @@ auto vertices(const G& x) {
 }
 
 
+template <class G, class F>
+auto verticesByDegree(const G& x, F fm) {
+  auto a = vertices(x, fm);
+  sort(a.begin(), a.end(), [&](int u, int v) { return x.degree(u) < x.degree(v); });
+  return a;
+}
+
+template <class G>
+auto verticesByDegree(const G& x) {
+  return verticesByDegree(x, [](int u) { return u; });
+}
+
+
 
 
 // VERTEX-DATA
