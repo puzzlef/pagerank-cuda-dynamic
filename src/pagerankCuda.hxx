@@ -71,7 +71,6 @@ template <class T>
 int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
   int B = BLOCK_DIM;
   int G = min(ceilDiv(N, B), GRID_DIM);
-  fillKernel<<<G, B>>>(rD, N, T(1)/N);
   pagerankFactorKernel<<<G, B>>>(fD, vdataD, p, N);
   return pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L);
 }
@@ -93,11 +92,13 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   int VDATA1 = vdata.size() * sizeof(int);
   int G1     = GRID_DIM * sizeof(T);
   int N1     = N        * sizeof(T);
-  vector<T> a(N);
+  vector<T> a(N), r(N);
 
   T *e,  *r0;
   T *eD, *r0D, *fD, *rD, *cD, *aD;
   int *vfromD, *efromD, *vdataD;
+  if (q) r = compressContainer(xt, *q, ks);
+  else fill(r, T(1)/N);
   // TRY( cudaProfilerStart() );
   TRY( cudaSetDeviceFlags(cudaDeviceMapHost) );
   TRY( cudaHostAlloc(&e,  G1, cudaHostAllocDefault) );
@@ -111,6 +112,7 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   TRY( cudaMalloc(&vfromD, VFROM1) );
   TRY( cudaMalloc(&efromD, EFROM1) );
   TRY( cudaMalloc(&vdataD, VDATA1) );
+  TRY( cudaMemcpy(rD,     r.data(),     N1,     cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vfromD, vfrom.data(), VFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(efromD, efrom.data(), EFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
