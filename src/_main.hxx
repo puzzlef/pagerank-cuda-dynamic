@@ -8,3 +8,4 @@
 #include "_nvgraph.hxx"
 #include "_string.hxx"
 #include "_utility.hxx"
+#include "_vector.hxx"

@@ -1,9 +1,12 @@
 #pragma once
 #include <vector>
-#include <unordered_map>
+#include <iterator>
 #include <algorithm>
+#include "_main.hxx"
 
 using std::vector;
+using std::transform;
+using std::back_inserter;
 
 
 
@@ -11,13 +14,18 @@ using std::vector;
 // EDGES
 // -----
 
-template <class G, class F>
-auto edges(const G& x, int u, F fn) {
-  using K = decltype(fn(0));
-  vector<K> a;
-  for (int v : x.edges(u))
-    a.push_back(fn(v));
+template <class G, class F, class D>
+auto edges(const G& x, int u, F fm, D fp) {
+  vector<int> a;
+  append(a, x.edges(u));
+  auto ie = a.end(), ib = a.begin();
+  fp(ib, ie); transform(ib, ie, ib, fm);
   return a;
+}
+
+template <class G, class F>
+auto edges(const G& x, int u, F fm) {
+  return edges(x, u, fm, [](auto ib, auto ie) {});
 }
 
 template <class G>
@@ -26,35 +34,27 @@ auto edges(const G& x, int u) {
 }
 
 
-template <class G, class F>
-auto inEdges(const G& x, int v, F fn) {
-  using K = decltype(fn(0));
-  vector<K> a;
-  for (int u : x.inEdges(v))
-    a.push_back(fn(u));
-  return a;
-}
-
-template <class G>
-auto inEdges(const G& x, int v) {
-  return inEdges(x, v, [](int u) { return u; });
-}
-
-
 
 
 // EDGE-DATA
 // ---------
 
-template <class G, class J, class F>
-auto edgeData(const G& x, J&& ks, F fn) {
-  using E = decltype(fn(0, 0));
+template <class G, class J, class F, class D>
+auto edgeData(const G& x, J&& ks, F fm, D fp) {
+  using E = decltype(fm(0, 0));
   vector<E> a;
+  vector<int> b;
   for (int u : ks) {
-    for (int v : x.edges(u))
-      a.push_back(fn(u, v));
+    b.clear(); append(b, x.edges(u));
+    auto ie = b.end(), ib = b.begin();
+    fp(ib, ie); transform(ib, ie, back_inserter(a), [&](int v) { return fm(u, v); });
   }
   return a;
+}
+
+template <class G, class J, class F>
+auto edgeData(const G& x, J&& ks, F fm) {
+  return edgeData(x, ks, fm, [](auto ib, auto ie) {});
 }
 
 template <class G, class J>
