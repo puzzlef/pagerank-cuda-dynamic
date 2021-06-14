@@ -1,14 +1,17 @@
-Performance of static vs dynamic CUDA based PageRank ([pull], [CSR], [scaled-fill]).
+Performance of static vs dynamic [CUDA] based PageRank ([pull], [CSR], [scaled-fill]).
 
 This experiment was for comparing the performance between:
-1. Find **static** pagerank of updated graph.
-2. Find **dynamic** pagerank of updated graph.
+1. Find **static** pagerank of updated graph using [nvGraph][pr-nvgraph].
+2. Find **dyanmic** pagerank of updated graph using [nvGraph][pr-nvgraph].
+3. Find **static** pagerank of updated graph using [CUDA].
+4. Find **dynamic** pagerank of updated graph using [CUDA].
 
-Both techniques were attempted on different temporal graphs, updating each
+Each technique was attempted on different temporal graphs, updating each
 graph with multiple batch sizes (`1`, `5`, `10`, `50`, ...). New edges are
 incrementally added to the graph batch-by-batch until the entire graph is
-complete. **Dynamic** pagerank is clearly **faster** that *static* approach
-for many batch sizes.
+complete. **Dynamic** pagerank using **CUDA** is indeed **faster** than
+*static* approach for many batch sizes. In order to measure error,
+[nvGraph] pagerank is taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -126,7 +129,20 @@ $ ...
 # [00064.371 ms; 059 iters.] [4.4546e-6 err.] pagerankCuda [dynamic]
 ```
 
-[![](https://i.imgur.com/kdiENBk.gif)][sheets]
+[![](https://i.imgur.com/rWozeTl.gif)][sheets]
+[![](https://i.imgur.com/G8p8oUV.gif)][sheets]
+[![](https://i.imgur.com/7lsmZmQ.gif)][sheets]
+[![](https://i.imgur.com/BdCuBvu.gif)][sheets]
+[![](https://i.imgur.com/CfuX4PQ.gif)][sheets]
+[![](https://i.imgur.com/2E0RgRL.gif)][sheets]
+[![](https://i.imgur.com/qPV9Uma.gif)][sheets]
+[![](https://i.imgur.com/aH9zxZd.gif)][sheets]
+[![](https://i.imgur.com/mldojLF.gif)][sheets]
+[![](https://i.imgur.com/ysjEXtr.gif)][sheets]
+[![](https://i.imgur.com/Ra94KyW.gif)][sheets]
+[![](https://i.imgur.com/La6xhcz.gif)][sheets]
+[![](https://i.imgur.com/ckynVDc.gif)][sheets]
+[![](https://i.imgur.com/FJ4SaaB.gif)][sheets]
 
 <br>
 <br>
@@ -135,16 +151,21 @@ $ ...
 ## References
 
 - [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](http://snap.stanford.edu/class/cs246-videos-2019/lec9_190205-cs246-720.mp4)
+- [CUDA by Example :: Jason Sanders, Edward Kandrot](http://www.mat.unimi.it/users/sansotte/cuda/CUDA_by_Example.pdf)
+- [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
 - [Stanford Large Network Dataset Collection]
 
 <br>
 <br>
 
-[![](https://i.imgur.com/68DVPzP.jpg)](https://www.youtube.com/watch?v=SoiKp2oSUl0)
+[![](https://i.imgur.com/98aAG4g.jpg)](https://www.youtube.com/watch?v=_iSPqH3tHLI)
 
+[Stanford Large Network Dataset Collection]: http://snap.stanford.edu/data/index.html
+[nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
 [scaled-fill]: https://github.com/puzzlef/pagerank-dynamic-adjust-ranks
-[charts]: https://photos.app.goo.gl/7zTbHBXV6uh7FGyd8
-[sheets]: https://docs.google.com/spreadsheets/d/1TPFX5al0-rlSde0xr7zlfCHNYEqxXSfS6P8QIa2dDsA/edit?usp=sharing
-[Stanford Large Network Dataset Collection]: http://snap.stanford.edu/data/index.html
+[pr-nvgraph]: https://github.com/puzzlef/pagerank-sequential-vs-nvgraph
+[CUDA]: https://github.com/puzzlef/pagerank-sequential-vs-cuda
+[charts]: https://photos.app.goo.gl/AFpUhz3EzohBmxQT7
+[sheets]: https://docs.google.com/spreadsheets/d/1XnVgAdSDIVInJn9XeIxUdXRkmsPgwsjH_4rAjCUYwkc/edit?usp=sharing
