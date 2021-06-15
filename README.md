@@ -9,10 +9,8 @@ This experiment was for comparing the performance between:
 Each approach was attempted on a number of graphs, running each with multiple
 batch sizes (`1`, `5`, `10`, `50`, ...). Each batch size was run with 5
 different updates to graph, and each specific update was run 5 times for each
-approach to get a good time measure. **Levelwise** pagerank is the
-[STIC-D algorithm], without **ICD** optimizations (using single-thread).
-On average, skipping unchanged components is **barely faster** than not
-skipping.
+approach to get a good time measure. On average, **dynamic CUDA** pagerank is
+**faster** than *static* approach.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -132,7 +130,8 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/kdiENBk.gif)][sheets]
+[![](https://i.imgur.com/xN9nZ5d.gif)][sheets]
+[![](https://i.imgur.com/PETNIU8.gif)][sheets]
 
 <br>
 <br>
@@ -156,5 +155,7 @@ $ ...
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
 [scaled-fill]: https://github.com/puzzlef/pagerank-dynamic-adjust-ranks
-[charts]: https://photos.app.goo.gl/7zTbHBXV6uh7FGyd8
-[sheets]: https://docs.google.com/spreadsheets/d/1TPFX5al0-rlSde0xr7zlfCHNYEqxXSfS6P8QIa2dDsA/edit?usp=sharing
+[pr-nvgraph]: https://github.com/puzzlef/pagerank-sequential-vs-nvgraph
+[CUDA]: https://github.com/puzzlef/pagerank-sequential-vs-cuda
+[charts]: https://photos.app.goo.gl/HvQYTAq4ZpnURJym7
+[sheets]: https://docs.google.com/spreadsheets/d/1drg2Jfo1zRirIf86_JablzSvvsYd6-VjECfuXCDpGA4/edit?usp=sharing
