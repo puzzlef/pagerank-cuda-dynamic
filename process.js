@@ -2,10 +2,11 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const RGRAPH = /^Using graph .*\/(.*?)\.txt \.\.\./m;
-const RTEMPE = /^Temporal edges: (\d+)/m;
-const RBATCH = /^# Batch size ([\d\.e+-]+)/;
-const RRESLT = /^order: (\d+) size: (\d+) \{\} \[(.*?) ms; (\d+) iters\.\] \[(.*?) err\.\] (.*)/m;
+const RGRAPH = /^Loading graph .*\/(.+?)\.mtx \.\.\./m;
+const RORDER = /^order: (\d+) size: (\d+) \{\}$/m;
+const RMONOL = /^\[(.+?) ms; (\d+) iters\.\] \[(.+?) err\.\] (.+)/m;
+const RBATCH = /^# Batch size ([\d\.e+-]+)/m;
+const RRESLT = /^order: (\d+) size: (\d+) \{\} \[(.+?) ms; (\d+) iters\.\] \[(.+?) err\.\] (.+)/m;
 
 
 
@@ -66,27 +67,32 @@ function readLogLine(ln, data, state) {
     if (!data.has(graph)) data.set(graph, []);
     state = {graph};
   }
-  else if (RTEMPE.test(ln)) {
-    var [, temporal_edges] = RTEMPE.exec(ln);
-    state.temporal_edges = parseFloat(temporal_edges);
+  else if (RORDER.test(ln)) {
+    var [, order, size] = RORDER.exec(ln);
+    state.original_order = parseFloat(order);
+    state.original_size  = parseFloat(size);
+  }
+  else if (RMONOL.test(ln)) {
+    var [, time, iterations, error, technique] = RMONOL.exec(ln);
+    state.original_time       = parseFloat(time);
+    state.original_iterations = parseFloat(iterations);
+    state.original_error      = parseFloat(error);
+    state.original_technique  = technique;
   }
   else if (RBATCH.test(ln)) {
     var [, batch_size] = RBATCH.exec(ln);
     state.batch_size = parseFloat(batch_size);
   }
   else if (RRESLT.test(ln)) {
-    var [, order, size, time, iters, err, technique] = RRESLT.exec(ln);
-    data.get(state.graph).push({
-      graph: state.graph,
-      temporal_edges: state.temporal_edges,
-      batch_size: state.batch_size,
-      order: parseFloat(order),
-      size: parseFloat(size),
-      time: parseFloat(time),
-      iterations: parseFloat(iters),
-      error: parseFloat(err),
+    var [, order, size, time, iterations, error, technique] = RRESLT.exec(ln);
+    data.get(state.graph).push(Object.assign({}, state, {
+      order:      parseFloat(order),
+      size:       parseFloat(size),
+      time:       parseFloat(time),
+      iterations: parseFloat(iterations),
+      error:      parseFloat(error),
       technique
-    });
+    }));
   }
   return state;
 }
@@ -108,18 +114,15 @@ function readLog(pth) {
 // ---------
 
 function processBatchAverage(rows) {
-  var a = [];
-  var graph = rows[0].graph;
-  var order = Math.max(...rows.map(r => r.order));
-  var size = Math.max(...rows.map(r => r.size));
-  var batch_size = rows[0].batch_size;
-  var techniques = new Set(rows.map(r => r.technique));
+  var techniques = new Set(rows.map(r => r.technique)), a = [];
   for (var technique of techniques) {
-    var rows_filt = rows.filter(r => r.technique===technique);
-    var time = avgArray(rows_filt.map(r => r.time));
-    var iterations = avgArray(rows_filt.map(r => r.iterations));
-    var error = avgArray(rows_filt.map(r => r.error));
-    a.push({graph, order, size, batch_size, technique, time, iterations, error});
+    var frows = rows.filter(r => r.technique===technique);
+    var order      = avgArray(frows.map(r => r.order));
+    var size       = avgArray(frows.map(r => r.size));
+    var time       = avgArray(frows.map(r => r.time));
+    var iterations = avgArray(frows.map(r => r.iterations));
+    var error      = avgArray(frows.map(r => r.error));
+    a.push(Object.assign({}, rows[0], {order, size, time, iterations, error, technique}));
   }
   return a;
 }
@@ -138,8 +141,8 @@ function processShortCsv(data) {
   for (var rows of data.values()) {
     var batch_sizes = new Set(rows.map(r => r.batch_size));
     for (var batch_size of batch_sizes) {
-      var rows_filt = rows.filter(r => r.batch_size===batch_size);
-      a.push(...processBatchAverage(rows_filt));
+      var frows = rows.filter(r => r.batch_size===batch_size);
+      a.push(...processBatchAverage(frows));
     }
   }
   return a;
@@ -149,20 +152,22 @@ function processShortCsv(data) {
 function processShortLog(data) {
   var a = '';
   for (var rows of data.values()) {
-    var order = Math.max(...rows.map(r => r.order));
-    var size = Math.max(...rows.map(r => r.size));
-    a += `Using graph ${rows[0].graph} ...\n`;
-    a += `Temporal edges: ${rows[0].temporal_edges}\n`;
-    a += `order: ${order} size: ${size} {}\n\n`;
+    var r = rows[0];
+    var time       = r.time.toFixed(3).padStart(9, '0');
+    var iterations = r.iterations.toFixed(0).padStart(3, '0');
+    var error      = r.error.toExponential(4);
+    a += `Loading graph ${r.graph}.mtx ...\n`;
+    a += `order: ${r.order} size: ${r.size} {}\n`;
+    a += `[${time} ms; ${iterations} iters.] [${error} err.] ${r.technique}\n\n`;
     var batch_sizes = new Set(rows.map(r => r.batch_size));
     for (var batch_size of batch_sizes) {
       var rows_filt = rows.filter(r => r.batch_size===batch_size);
       a += `# Batch size ${batch_size.toExponential(0)}\n`;
       for (var r of processBatchAverage(rows_filt)) {
-        var time = r.time.toFixed(3).padStart(9, '0');
+        var time       = r.time.toFixed(3).padStart(9, '0');
         var iterations = r.iterations.toFixed(0).padStart(3, '0');
-        var error = r.error.toExponential(4);
-        a += `[${time} ms; ${iterations} iters.] [${error} err.] ${r.technique}\n`;
+        var error      = r.error.toExponential(4);
+        a += `order: ${r.order} size: ${r.size} {} [${time} ms; ${iterations} iters.] [${error} err.] ${r.technique}\n`;
       }
       a += `\n`;
     }
@@ -179,7 +184,7 @@ function processShortLog(data) {
 
 function main(cmd, log, out) {
   var data = readLog(log);
-  if (path.extname(out)==='') cmd += '-dir';
+  if (!path.extname(out)) cmd += '-dir';
   switch (cmd) {
     case 'csv':
       var rows = processCsv(data);
@@ -192,6 +197,12 @@ function main(cmd, log, out) {
     case 'short-csv':
       var rows = processShortCsv(data);
       writeCsv(out, rows);
+      break;
+    case 'short-csv-dir':
+      for (var [graph, rows] of data) {
+        var rows = processShortCsv(new Map([[graph, rows]]));
+        writeCsv(path.join(out, graph+'.csv'), rows);
+      }
       break;
     case 'short-log':
       var text = processShortLog(data);
