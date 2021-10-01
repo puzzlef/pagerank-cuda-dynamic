@@ -2,7 +2,7 @@ Performance of static vs incremental [CUDA] based PageRank ([pull], [CSR], [scal
 
 This experiment was for comparing the performance between:
 1. Find **static** pagerank of updated graph using [nvGraph][pr-nvgraph].
-2. Find **dyanmic** pagerank of updated graph using [nvGraph][pr-nvgraph].
+2. Find **incremental** pagerank of updated graph using [nvGraph][pr-nvgraph].
 3. Find **static** pagerank of updated graph using [CUDA].
 4. Find **incremental** pagerank of updated graph using [CUDA].
 
@@ -16,7 +16,8 @@ complete. **Incremental** pagerank using **CUDA** is indeed **faster** than
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at the
-[Stanford Large Network Dataset Collection].
+[Stanford Large Network Dataset Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -129,20 +130,27 @@ $ ...
 # [00064.371 ms; 059 iters.] [4.4546e-6 err.] pagerankCuda [incremental]
 ```
 
-[![](https://i.imgur.com/rWozeTl.gif)][sheets]
-[![](https://i.imgur.com/G8p8oUV.gif)][sheets]
-[![](https://i.imgur.com/7lsmZmQ.gif)][sheets]
-[![](https://i.imgur.com/BdCuBvu.gif)][sheets]
-[![](https://i.imgur.com/CfuX4PQ.gif)][sheets]
-[![](https://i.imgur.com/2E0RgRL.gif)][sheets]
-[![](https://i.imgur.com/qPV9Uma.gif)][sheets]
-[![](https://i.imgur.com/aH9zxZd.gif)][sheets]
-[![](https://i.imgur.com/mldojLF.gif)][sheets]
-[![](https://i.imgur.com/ysjEXtr.gif)][sheets]
-[![](https://i.imgur.com/Ra94KyW.gif)][sheets]
-[![](https://i.imgur.com/La6xhcz.gif)][sheets]
-[![](https://i.imgur.com/ckynVDc.gif)][sheets]
-[![](https://i.imgur.com/FJ4SaaB.gif)][sheets]
+[![](https://i.imgur.com/rWozeTl.gif)][sheetp]
+[![](https://i.imgur.com/G8p8oUV.gif)][sheetp]
+[![](https://i.imgur.com/7lsmZmQ.gif)][sheetp]
+[![](https://i.imgur.com/BdCuBvu.gif)][sheetp]
+[![](https://i.imgur.com/CfuX4PQ.gif)][sheetp]
+[![](https://i.imgur.com/2E0RgRL.gif)][sheetp]
+[![](https://i.imgur.com/qPV9Uma.gif)][sheetp]
+[![](https://i.imgur.com/aH9zxZd.gif)][sheetp]
+[![](https://i.imgur.com/mldojLF.gif)][sheetp]
+[![](https://i.imgur.com/ysjEXtr.gif)][sheetp]
+[![](https://i.imgur.com/Ra94KyW.gif)][sheetp]
+[![](https://i.imgur.com/La6xhcz.gif)][sheetp]
+[![](https://i.imgur.com/ckynVDc.gif)][sheetp]
+[![](https://i.imgur.com/FJ4SaaB.gif)][sheetp]
+
+[![](https://i.imgur.com/wpyR9RZ.png)][sheetp]
+[![](https://i.imgur.com/DPX5Bux.png)][sheetp]
+[![](https://i.imgur.com/nFlvaCB.png)][sheetp]
+[![](https://i.imgur.com/EsbvLtJ.png)][sheetp]
+[![](https://i.imgur.com/ZEiXFMx.png)][sheetp]
+[![](https://i.imgur.com/bJJFpd6.png)][sheetp]
 
 <br>
 <br>
@@ -160,6 +168,8 @@ $ ...
 
 [![](https://i.imgur.com/98aAG4g.jpg)](https://www.youtube.com/watch?v=_iSPqH3tHLI)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [Stanford Large Network Dataset Collection]: http://snap.stanford.edu/data/index.html
 [nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
@@ -169,3 +179,4 @@ $ ...
 [CUDA]: https://github.com/puzzlef/pagerank-sequential-vs-cuda
 [charts]: https://photos.app.goo.gl/AFpUhz3EzohBmxQT7
 [sheets]: https://docs.google.com/spreadsheets/d/1XnVgAdSDIVInJn9XeIxUdXRkmsPgwsjH_4rAjCUYwkc/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vT27-_m62PzGz27urZkXyqu-YrI050uY98J7eoxGDPoJw5Z73Kxhwa06TXwef6onhcHwkC9FrZdoMQD/pubhtml
