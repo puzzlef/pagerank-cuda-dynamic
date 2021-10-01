@@ -37,16 +37,16 @@ void runPagerankBatch(const string& data, bool show, int batch, int skip) {
     auto e2 = l1Norm(a2.ranks, a1.ranks);
     print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [static]\n", a2.time, a2.iterations, e2);
 
-    // Find dynamic pagerank of updated graph using nvGraph.
+    // Find incremental pagerank of updated graph using nvGraph.
     adjustRanks(ranksAdj, ranksOld, ksOld, ks, 0.0f, float(ksOld.size())/ks.size(), 1.0f/ks.size());
     auto a3 = pagerankNvgraph(xt, initDynamic, {REPEAT});
     auto e3 = l1Norm(a3.ranks, a1.ranks);
-    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [dynamic]\n", a3.time, a3.iterations, e3);
+    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [incremental]\n", a3.time, a3.iterations, e3);
 
-    // Find dynamic pagerank of updated graph using CUDA.
+    // Find incremental pagerank of updated graph using CUDA.
     auto a4 = pagerankCuda(xt, initDynamic, {REPEAT});
     auto e4 = l1Norm(a4.ranks, a1.ranks);
-    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [dynamic]\n", a4.time, a4.iterations, e4);
+    print(xt); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [incremental]\n", a4.time, a4.iterations, e4);
 
     // Skip some edges (to speed up execution)
     if (skip) {
