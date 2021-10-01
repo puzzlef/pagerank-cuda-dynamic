@@ -15,7 +15,8 @@ approach to get a good time measure. On average, **incremental CUDA** pagerank i
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -130,8 +131,15 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/xN9nZ5d.gif)][sheets]
-[![](https://i.imgur.com/PETNIU8.gif)][sheets]
+[![](https://i.imgur.com/xN9nZ5d.gif)][sheetp]
+[![](https://i.imgur.com/PETNIU8.gif)][sheetp]
+
+[![](https://i.imgur.com/RJ44zgV.png)][sheetp]
+[![](https://i.imgur.com/BQvWbZP.png)][sheetp]
+[![](https://i.imgur.com/DD666Ca.png)][sheetp]
+[![](https://i.imgur.com/BHYszn6.png)][sheetp]
+[![](https://i.imgur.com/pZAeSe5.png)][sheetp]
+[![](https://i.imgur.com/h5rrDzu.png)][sheetp]
 
 <br>
 <br>
@@ -149,6 +157,8 @@ $ ...
 
 [![](https://i.imgur.com/68DVPzP.jpg)](https://www.youtube.com/watch?v=SoiKp2oSUl0)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
 ["graphs"]: https://github.com/puzzlef/graphs
@@ -159,3 +169,4 @@ $ ...
 [CUDA]: https://github.com/puzzlef/pagerank-sequential-vs-cuda
 [charts]: https://photos.app.goo.gl/HvQYTAq4ZpnURJym7
 [sheets]: https://docs.google.com/spreadsheets/d/1drg2Jfo1zRirIf86_JablzSvvsYd6-VjECfuXCDpGA4/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vSW_1ZivlpMUQNdzDccmbn3UFPGrfJW9KsGsAsvOIS9-HidE_dKb6FyxF4n1KSdjyfNJFiUUTW0njR2/pubhtml
