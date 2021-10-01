@@ -26,7 +26,7 @@ void runPagerankBatch(const G& x, const H& xt, const vector<float>& ranksOld, in
     addRandomEdgeByDegree(y, rnd, span);
   auto yt = transposeWithDegree(y);
 
-  // Adjust ranks for dynamic pagerank
+  // Adjust ranks for incremental pagerank
   auto ksOld = vertices(x);
   auto ks    = vertices(y);
   ranksAdj.resize(y.span());
@@ -42,15 +42,15 @@ void runPagerankBatch(const G& x, const H& xt, const vector<float>& ranksOld, in
   auto e2 = l1Norm(a2.ranks, a1.ranks);
   print(y); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [static]\n", a2.time, a2.iterations, e2);
 
-  // Find dynamic pagerank, using nvGraph.
+  // Find incremental pagerank, using nvGraph.
   auto a3 = pagerankNvgraph(yt, initDynamic, {REPEAT});
   auto e3 = l1Norm(a3.ranks, a1.ranks);
-  print(y); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [dynamic]\n", a3.time, a3.iterations, e3);
+  print(y); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [incremental]\n", a3.time, a3.iterations, e3);
 
-  // Find dynamic pagerank, using CUDA.
+  // Find incremental pagerank, using CUDA.
   auto a4 = pagerankCuda(yt, initDynamic, {REPEAT});
   auto e4 = l1Norm(a4.ranks, a1.ranks);
-  print(y); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [dynamic]\n", a4.time, a4.iterations, e4);
+  print(y); printf(" [%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [incremental]\n", a4.time, a4.iterations, e4);
 }
 
 

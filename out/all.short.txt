@@ -5,14 +5,14 @@ order: 5 size: 7 {}
 # Batch size 1e+0
 order: 5.2 size: 6.6 {} [00001.725 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 5.2 size: 6.6 {} [00000.652 ms; 019 iters.] [1.1623e-7 err.] pagerankCuda [static]
-order: 5.2 size: 6.6 {} [00001.112 ms; 000 iters.] [3.1293e-7 err.] pagerankNvgraph [dynamic]
-order: 5.2 size: 6.6 {} [00000.428 ms; 012 iters.] [3.0994e-7 err.] pagerankCuda [dynamic]
+order: 5.2 size: 6.6 {} [00001.112 ms; 000 iters.] [3.1293e-7 err.] pagerankNvgraph [incremental]
+order: 5.2 size: 6.6 {} [00000.428 ms; 012 iters.] [3.0994e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 5.8 size: 9.4 {} [00001.682 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 5.8 size: 9.4 {} [00000.652 ms; 019 iters.] [3.2485e-7 err.] pagerankCuda [static]
-order: 5.8 size: 9.4 {} [00001.669 ms; 000 iters.] [2.8759e-7 err.] pagerankNvgraph [dynamic]
-order: 5.8 size: 9.4 {} [00000.627 ms; 018 iters.] [4.5970e-7 err.] pagerankCuda [dynamic]
+order: 5.8 size: 9.4 {} [00001.669 ms; 000 iters.] [2.8759e-7 err.] pagerankNvgraph [incremental]
+order: 5.8 size: 9.4 {} [00000.627 ms; 018 iters.] [4.5970e-7 err.] pagerankCuda [incremental]
 
 
 Loading graph min-2SCC.mtx ...
@@ -22,20 +22,20 @@ order: 8 size: 13 {}
 # Batch size 1e+0
 order: 8.2 size: 13 {} [00003.497 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8.2 size: 13 {} [00001.077 ms; 037 iters.] [4.8578e-7 err.] pagerankCuda [static]
-order: 8.2 size: 13 {} [00003.436 ms; 000 iters.] [4.3437e-7 err.] pagerankNvgraph [dynamic]
-order: 8.2 size: 13 {} [00001.049 ms; 036 iters.] [3.6731e-7 err.] pagerankCuda [dynamic]
+order: 8.2 size: 13 {} [00003.436 ms; 000 iters.] [4.3437e-7 err.] pagerankNvgraph [incremental]
+order: 8.2 size: 13 {} [00001.049 ms; 036 iters.] [3.6731e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 8.6 size: 15.8 {} [00002.786 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8.6 size: 15.8 {} [00000.764 ms; 030 iters.] [1.9334e-7 err.] pagerankCuda [static]
-order: 8.6 size: 15.8 {} [00002.726 ms; 000 iters.] [2.7716e-7 err.] pagerankNvgraph [dynamic]
-order: 8.6 size: 15.8 {} [00000.732 ms; 028 iters.] [5.7258e-7 err.] pagerankCuda [dynamic]
+order: 8.6 size: 15.8 {} [00002.726 ms; 000 iters.] [2.7716e-7 err.] pagerankNvgraph [incremental]
+order: 8.6 size: 15.8 {} [00000.732 ms; 028 iters.] [5.7258e-7 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 8.8 size: 19.4 {} [00002.669 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8.8 size: 19.4 {} [00000.728 ms; 028 iters.] [3.5279e-7 err.] pagerankCuda [static]
-order: 8.8 size: 19.4 {} [00002.851 ms; 000 iters.] [3.0883e-7 err.] pagerankNvgraph [dynamic]
-order: 8.8 size: 19.4 {} [00000.772 ms; 030 iters.] [5.2936e-7 err.] pagerankCuda [dynamic]
+order: 8.8 size: 19.4 {} [00002.851 ms; 000 iters.] [3.0883e-7 err.] pagerankNvgraph [incremental]
+order: 8.8 size: 19.4 {} [00000.772 ms; 030 iters.] [5.2936e-7 err.] pagerankCuda [incremental]
 
 
 Loading graph min-4SCC.mtx ...
@@ -45,20 +45,20 @@ order: 21 size: 36 {}
 # Batch size 1e+0
 order: 21.2 size: 36 {} [00004.105 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 21.2 size: 36 {} [00001.126 ms; 043 iters.] [6.5304e-7 err.] pagerankCuda [static]
-order: 21.2 size: 36 {} [00003.871 ms; 000 iters.] [1.8619e-6 err.] pagerankNvgraph [dynamic]
-order: 21.2 size: 36 {} [00001.033 ms; 040 iters.] [2.5775e-6 err.] pagerankCuda [dynamic]
+order: 21.2 size: 36 {} [00003.871 ms; 000 iters.] [1.8619e-6 err.] pagerankNvgraph [incremental]
+order: 21.2 size: 36 {} [00001.033 ms; 040 iters.] [2.5775e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 22.2 size: 39.8 {} [00004.521 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 22.2 size: 39.8 {} [00001.248 ms; 048 iters.] [5.6289e-7 err.] pagerankCuda [static]
-order: 22.2 size: 39.8 {} [00004.864 ms; 000 iters.] [1.2511e-6 err.] pagerankNvgraph [dynamic]
-order: 22.2 size: 39.8 {} [00001.349 ms; 052 iters.] [1.5067e-6 err.] pagerankCuda [dynamic]
+order: 22.2 size: 39.8 {} [00004.864 ms; 000 iters.] [1.2511e-6 err.] pagerankNvgraph [incremental]
+order: 22.2 size: 39.8 {} [00001.349 ms; 052 iters.] [1.5067e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 23.4 size: 44 {} [00003.834 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 23.4 size: 44 {} [00001.062 ms; 041 iters.] [3.1404e-7 err.] pagerankCuda [static]
-order: 23.4 size: 44 {} [00004.003 ms; 000 iters.] [9.2517e-7 err.] pagerankNvgraph [dynamic]
-order: 23.4 size: 44 {} [00001.067 ms; 041 iters.] [1.0001e-6 err.] pagerankCuda [dynamic]
+order: 23.4 size: 44 {} [00004.003 ms; 000 iters.] [9.2517e-7 err.] pagerankNvgraph [incremental]
+order: 23.4 size: 44 {} [00001.067 ms; 041 iters.] [1.0001e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph min-NvgraphEx.mtx ...
@@ -68,14 +68,14 @@ order: 6 size: 10 {}
 # Batch size 1e+0
 order: 6 size: 10.4 {} [00002.086 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6 size: 10.4 {} [00000.764 ms; 024 iters.] [2.3842e-8 err.] pagerankCuda [static]
-order: 6 size: 10.4 {} [00000.757 ms; 000 iters.] [1.0207e-6 err.] pagerankNvgraph [dynamic]
-order: 6 size: 10.4 {} [00000.270 ms; 008 iters.] [9.0673e-7 err.] pagerankCuda [dynamic]
+order: 6 size: 10.4 {} [00000.757 ms; 000 iters.] [1.0207e-6 err.] pagerankNvgraph [incremental]
+order: 6 size: 10.4 {} [00000.270 ms; 008 iters.] [9.0673e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 6.8 size: 13.4 {} [00002.105 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6.8 size: 13.4 {} [00000.771 ms; 024 iters.] [1.7956e-7 err.] pagerankCuda [static]
-order: 6.8 size: 13.4 {} [00002.119 ms; 000 iters.] [1.5847e-6 err.] pagerankNvgraph [dynamic]
-order: 6.8 size: 13.4 {} [00000.769 ms; 024 iters.] [1.6220e-6 err.] pagerankCuda [dynamic]
+order: 6.8 size: 13.4 {} [00002.119 ms; 000 iters.] [1.5847e-6 err.] pagerankNvgraph [incremental]
+order: 6.8 size: 13.4 {} [00000.769 ms; 024 iters.] [1.6220e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph web-Stanford.mtx ...
@@ -85,80 +85,80 @@ order: 281903 size: 2312498 {}
 # Batch size 1e+0
 order: 281903 size: 2312498 {} [00011.304 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281903 size: 2312498 {} [00011.186 ms; 063 iters.] [7.2128e-7 err.] pagerankCuda [static]
-order: 281903 size: 2312498 {} [00001.776 ms; 000 iters.] [9.5487e-7 err.] pagerankNvgraph [dynamic]
-order: 281903 size: 2312498 {} [00000.404 ms; 002 iters.] [2.5066e-6 err.] pagerankCuda [dynamic]
+order: 281903 size: 2312498 {} [00001.776 ms; 000 iters.] [9.5487e-7 err.] pagerankNvgraph [incremental]
+order: 281903 size: 2312498 {} [00000.404 ms; 002 iters.] [2.5066e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 281904.2 size: 2312502 {} [00011.305 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281904.2 size: 2312502 {} [00011.178 ms; 063 iters.] [7.0756e-7 err.] pagerankCuda [static]
-order: 281904.2 size: 2312502 {} [00003.237 ms; 000 iters.] [1.4241e-6 err.] pagerankNvgraph [dynamic]
-order: 281904.2 size: 2312502 {} [00001.743 ms; 009 iters.] [3.5181e-6 err.] pagerankCuda [dynamic]
+order: 281904.2 size: 2312502 {} [00003.237 ms; 000 iters.] [1.4241e-6 err.] pagerankNvgraph [incremental]
+order: 281904.2 size: 2312502 {} [00001.743 ms; 009 iters.] [3.5181e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 281906.4 size: 2312507 {} [00011.301 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281906.4 size: 2312507 {} [00011.182 ms; 063 iters.] [7.1315e-7 err.] pagerankCuda [static]
-order: 281906.4 size: 2312507 {} [00003.505 ms; 000 iters.] [1.3272e-6 err.] pagerankNvgraph [dynamic]
-order: 281906.4 size: 2312507 {} [00002.196 ms; 012 iters.] [3.3711e-6 err.] pagerankCuda [dynamic]
+order: 281906.4 size: 2312507 {} [00003.505 ms; 000 iters.] [1.3272e-6 err.] pagerankNvgraph [incremental]
+order: 281906.4 size: 2312507 {} [00002.196 ms; 012 iters.] [3.3711e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 281912.2 size: 2312547 {} [00011.300 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281912.2 size: 2312547 {} [00011.179 ms; 063 iters.] [7.1136e-7 err.] pagerankCuda [static]
-order: 281912.2 size: 2312547 {} [00004.600 ms; 000 iters.] [2.3103e-6 err.] pagerankNvgraph [dynamic]
-order: 281912.2 size: 2312547 {} [00003.820 ms; 021 iters.] [4.5852e-6 err.] pagerankCuda [dynamic]
+order: 281912.2 size: 2312547 {} [00004.600 ms; 000 iters.] [2.3103e-6 err.] pagerankNvgraph [incremental]
+order: 281912.2 size: 2312547 {} [00003.820 ms; 021 iters.] [4.5852e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 281919.8 size: 2312597 {} [00011.293 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281919.8 size: 2312597 {} [00011.204 ms; 063 iters.] [7.0514e-7 err.] pagerankCuda [static]
-order: 281919.8 size: 2312597 {} [00004.981 ms; 000 iters.] [2.6146e-6 err.] pagerankNvgraph [dynamic]
-order: 281919.8 size: 2312597 {} [00004.394 ms; 024 iters.] [4.6582e-6 err.] pagerankCuda [dynamic]
+order: 281919.8 size: 2312597 {} [00004.981 ms; 000 iters.] [2.6146e-6 err.] pagerankNvgraph [incremental]
+order: 281919.8 size: 2312597 {} [00004.394 ms; 024 iters.] [4.6582e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 281997.8 size: 2312997 {} [00011.230 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 281997.8 size: 2312997 {} [00011.213 ms; 063 iters.] [8.1455e-7 err.] pagerankCuda [static]
-order: 281997.8 size: 2312997 {} [00007.028 ms; 000 iters.] [2.2056e-6 err.] pagerankNvgraph [dynamic]
-order: 281997.8 size: 2312997 {} [00006.296 ms; 035 iters.] [4.6993e-6 err.] pagerankCuda [dynamic]
+order: 281997.8 size: 2312997 {} [00007.028 ms; 000 iters.] [2.2056e-6 err.] pagerankNvgraph [incremental]
+order: 281997.8 size: 2312997 {} [00006.296 ms; 035 iters.] [4.6993e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 282074.2 size: 2313497 {} [00011.267 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 282074.2 size: 2313497 {} [00011.176 ms; 063 iters.] [7.7204e-7 err.] pagerankCuda [static]
-order: 282074.2 size: 2313497 {} [00006.727 ms; 000 iters.] [3.4386e-6 err.] pagerankNvgraph [dynamic]
-order: 282074.2 size: 2313497 {} [00006.666 ms; 037 iters.] [4.3586e-6 err.] pagerankCuda [dynamic]
+order: 282074.2 size: 2313497 {} [00006.727 ms; 000 iters.] [3.4386e-6 err.] pagerankNvgraph [incremental]
+order: 282074.2 size: 2313497 {} [00006.666 ms; 037 iters.] [4.3586e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 282811.4 size: 2317497 {} [00011.089 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 282811.4 size: 2317497 {} [00011.173 ms; 063 iters.] [9.0846e-7 err.] pagerankCuda [static]
-order: 282811.4 size: 2317497 {} [00008.326 ms; 000 iters.] [3.0809e-6 err.] pagerankNvgraph [dynamic]
-order: 282811.4 size: 2317497 {} [00008.298 ms; 046 iters.] [3.9118e-6 err.] pagerankCuda [dynamic]
+order: 282811.4 size: 2317497 {} [00008.326 ms; 000 iters.] [3.0809e-6 err.] pagerankNvgraph [incremental]
+order: 282811.4 size: 2317497 {} [00008.298 ms; 046 iters.] [3.9118e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 283663.6 size: 2322497 {} [00010.898 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 283663.6 size: 2322497 {} [00011.146 ms; 062 iters.] [6.9148e-7 err.] pagerankCuda [static]
-order: 283663.6 size: 2322497 {} [00008.203 ms; 000 iters.] [4.1646e-6 err.] pagerankNvgraph [dynamic]
-order: 283663.6 size: 2322497 {} [00008.776 ms; 048 iters.] [3.7279e-6 err.] pagerankCuda [dynamic]
+order: 283663.6 size: 2322497 {} [00008.203 ms; 000 iters.] [4.1646e-6 err.] pagerankNvgraph [incremental]
+order: 283663.6 size: 2322497 {} [00008.776 ms; 048 iters.] [3.7279e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 289720.2 size: 2362495.8 {} [00010.200 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 289720.2 size: 2362495.8 {} [00010.501 ms; 058 iters.] [8.0618e-7 err.] pagerankCuda [static]
-order: 289720.2 size: 2362495.8 {} [00009.304 ms; 000 iters.] [2.6877e-6 err.] pagerankNvgraph [dynamic]
-order: 289720.2 size: 2362495.8 {} [00009.559 ms; 053 iters.] [3.3770e-6 err.] pagerankCuda [dynamic]
+order: 289720.2 size: 2362495.8 {} [00009.304 ms; 000 iters.] [2.6877e-6 err.] pagerankNvgraph [incremental]
+order: 289720.2 size: 2362495.8 {} [00009.559 ms; 053 iters.] [3.3770e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 295269.2 size: 2412493.6 {} [00009.671 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 295269.2 size: 2412493.6 {} [00010.104 ms; 055 iters.] [9.2660e-7 err.] pagerankCuda [static]
-order: 295269.2 size: 2412493.6 {} [00008.865 ms; 000 iters.] [2.4293e-6 err.] pagerankNvgraph [dynamic]
-order: 295269.2 size: 2412493.6 {} [00009.313 ms; 051 iters.] [2.9225e-6 err.] pagerankCuda [dynamic]
+order: 295269.2 size: 2412493.6 {} [00008.865 ms; 000 iters.] [2.4293e-6 err.] pagerankNvgraph [incremental]
+order: 295269.2 size: 2412493.6 {} [00009.313 ms; 051 iters.] [2.9225e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 308976.8 size: 2812486.4 {} [00008.146 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 308976.8 size: 2812486.4 {} [00007.939 ms; 041 iters.] [1.7466e-6 err.] pagerankCuda [static]
-order: 308976.8 size: 2812486.4 {} [00008.160 ms; 000 iters.] [6.8444e-7 err.] pagerankNvgraph [dynamic]
-order: 308976.8 size: 2812486.4 {} [00007.829 ms; 041 iters.] [2.2373e-6 err.] pagerankCuda [dynamic]
+order: 308976.8 size: 2812486.4 {} [00008.160 ms; 000 iters.] [6.8444e-7 err.] pagerankNvgraph [incremental]
+order: 308976.8 size: 2812486.4 {} [00007.829 ms; 041 iters.] [2.2373e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 310050 size: 3312473.2 {} [00007.272 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 310050 size: 3312473.2 {} [00006.953 ms; 034 iters.] [1.6302e-6 err.] pagerankCuda [static]
-order: 310050 size: 3312473.2 {} [00007.333 ms; 000 iters.] [2.9788e-7 err.] pagerankNvgraph [dynamic]
-order: 310050 size: 3312473.2 {} [00007.029 ms; 035 iters.] [1.5474e-6 err.] pagerankCuda [dynamic]
+order: 310050 size: 3312473.2 {} [00007.333 ms; 000 iters.] [2.9788e-7 err.] pagerankNvgraph [incremental]
+order: 310050 size: 3312473.2 {} [00007.029 ms; 035 iters.] [1.5474e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph web-BerkStan.mtx ...
@@ -168,86 +168,86 @@ order: 685230 size: 7600596 {}
 # Batch size 1e+0
 order: 685230 size: 7600596 {} [00015.830 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685230 size: 7600596 {} [00021.716 ms; 064 iters.] [9.6501e-7 err.] pagerankCuda [static]
-order: 685230 size: 7600596 {} [00000.757 ms; 000 iters.] [5.7817e-7 err.] pagerankNvgraph [dynamic]
-order: 685230 size: 7600596 {} [00000.404 ms; 001 iters.] [8.9586e-7 err.] pagerankCuda [dynamic]
+order: 685230 size: 7600596 {} [00000.757 ms; 000 iters.] [5.7817e-7 err.] pagerankNvgraph [incremental]
+order: 685230 size: 7600596 {} [00000.404 ms; 001 iters.] [8.9586e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 685230.8 size: 7600600 {} [00015.911 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685230.8 size: 7600600 {} [00022.111 ms; 064 iters.] [9.7218e-7 err.] pagerankCuda [static]
-order: 685230.8 size: 7600600 {} [00002.348 ms; 000 iters.] [1.4930e-6 err.] pagerankNvgraph [dynamic]
-order: 685230.8 size: 7600600 {} [00001.639 ms; 005 iters.] [2.7515e-6 err.] pagerankCuda [dynamic]
+order: 685230.8 size: 7600600 {} [00002.348 ms; 000 iters.] [1.4930e-6 err.] pagerankNvgraph [incremental]
+order: 685230.8 size: 7600600 {} [00001.639 ms; 005 iters.] [2.7515e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 685232.8 size: 7600605 {} [00015.876 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685232.8 size: 7600605 {} [00021.716 ms; 064 iters.] [9.7889e-7 err.] pagerankCuda [static]
-order: 685232.8 size: 7600605 {} [00003.077 ms; 000 iters.] [1.9396e-6 err.] pagerankNvgraph [dynamic]
-order: 685232.8 size: 7600605 {} [00002.700 ms; 008 iters.] [3.5339e-6 err.] pagerankCuda [dynamic]
+order: 685232.8 size: 7600605 {} [00003.077 ms; 000 iters.] [1.9396e-6 err.] pagerankNvgraph [incremental]
+order: 685232.8 size: 7600605 {} [00002.700 ms; 008 iters.] [3.5339e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 685243.2 size: 7600645 {} [00015.917 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685243.2 size: 7600645 {} [00022.024 ms; 064 iters.] [9.5974e-7 err.] pagerankCuda [static]
-order: 685243.2 size: 7600645 {} [00005.152 ms; 000 iters.] [2.6165e-6 err.] pagerankNvgraph [dynamic]
-order: 685243.2 size: 7600645 {} [00005.669 ms; 016 iters.] [4.8645e-6 err.] pagerankCuda [dynamic]
+order: 685243.2 size: 7600645 {} [00005.152 ms; 000 iters.] [2.6165e-6 err.] pagerankNvgraph [incremental]
+order: 685243.2 size: 7600645 {} [00005.669 ms; 016 iters.] [4.8645e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 685249.6 size: 7600695 {} [00015.830 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685249.6 size: 7600695 {} [00021.965 ms; 064 iters.] [9.9565e-7 err.] pagerankCuda [static]
-order: 685249.6 size: 7600695 {} [00005.725 ms; 000 iters.] [2.3896e-6 err.] pagerankNvgraph [dynamic]
-order: 685249.6 size: 7600695 {} [00006.500 ms; 019 iters.] [4.4172e-6 err.] pagerankCuda [dynamic]
+order: 685249.6 size: 7600695 {} [00005.725 ms; 000 iters.] [2.3896e-6 err.] pagerankNvgraph [incremental]
+order: 685249.6 size: 7600695 {} [00006.500 ms; 019 iters.] [4.4172e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 685324.4 size: 7601095 {} [00015.950 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685324.4 size: 7601095 {} [00021.962 ms; 064 iters.] [9.6979e-7 err.] pagerankCuda [static]
-order: 685324.4 size: 7601095 {} [00007.659 ms; 000 iters.] [2.9431e-6 err.] pagerankNvgraph [dynamic]
-order: 685324.4 size: 7601095 {} [00009.848 ms; 029 iters.] [4.6161e-6 err.] pagerankCuda [dynamic]
+order: 685324.4 size: 7601095 {} [00007.659 ms; 000 iters.] [2.9431e-6 err.] pagerankNvgraph [incremental]
+order: 685324.4 size: 7601095 {} [00009.848 ms; 029 iters.] [4.6161e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 685419.8 size: 7601595 {} [00015.961 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 685419.8 size: 7601595 {} [00021.938 ms; 064 iters.] [9.4046e-7 err.] pagerankCuda [static]
-order: 685419.8 size: 7601595 {} [00008.192 ms; 000 iters.] [3.0750e-6 err.] pagerankNvgraph [dynamic]
-order: 685419.8 size: 7601595 {} [00010.796 ms; 031 iters.] [4.5832e-6 err.] pagerankCuda [dynamic]
+order: 685419.8 size: 7601595 {} [00008.192 ms; 000 iters.] [3.0750e-6 err.] pagerankNvgraph [incremental]
+order: 685419.8 size: 7601595 {} [00010.796 ms; 031 iters.] [4.5832e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 686121.8 size: 7605594.8 {} [00015.704 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 686121.8 size: 7605594.8 {} [00021.894 ms; 064 iters.] [3.8178e-7 err.] pagerankCuda [static]
-order: 686121.8 size: 7605594.8 {} [00009.738 ms; 000 iters.] [4.1315e-6 err.] pagerankNvgraph [dynamic]
-order: 686121.8 size: 7605594.8 {} [00013.588 ms; 040 iters.] [4.5677e-6 err.] pagerankCuda [dynamic]
+order: 686121.8 size: 7605594.8 {} [00009.738 ms; 000 iters.] [4.1315e-6 err.] pagerankNvgraph [incremental]
+order: 686121.8 size: 7605594.8 {} [00013.588 ms; 040 iters.] [4.5677e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 687012.2 size: 7610595 {} [00015.652 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 687012.2 size: 7610595 {} [00021.865 ms; 064 iters.] [5.2666e-7 err.] pagerankCuda [static]
-order: 687012.2 size: 7610595 {} [00010.999 ms; 000 iters.] [3.4045e-6 err.] pagerankNvgraph [dynamic]
-order: 687012.2 size: 7610595 {} [00015.178 ms; 044 iters.] [4.3381e-6 err.] pagerankCuda [dynamic]
+order: 687012.2 size: 7610595 {} [00010.999 ms; 000 iters.] [3.4045e-6 err.] pagerankNvgraph [incremental]
+order: 687012.2 size: 7610595 {} [00015.178 ms; 044 iters.] [4.3381e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 693831.6 size: 7650594.6 {} [00014.876 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 693831.6 size: 7650594.6 {} [00020.927 ms; 061 iters.] [8.1338e-7 err.] pagerankCuda [static]
-order: 693831.6 size: 7650594.6 {} [00012.110 ms; 000 iters.] [3.5944e-6 err.] pagerankNvgraph [dynamic]
-order: 693831.6 size: 7650594.6 {} [00016.893 ms; 049 iters.] [4.0337e-6 err.] pagerankCuda [dynamic]
+order: 693831.6 size: 7650594.6 {} [00012.110 ms; 000 iters.] [3.5944e-6 err.] pagerankNvgraph [incremental]
+order: 693831.6 size: 7650594.6 {} [00016.893 ms; 049 iters.] [4.0337e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 701220.4 size: 7700592.4 {} [00014.181 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 701220.4 size: 7700592.4 {} [00020.472 ms; 059 iters.] [5.6717e-7 err.] pagerankCuda [static]
-order: 701220.4 size: 7700592.4 {} [00012.375 ms; 000 iters.] [3.4487e-6 err.] pagerankNvgraph [dynamic]
-order: 701220.4 size: 7700592.4 {} [00017.480 ms; 050 iters.] [3.7478e-6 err.] pagerankCuda [dynamic]
+order: 701220.4 size: 7700592.4 {} [00012.375 ms; 000 iters.] [3.4487e-6 err.] pagerankNvgraph [incremental]
+order: 701220.4 size: 7700592.4 {} [00017.480 ms; 050 iters.] [3.7478e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 735627.6 size: 8100589 {} [00013.534 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 735627.6 size: 8100589 {} [00017.974 ms; 050 iters.] [1.3310e-6 err.] pagerankCuda [static]
-order: 735627.6 size: 8100589 {} [00013.372 ms; 000 iters.] [1.2099e-6 err.] pagerankNvgraph [dynamic]
-order: 735627.6 size: 8100589 {} [00017.309 ms; 049 iters.] [2.4265e-6 err.] pagerankCuda [dynamic]
+order: 735627.6 size: 8100589 {} [00013.372 ms; 000 iters.] [1.2099e-6 err.] pagerankNvgraph [incremental]
+order: 735627.6 size: 8100589 {} [00017.309 ms; 049 iters.] [2.4265e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 748959.6 size: 8600583.4 {} [00012.806 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 748959.6 size: 8600583.4 {} [00016.230 ms; 045 iters.] [1.2456e-6 err.] pagerankCuda [static]
-order: 748959.6 size: 8600583.4 {} [00012.935 ms; 000 iters.] [7.0401e-7 err.] pagerankNvgraph [dynamic]
-order: 748959.6 size: 8600583.4 {} [00016.005 ms; 045 iters.] [1.7588e-6 err.] pagerankCuda [dynamic]
+order: 748959.6 size: 8600583.4 {} [00012.935 ms; 000 iters.] [7.0401e-7 err.] pagerankNvgraph [incremental]
+order: 748959.6 size: 8600583.4 {} [00016.005 ms; 045 iters.] [1.7588e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 753753.8 size: 12600522.6 {} [00011.230 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 753753.8 size: 12600522.6 {} [00014.052 ms; 031 iters.] [1.0092e-6 err.] pagerankCuda [static]
-order: 753753.8 size: 12600522.6 {} [00011.281 ms; 000 iters.] [2.4704e-7 err.] pagerankNvgraph [dynamic]
-order: 753753.8 size: 12600522.6 {} [00013.954 ms; 032 iters.] [1.0079e-6 err.] pagerankCuda [dynamic]
+order: 753753.8 size: 12600522.6 {} [00011.281 ms; 000 iters.] [2.4704e-7 err.] pagerankNvgraph [incremental]
+order: 753753.8 size: 12600522.6 {} [00013.954 ms; 032 iters.] [1.0079e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph web-Google.mtx ...
@@ -257,86 +257,86 @@ order: 916428 size: 5105040 {}
 # Batch size 1e+0
 order: 916428 size: 5105040 {} [00019.979 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916428 size: 5105040 {} [00012.732 ms; 062 iters.] [1.2765e-6 err.] pagerankCuda [static]
-order: 916428 size: 5105040 {} [00002.123 ms; 000 iters.] [5.3887e-7 err.] pagerankNvgraph [dynamic]
-order: 916428 size: 5105040 {} [00000.275 ms; 001 iters.] [1.0640e-6 err.] pagerankCuda [dynamic]
+order: 916428 size: 5105040 {} [00002.123 ms; 000 iters.] [5.3887e-7 err.] pagerankNvgraph [incremental]
+order: 916428 size: 5105040 {} [00000.275 ms; 001 iters.] [1.0640e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 916429.2 size: 5105044 {} [00019.665 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916429.2 size: 5105044 {} [00012.711 ms; 062 iters.] [1.3886e-6 err.] pagerankCuda [static]
-order: 916429.2 size: 5105044 {} [00003.494 ms; 000 iters.] [6.2766e-7 err.] pagerankNvgraph [dynamic]
-order: 916429.2 size: 5105044 {} [00000.887 ms; 004 iters.] [2.2517e-6 err.] pagerankCuda [dynamic]
+order: 916429.2 size: 5105044 {} [00003.494 ms; 000 iters.] [6.2766e-7 err.] pagerankNvgraph [incremental]
+order: 916429.2 size: 5105044 {} [00000.887 ms; 004 iters.] [2.2517e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 916430.4 size: 5105049 {} [00019.981 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916430.4 size: 5105049 {} [00012.738 ms; 062 iters.] [1.4080e-6 err.] pagerankCuda [static]
-order: 916430.4 size: 5105049 {} [00004.622 ms; 000 iters.] [7.7959e-7 err.] pagerankNvgraph [dynamic]
-order: 916430.4 size: 5105049 {} [00001.214 ms; 006 iters.] [3.5001e-6 err.] pagerankCuda [dynamic]
+order: 916430.4 size: 5105049 {} [00004.622 ms; 000 iters.] [7.7959e-7 err.] pagerankNvgraph [incremental]
+order: 916430.4 size: 5105049 {} [00001.214 ms; 006 iters.] [3.5001e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 916434.8 size: 5105089 {} [00019.675 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916434.8 size: 5105089 {} [00012.701 ms; 062 iters.] [1.5150e-6 err.] pagerankCuda [static]
-order: 916434.8 size: 5105089 {} [00006.514 ms; 000 iters.] [8.7829e-7 err.] pagerankNvgraph [dynamic]
-order: 916434.8 size: 5105089 {} [00002.799 ms; 013 iters.] [4.1212e-6 err.] pagerankCuda [dynamic]
+order: 916434.8 size: 5105089 {} [00006.514 ms; 000 iters.] [8.7829e-7 err.] pagerankNvgraph [incremental]
+order: 916434.8 size: 5105089 {} [00002.799 ms; 013 iters.] [4.1212e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 916445.6 size: 5105139 {} [00019.980 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916445.6 size: 5105139 {} [00012.722 ms; 062 iters.] [1.4142e-6 err.] pagerankCuda [static]
-order: 916445.6 size: 5105139 {} [00008.024 ms; 000 iters.] [8.4121e-7 err.] pagerankNvgraph [dynamic]
-order: 916445.6 size: 5105139 {} [00003.499 ms; 017 iters.] [4.3035e-6 err.] pagerankCuda [dynamic]
+order: 916445.6 size: 5105139 {} [00008.024 ms; 000 iters.] [8.4121e-7 err.] pagerankNvgraph [incremental]
+order: 916445.6 size: 5105139 {} [00003.499 ms; 017 iters.] [4.3035e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 916516.2 size: 5105539 {} [00019.668 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916516.2 size: 5105539 {} [00012.703 ms; 062 iters.] [1.4876e-6 err.] pagerankCuda [static]
-order: 916516.2 size: 5105539 {} [00009.579 ms; 000 iters.] [9.8556e-7 err.] pagerankNvgraph [dynamic]
-order: 916516.2 size: 5105539 {} [00005.001 ms; 024 iters.] [4.2955e-6 err.] pagerankCuda [dynamic]
+order: 916516.2 size: 5105539 {} [00009.579 ms; 000 iters.] [9.8556e-7 err.] pagerankNvgraph [incremental]
+order: 916516.2 size: 5105539 {} [00005.001 ms; 024 iters.] [4.2955e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 916603.4 size: 5106039 {} [00019.999 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 916603.4 size: 5106039 {} [00012.714 ms; 062 iters.] [1.3752e-6 err.] pagerankCuda [static]
-order: 916603.4 size: 5106039 {} [00010.367 ms; 000 iters.] [1.0042e-6 err.] pagerankNvgraph [dynamic]
-order: 916603.4 size: 5106039 {} [00005.672 ms; 027 iters.] [4.5634e-6 err.] pagerankCuda [dynamic]
+order: 916603.4 size: 5106039 {} [00010.367 ms; 000 iters.] [1.0042e-6 err.] pagerankNvgraph [incremental]
+order: 916603.4 size: 5106039 {} [00005.672 ms; 027 iters.] [4.5634e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 917335.6 size: 5110039 {} [00020.282 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 917335.6 size: 5110039 {} [00012.750 ms; 061 iters.] [1.5064e-6 err.] pagerankCuda [static]
-order: 917335.6 size: 5110039 {} [00012.529 ms; 000 iters.] [1.0450e-6 err.] pagerankNvgraph [dynamic]
-order: 917335.6 size: 5110039 {} [00007.244 ms; 035 iters.] [4.4116e-6 err.] pagerankCuda [dynamic]
+order: 917335.6 size: 5110039 {} [00012.529 ms; 000 iters.] [1.0450e-6 err.] pagerankNvgraph [incremental]
+order: 917335.6 size: 5110039 {} [00007.244 ms; 035 iters.] [4.4116e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 918191.8 size: 5115039 {} [00019.685 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 918191.8 size: 5115039 {} [00012.546 ms; 061 iters.] [1.4574e-6 err.] pagerankCuda [static]
-order: 918191.8 size: 5115039 {} [00012.765 ms; 000 iters.] [1.2743e-6 err.] pagerankNvgraph [dynamic]
-order: 918191.8 size: 5115039 {} [00007.905 ms; 038 iters.] [4.1623e-6 err.] pagerankCuda [dynamic]
+order: 918191.8 size: 5115039 {} [00012.765 ms; 000 iters.] [1.2743e-6 err.] pagerankNvgraph [incremental]
+order: 918191.8 size: 5115039 {} [00007.905 ms; 038 iters.] [4.1623e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 925032.4 size: 5155038.6 {} [00019.867 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 925032.4 size: 5155038.6 {} [00012.608 ms; 060 iters.] [1.7841e-6 err.] pagerankCuda [static]
-order: 925032.4 size: 5155038.6 {} [00014.766 ms; 000 iters.] [1.1838e-6 err.] pagerankNvgraph [dynamic]
-order: 925032.4 size: 5155038.6 {} [00009.191 ms; 044 iters.] [4.0794e-6 err.] pagerankCuda [dynamic]
+order: 925032.4 size: 5155038.6 {} [00014.766 ms; 000 iters.] [1.1838e-6 err.] pagerankNvgraph [incremental]
+order: 925032.4 size: 5155038.6 {} [00009.191 ms; 044 iters.] [4.0794e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 932896.4 size: 5205038.6 {} [00019.236 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 932896.4 size: 5205038.6 {} [00012.318 ms; 059 iters.] [1.6425e-6 err.] pagerankCuda [static]
-order: 932896.4 size: 5205038.6 {} [00015.209 ms; 000 iters.] [1.0773e-6 err.] pagerankNvgraph [dynamic]
-order: 932896.4 size: 5205038.6 {} [00009.614 ms; 046 iters.] [3.8969e-6 err.] pagerankCuda [dynamic]
+order: 932896.4 size: 5205038.6 {} [00015.209 ms; 000 iters.] [1.0773e-6 err.] pagerankNvgraph [incremental]
+order: 932896.4 size: 5205038.6 {} [00009.614 ms; 046 iters.] [3.8969e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 974063.8 size: 5605035.6 {} [00019.496 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 974063.8 size: 5605035.6 {} [00011.377 ms; 052 iters.] [2.5182e-6 err.] pagerankCuda [static]
-order: 974063.8 size: 5605035.6 {} [00016.995 ms; 000 iters.] [4.5227e-7 err.] pagerankNvgraph [dynamic]
-order: 974063.8 size: 5605035.6 {} [00009.868 ms; 045 iters.] [3.5555e-6 err.] pagerankCuda [dynamic]
+order: 974063.8 size: 5605035.6 {} [00016.995 ms; 000 iters.] [4.5227e-7 err.] pagerankNvgraph [incremental]
+order: 974063.8 size: 5605035.6 {} [00009.868 ms; 045 iters.] [3.5555e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 995492.2 size: 6105034.2 {} [00018.548 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 995492.2 size: 6105034.2 {} [00010.412 ms; 044 iters.] [3.1840e-6 err.] pagerankCuda [static]
-order: 995492.2 size: 6105034.2 {} [00016.864 ms; 000 iters.] [2.6261e-7 err.] pagerankNvgraph [dynamic]
-order: 995492.2 size: 6105034.2 {} [00009.260 ms; 040 iters.] [3.2993e-6 err.] pagerankCuda [dynamic]
+order: 995492.2 size: 6105034.2 {} [00016.864 ms; 000 iters.] [2.6261e-7 err.] pagerankNvgraph [incremental]
+order: 995492.2 size: 6105034.2 {} [00009.260 ms; 040 iters.] [3.2993e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 1008066.4 size: 10105019.4 {} [00011.086 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 1008066.4 size: 10105019.4 {} [00007.510 ms; 023 iters.] [8.2066e-7 err.] pagerankCuda [static]
-order: 1008066.4 size: 10105019.4 {} [00010.724 ms; 000 iters.] [7.0599e-7 err.] pagerankNvgraph [dynamic]
-order: 1008066.4 size: 10105019.4 {} [00007.223 ms; 022 iters.] [1.6769e-6 err.] pagerankCuda [dynamic]
+order: 1008066.4 size: 10105019.4 {} [00010.724 ms; 000 iters.] [7.0599e-7 err.] pagerankNvgraph [incremental]
+order: 1008066.4 size: 10105019.4 {} [00007.223 ms; 022 iters.] [1.6769e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph web-NotreDame.mtx ...
@@ -346,80 +346,80 @@ order: 325729 size: 1497135 {}
 # Batch size 1e+0
 order: 325729.2 size: 1497135 {} [00008.699 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325729.2 size: 1497135 {} [00006.220 ms; 058 iters.] [2.6291e-6 err.] pagerankCuda [static]
-order: 325729.2 size: 1497135 {} [00001.265 ms; 000 iters.] [9.6829e-7 err.] pagerankNvgraph [dynamic]
-order: 325729.2 size: 1497135 {} [00000.426 ms; 003 iters.] [1.4711e-6 err.] pagerankCuda [dynamic]
+order: 325729.2 size: 1497135 {} [00001.265 ms; 000 iters.] [9.6829e-7 err.] pagerankNvgraph [incremental]
+order: 325729.2 size: 1497135 {} [00000.426 ms; 003 iters.] [1.4711e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 325730.2 size: 1497139 {} [00008.797 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325730.2 size: 1497139 {} [00006.248 ms; 058 iters.] [2.6157e-6 err.] pagerankCuda [static]
-order: 325730.2 size: 1497139 {} [00001.964 ms; 000 iters.] [1.5710e-6 err.] pagerankNvgraph [dynamic]
-order: 325730.2 size: 1497139 {} [00000.702 ms; 006 iters.] [3.1234e-6 err.] pagerankCuda [dynamic]
+order: 325730.2 size: 1497139 {} [00001.964 ms; 000 iters.] [1.5710e-6 err.] pagerankNvgraph [incremental]
+order: 325730.2 size: 1497139 {} [00000.702 ms; 006 iters.] [3.1234e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 325731 size: 1497144 {} [00008.708 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325731 size: 1497144 {} [00006.286 ms; 059 iters.] [1.9782e-6 err.] pagerankCuda [static]
-order: 325731 size: 1497144 {} [00002.776 ms; 000 iters.] [1.7096e-6 err.] pagerankNvgraph [dynamic]
-order: 325731 size: 1497144 {} [00001.082 ms; 010 iters.] [4.2678e-6 err.] pagerankCuda [dynamic]
+order: 325731 size: 1497144 {} [00002.776 ms; 000 iters.] [1.7096e-6 err.] pagerankNvgraph [incremental]
+order: 325731 size: 1497144 {} [00001.082 ms; 010 iters.] [4.2678e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 325735.8 size: 1497184 {} [00008.720 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325735.8 size: 1497184 {} [00006.221 ms; 058 iters.] [2.9867e-6 err.] pagerankCuda [static]
-order: 325735.8 size: 1497184 {} [00003.492 ms; 000 iters.] [2.0676e-6 err.] pagerankNvgraph [dynamic]
-order: 325735.8 size: 1497184 {} [00001.757 ms; 016 iters.] [5.1168e-6 err.] pagerankCuda [dynamic]
+order: 325735.8 size: 1497184 {} [00003.492 ms; 000 iters.] [2.0676e-6 err.] pagerankNvgraph [incremental]
+order: 325735.8 size: 1497184 {} [00001.757 ms; 016 iters.] [5.1168e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 325746.6 size: 1497234 {} [00008.720 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325746.6 size: 1497234 {} [00006.223 ms; 058 iters.] [2.5612e-6 err.] pagerankCuda [static]
-order: 325746.6 size: 1497234 {} [00004.226 ms; 000 iters.] [2.0484e-6 err.] pagerankNvgraph [dynamic]
-order: 325746.6 size: 1497234 {} [00002.209 ms; 020 iters.] [5.3846e-6 err.] pagerankCuda [dynamic]
+order: 325746.6 size: 1497234 {} [00004.226 ms; 000 iters.] [2.0484e-6 err.] pagerankNvgraph [incremental]
+order: 325746.6 size: 1497234 {} [00002.209 ms; 020 iters.] [5.3846e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 325813.2 size: 1497634 {} [00008.723 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325813.2 size: 1497634 {} [00006.231 ms; 058 iters.] [2.6308e-6 err.] pagerankCuda [static]
-order: 325813.2 size: 1497634 {} [00004.894 ms; 000 iters.] [2.6073e-6 err.] pagerankNvgraph [dynamic]
-order: 325813.2 size: 1497634 {} [00003.064 ms; 028 iters.] [5.9451e-6 err.] pagerankCuda [dynamic]
+order: 325813.2 size: 1497634 {} [00004.894 ms; 000 iters.] [2.6073e-6 err.] pagerankNvgraph [incremental]
+order: 325813.2 size: 1497634 {} [00003.064 ms; 028 iters.] [5.9451e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 325907.6 size: 1498134 {} [00008.685 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 325907.6 size: 1498134 {} [00006.262 ms; 058 iters.] [2.1820e-6 err.] pagerankCuda [static]
-order: 325907.6 size: 1498134 {} [00005.059 ms; 000 iters.] [2.8259e-6 err.] pagerankNvgraph [dynamic]
-order: 325907.6 size: 1498134 {} [00003.375 ms; 031 iters.] [5.6571e-6 err.] pagerankCuda [dynamic]
+order: 325907.6 size: 1498134 {} [00005.059 ms; 000 iters.] [2.8259e-6 err.] pagerankNvgraph [incremental]
+order: 325907.6 size: 1498134 {} [00003.375 ms; 031 iters.] [5.6571e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 326640 size: 1502134 {} [00008.705 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 326640 size: 1502134 {} [00006.215 ms; 058 iters.] [2.2809e-6 err.] pagerankCuda [static]
-order: 326640 size: 1502134 {} [00006.221 ms; 000 iters.] [2.6467e-6 err.] pagerankNvgraph [dynamic]
-order: 326640 size: 1502134 {} [00004.181 ms; 039 iters.] [5.7096e-6 err.] pagerankCuda [dynamic]
+order: 326640 size: 1502134 {} [00006.221 ms; 000 iters.] [2.6467e-6 err.] pagerankNvgraph [incremental]
+order: 326640 size: 1502134 {} [00004.181 ms; 039 iters.] [5.7096e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 327491.8 size: 1507133.8 {} [00008.731 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 327491.8 size: 1507133.8 {} [00006.174 ms; 058 iters.] [2.4225e-6 err.] pagerankCuda [static]
-order: 327491.8 size: 1507133.8 {} [00006.839 ms; 000 iters.] [2.0525e-6 err.] pagerankNvgraph [dynamic]
-order: 327491.8 size: 1507133.8 {} [00004.459 ms; 041 iters.] [5.3968e-6 err.] pagerankCuda [dynamic]
+order: 327491.8 size: 1507133.8 {} [00006.839 ms; 000 iters.] [2.0525e-6 err.] pagerankNvgraph [incremental]
+order: 327491.8 size: 1507133.8 {} [00004.459 ms; 041 iters.] [5.3968e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 333677.2 size: 1547132.8 {} [00009.035 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 333677.2 size: 1547132.8 {} [00005.911 ms; 055 iters.] [3.7993e-6 err.] pagerankCuda [static]
-order: 333677.2 size: 1547132.8 {} [00007.778 ms; 000 iters.] [1.6439e-6 err.] pagerankNvgraph [dynamic]
-order: 333677.2 size: 1547132.8 {} [00004.879 ms; 045 iters.] [4.6583e-6 err.] pagerankCuda [dynamic]
+order: 333677.2 size: 1547132.8 {} [00007.778 ms; 000 iters.] [1.6439e-6 err.] pagerankNvgraph [incremental]
+order: 333677.2 size: 1547132.8 {} [00004.879 ms; 045 iters.] [4.6583e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 339626 size: 1597133.2 {} [00009.222 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 339626 size: 1597133.2 {} [00005.862 ms; 054 iters.] [3.6935e-6 err.] pagerankCuda [static]
-order: 339626 size: 1597133.2 {} [00008.428 ms; 000 iters.] [1.0115e-6 err.] pagerankNvgraph [dynamic]
-order: 339626 size: 1597133.2 {} [00005.027 ms; 046 iters.] [4.6526e-6 err.] pagerankCuda [dynamic]
+order: 339626 size: 1597133.2 {} [00008.428 ms; 000 iters.] [1.0115e-6 err.] pagerankNvgraph [incremental]
+order: 339626 size: 1597133.2 {} [00005.027 ms; 046 iters.] [4.6526e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 356296 size: 1997127.2 {} [00009.010 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 356296 size: 1997127.2 {} [00005.504 ms; 047 iters.] [3.5799e-6 err.] pagerankCuda [static]
-order: 356296 size: 1997127.2 {} [00008.844 ms; 000 iters.] [6.6625e-7 err.] pagerankNvgraph [dynamic]
-order: 356296 size: 1997127.2 {} [00005.028 ms; 043 iters.] [4.1737e-6 err.] pagerankCuda [dynamic]
+order: 356296 size: 1997127.2 {} [00008.844 ms; 000 iters.] [6.6625e-7 err.] pagerankNvgraph [incremental]
+order: 356296 size: 1997127.2 {} [00005.028 ms; 043 iters.] [4.1737e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 358178.2 size: 2497121.2 {} [00008.771 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 358178.2 size: 2497121.2 {} [00005.212 ms; 043 iters.] [3.6099e-6 err.] pagerankCuda [static]
-order: 358178.2 size: 2497121.2 {} [00009.351 ms; 000 iters.] [4.3394e-7 err.] pagerankNvgraph [dynamic]
-order: 358178.2 size: 2497121.2 {} [00004.987 ms; 041 iters.] [3.9871e-6 err.] pagerankCuda [dynamic]
+order: 358178.2 size: 2497121.2 {} [00009.351 ms; 000 iters.] [4.3394e-7 err.] pagerankNvgraph [incremental]
+order: 358178.2 size: 2497121.2 {} [00004.987 ms; 041 iters.] [3.9871e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph soc-Slashdot0811.mtx ...
@@ -429,74 +429,74 @@ order: 77360 size: 905469 {}
 # Batch size 1e+0
 order: 77360 size: 905469 {} [00006.722 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77360 size: 905469 {} [00003.581 ms; 055 iters.] [8.0647e-7 err.] pagerankCuda [static]
-order: 77360 size: 905469 {} [00001.897 ms; 000 iters.] [4.0916e-6 err.] pagerankNvgraph [dynamic]
-order: 77360 size: 905469 {} [00000.369 ms; 005 iters.] [3.5778e-6 err.] pagerankCuda [dynamic]
+order: 77360 size: 905469 {} [00001.897 ms; 000 iters.] [4.0916e-6 err.] pagerankNvgraph [incremental]
+order: 77360 size: 905469 {} [00000.369 ms; 005 iters.] [3.5778e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 77360.6 size: 905473 {} [00006.721 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77360.6 size: 905473 {} [00003.594 ms; 055 iters.] [6.2782e-7 err.] pagerankCuda [static]
-order: 77360.6 size: 905473 {} [00002.414 ms; 000 iters.] [4.3597e-6 err.] pagerankNvgraph [dynamic]
-order: 77360.6 size: 905473 {} [00000.575 ms; 008 iters.] [4.1448e-6 err.] pagerankCuda [dynamic]
+order: 77360.6 size: 905473 {} [00002.414 ms; 000 iters.] [4.3597e-6 err.] pagerankNvgraph [incremental]
+order: 77360.6 size: 905473 {} [00000.575 ms; 008 iters.] [4.1448e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 77362.4 size: 905478 {} [00006.731 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77362.4 size: 905478 {} [00003.590 ms; 055 iters.] [6.2910e-7 err.] pagerankCuda [static]
-order: 77362.4 size: 905478 {} [00002.793 ms; 000 iters.] [4.4225e-6 err.] pagerankNvgraph [dynamic]
-order: 77362.4 size: 905478 {} [00000.703 ms; 010 iters.] [5.0034e-6 err.] pagerankCuda [dynamic]
+order: 77362.4 size: 905478 {} [00002.793 ms; 000 iters.] [4.4225e-6 err.] pagerankNvgraph [incremental]
+order: 77362.4 size: 905478 {} [00000.703 ms; 010 iters.] [5.0034e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 77369 size: 905518 {} [00006.719 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77369 size: 905518 {} [00003.580 ms; 055 iters.] [8.1998e-7 err.] pagerankCuda [static]
-order: 77369 size: 905518 {} [00004.000 ms; 000 iters.] [4.5623e-6 err.] pagerankNvgraph [dynamic]
-order: 77369 size: 905518 {} [00001.027 ms; 015 iters.] [4.9230e-6 err.] pagerankCuda [dynamic]
+order: 77369 size: 905518 {} [00004.000 ms; 000 iters.] [4.5623e-6 err.] pagerankNvgraph [incremental]
+order: 77369 size: 905518 {} [00001.027 ms; 015 iters.] [4.9230e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 77380.8 size: 905568 {} [00006.712 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77380.8 size: 905568 {} [00003.576 ms; 055 iters.] [7.8655e-7 err.] pagerankCuda [static]
-order: 77380.8 size: 905568 {} [00004.380 ms; 000 iters.] [4.6265e-6 err.] pagerankNvgraph [dynamic]
-order: 77380.8 size: 905568 {} [00001.297 ms; 020 iters.] [4.8278e-6 err.] pagerankCuda [dynamic]
+order: 77380.8 size: 905568 {} [00004.380 ms; 000 iters.] [4.6265e-6 err.] pagerankNvgraph [incremental]
+order: 77380.8 size: 905568 {} [00001.297 ms; 020 iters.] [4.8278e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 77450.4 size: 905968 {} [00006.725 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77450.4 size: 905968 {} [00003.594 ms; 055 iters.] [6.6728e-7 err.] pagerankCuda [static]
-order: 77450.4 size: 905968 {} [00004.890 ms; 000 iters.] [4.5275e-6 err.] pagerankNvgraph [dynamic]
-order: 77450.4 size: 905968 {} [00001.828 ms; 028 iters.] [4.5926e-6 err.] pagerankCuda [dynamic]
+order: 77450.4 size: 905968 {} [00004.890 ms; 000 iters.] [4.5275e-6 err.] pagerankNvgraph [incremental]
+order: 77450.4 size: 905968 {} [00001.828 ms; 028 iters.] [4.5926e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 77543.4 size: 906467.8 {} [00006.723 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77543.4 size: 906467.8 {} [00003.590 ms; 055 iters.] [6.8234e-7 err.] pagerankCuda [static]
-order: 77543.4 size: 906467.8 {} [00005.229 ms; 000 iters.] [4.5388e-6 err.] pagerankNvgraph [dynamic]
-order: 77543.4 size: 906467.8 {} [00002.122 ms; 032 iters.] [4.5948e-6 err.] pagerankCuda [dynamic]
+order: 77543.4 size: 906467.8 {} [00005.229 ms; 000 iters.] [4.5388e-6 err.] pagerankNvgraph [incremental]
+order: 77543.4 size: 906467.8 {} [00002.122 ms; 032 iters.] [4.5948e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 78212.2 size: 910467.6 {} [00006.767 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 78212.2 size: 910467.6 {} [00003.602 ms; 055 iters.] [7.8764e-7 err.] pagerankCuda [static]
-order: 78212.2 size: 910467.6 {} [00005.789 ms; 000 iters.] [3.9644e-6 err.] pagerankNvgraph [dynamic]
-order: 78212.2 size: 910467.6 {} [00002.701 ms; 041 iters.] [4.4091e-6 err.] pagerankCuda [dynamic]
+order: 78212.2 size: 910467.6 {} [00005.789 ms; 000 iters.] [3.9644e-6 err.] pagerankNvgraph [incremental]
+order: 78212.2 size: 910467.6 {} [00002.701 ms; 041 iters.] [4.4091e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 79003.2 size: 915467 {} [00006.833 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 79003.2 size: 915467 {} [00003.605 ms; 055 iters.] [1.1795e-6 err.] pagerankCuda [static]
-order: 79003.2 size: 915467 {} [00006.024 ms; 000 iters.] [3.3035e-6 err.] pagerankNvgraph [dynamic]
-order: 79003.2 size: 915467 {} [00002.939 ms; 045 iters.] [4.1730e-6 err.] pagerankCuda [dynamic]
+order: 79003.2 size: 915467 {} [00006.024 ms; 000 iters.] [3.3035e-6 err.] pagerankNvgraph [incremental]
+order: 79003.2 size: 915467 {} [00002.939 ms; 045 iters.] [4.1730e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 82687.4 size: 955461.4 {} [00006.833 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82687.4 size: 955461.4 {} [00003.592 ms; 055 iters.] [1.3892e-6 err.] pagerankCuda [static]
-order: 82687.4 size: 955461.4 {} [00006.623 ms; 000 iters.] [1.7163e-6 err.] pagerankNvgraph [dynamic]
-order: 82687.4 size: 955461.4 {} [00003.383 ms; 052 iters.] [2.6187e-6 err.] pagerankCuda [dynamic]
+order: 82687.4 size: 955461.4 {} [00006.623 ms; 000 iters.] [1.7163e-6 err.] pagerankNvgraph [incremental]
+order: 82687.4 size: 955461.4 {} [00003.383 ms; 052 iters.] [2.6187e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 84384 size: 1005455.4 {} [00007.130 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 84384 size: 1005455.4 {} [00003.529 ms; 054 iters.] [1.9600e-6 err.] pagerankCuda [static]
-order: 84384 size: 1005455.4 {} [00007.098 ms; 000 iters.] [9.1501e-7 err.] pagerankNvgraph [dynamic]
-order: 84384 size: 1005455.4 {} [00003.401 ms; 052 iters.] [2.8387e-6 err.] pagerankCuda [dynamic]
+order: 84384 size: 1005455.4 {} [00007.098 ms; 000 iters.] [9.1501e-7 err.] pagerankNvgraph [incremental]
+order: 84384 size: 1005455.4 {} [00003.401 ms; 052 iters.] [2.8387e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 85097 size: 1405404 {} [00006.531 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 85097 size: 1405404 {} [00002.671 ms; 031 iters.] [4.7604e-6 err.] pagerankCuda [static]
-order: 85097 size: 1405404 {} [00006.613 ms; 000 iters.] [5.6277e-8 err.] pagerankNvgraph [dynamic]
-order: 85097 size: 1405404 {} [00002.654 ms; 031 iters.] [5.0264e-6 err.] pagerankCuda [dynamic]
+order: 85097 size: 1405404 {} [00006.613 ms; 000 iters.] [5.6277e-8 err.] pagerankNvgraph [incremental]
+order: 85097 size: 1405404 {} [00002.654 ms; 031 iters.] [5.0264e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph soc-Slashdot0902.mtx ...
@@ -506,74 +506,74 @@ order: 82168 size: 948465 {}
 # Batch size 1e+0
 order: 82168.2 size: 948465 {} [00006.864 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82168.2 size: 948465 {} [00003.721 ms; 056 iters.] [7.8377e-7 err.] pagerankCuda [static]
-order: 82168.2 size: 948465 {} [00001.292 ms; 000 iters.] [3.5250e-6 err.] pagerankNvgraph [dynamic]
-order: 82168.2 size: 948465 {} [00000.391 ms; 005 iters.] [3.0508e-6 err.] pagerankCuda [dynamic]
+order: 82168.2 size: 948465 {} [00001.292 ms; 000 iters.] [3.5250e-6 err.] pagerankNvgraph [incremental]
+order: 82168.2 size: 948465 {} [00000.391 ms; 005 iters.] [3.0508e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 82169.4 size: 948469 {} [00006.858 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82169.4 size: 948469 {} [00003.724 ms; 056 iters.] [7.8656e-7 err.] pagerankCuda [static]
-order: 82169.4 size: 948469 {} [00002.447 ms; 000 iters.] [4.1119e-6 err.] pagerankNvgraph [dynamic]
-order: 82169.4 size: 948469 {} [00000.566 ms; 008 iters.] [4.0961e-6 err.] pagerankCuda [dynamic]
+order: 82169.4 size: 948469 {} [00002.447 ms; 000 iters.] [4.1119e-6 err.] pagerankNvgraph [incremental]
+order: 82169.4 size: 948469 {} [00000.566 ms; 008 iters.] [4.0961e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 82170 size: 948474 {} [00006.868 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82170 size: 948474 {} [00003.725 ms; 056 iters.] [7.5763e-7 err.] pagerankCuda [static]
-order: 82170 size: 948474 {} [00002.665 ms; 000 iters.] [4.1479e-6 err.] pagerankNvgraph [dynamic]
-order: 82170 size: 948474 {} [00000.655 ms; 009 iters.] [4.2023e-6 err.] pagerankCuda [dynamic]
+order: 82170 size: 948474 {} [00002.665 ms; 000 iters.] [4.1479e-6 err.] pagerankNvgraph [incremental]
+order: 82170 size: 948474 {} [00000.655 ms; 009 iters.] [4.2023e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 82175.8 size: 948514 {} [00006.858 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82175.8 size: 948514 {} [00003.713 ms; 056 iters.] [7.8563e-7 err.] pagerankCuda [static]
-order: 82175.8 size: 948514 {} [00004.228 ms; 000 iters.] [4.4254e-6 err.] pagerankNvgraph [dynamic]
-order: 82175.8 size: 948514 {} [00001.061 ms; 016 iters.] [5.0908e-6 err.] pagerankCuda [dynamic]
+order: 82175.8 size: 948514 {} [00004.228 ms; 000 iters.] [4.4254e-6 err.] pagerankNvgraph [incremental]
+order: 82175.8 size: 948514 {} [00001.061 ms; 016 iters.] [5.0908e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 82184.8 size: 948564 {} [00006.855 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82184.8 size: 948564 {} [00003.720 ms; 056 iters.] [7.9748e-7 err.] pagerankCuda [static]
-order: 82184.8 size: 948564 {} [00004.605 ms; 000 iters.] [4.4380e-6 err.] pagerankNvgraph [dynamic]
-order: 82184.8 size: 948564 {} [00001.300 ms; 019 iters.] [5.5930e-6 err.] pagerankCuda [dynamic]
+order: 82184.8 size: 948564 {} [00004.605 ms; 000 iters.] [4.4380e-6 err.] pagerankNvgraph [incremental]
+order: 82184.8 size: 948564 {} [00001.300 ms; 019 iters.] [5.5930e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 82262.4 size: 948963.6 {} [00006.847 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82262.4 size: 948963.6 {} [00003.721 ms; 056 iters.] [7.9122e-7 err.] pagerankCuda [static]
-order: 82262.4 size: 948963.6 {} [00005.217 ms; 000 iters.] [4.4488e-6 err.] pagerankNvgraph [dynamic]
-order: 82262.4 size: 948963.6 {} [00001.881 ms; 028 iters.] [5.3594e-6 err.] pagerankCuda [dynamic]
+order: 82262.4 size: 948963.6 {} [00005.217 ms; 000 iters.] [4.4488e-6 err.] pagerankNvgraph [incremental]
+order: 82262.4 size: 948963.6 {} [00001.881 ms; 028 iters.] [5.3594e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 82352.6 size: 949464 {} [00006.884 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82352.6 size: 949464 {} [00003.715 ms; 056 iters.] [8.9841e-7 err.] pagerankCuda [static]
-order: 82352.6 size: 949464 {} [00005.795 ms; 000 iters.] [4.3268e-6 err.] pagerankNvgraph [dynamic]
-order: 82352.6 size: 949464 {} [00002.195 ms; 033 iters.] [5.2570e-6 err.] pagerankCuda [dynamic]
+order: 82352.6 size: 949464 {} [00005.795 ms; 000 iters.] [4.3268e-6 err.] pagerankNvgraph [incremental]
+order: 82352.6 size: 949464 {} [00002.195 ms; 033 iters.] [5.2570e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 83043.4 size: 953463.8 {} [00006.854 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 83043.4 size: 953463.8 {} [00003.718 ms; 056 iters.] [8.1029e-7 err.] pagerankCuda [static]
-order: 83043.4 size: 953463.8 {} [00006.076 ms; 000 iters.] [4.2415e-6 err.] pagerankNvgraph [dynamic]
-order: 83043.4 size: 953463.8 {} [00002.760 ms; 041 iters.] [4.9650e-6 err.] pagerankCuda [dynamic]
+order: 83043.4 size: 953463.8 {} [00006.076 ms; 000 iters.] [4.2415e-6 err.] pagerankNvgraph [incremental]
+order: 83043.4 size: 953463.8 {} [00002.760 ms; 041 iters.] [4.9650e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 83800 size: 958462.6 {} [00006.964 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 83800 size: 958462.6 {} [00003.725 ms; 056 iters.] [1.4320e-6 err.] pagerankCuda [static]
-order: 83800 size: 958462.6 {} [00006.701 ms; 000 iters.] [3.3461e-6 err.] pagerankNvgraph [dynamic]
-order: 83800 size: 958462.6 {} [00003.043 ms; 046 iters.] [4.5589e-6 err.] pagerankCuda [dynamic]
+order: 83800 size: 958462.6 {} [00006.701 ms; 000 iters.] [3.3461e-6 err.] pagerankNvgraph [incremental]
+order: 83800 size: 958462.6 {} [00003.043 ms; 046 iters.] [4.5589e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 87685.2 size: 998458.6 {} [00007.144 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 87685.2 size: 998458.6 {} [00003.745 ms; 056 iters.] [1.8987e-6 err.] pagerankCuda [static]
-order: 87685.2 size: 998458.6 {} [00007.041 ms; 000 iters.] [1.8338e-6 err.] pagerankNvgraph [dynamic]
-order: 87685.2 size: 998458.6 {} [00003.486 ms; 052 iters.] [3.2463e-6 err.] pagerankCuda [dynamic]
+order: 87685.2 size: 998458.6 {} [00007.041 ms; 000 iters.] [1.8338e-6 err.] pagerankNvgraph [incremental]
+order: 87685.2 size: 998458.6 {} [00003.486 ms; 052 iters.] [3.2463e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 89498.2 size: 1048452.4 {} [00007.348 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 89498.2 size: 1048452.4 {} [00004.116 ms; 054 iters.] [2.9410e-6 err.] pagerankCuda [static]
-order: 89498.2 size: 1048452.4 {} [00007.292 ms; 000 iters.] [8.5803e-7 err.] pagerankNvgraph [dynamic]
-order: 89498.2 size: 1048452.4 {} [00003.928 ms; 052 iters.] [3.5900e-6 err.] pagerankCuda [dynamic]
+order: 89498.2 size: 1048452.4 {} [00007.292 ms; 000 iters.] [8.5803e-7 err.] pagerankNvgraph [incremental]
+order: 89498.2 size: 1048452.4 {} [00003.928 ms; 052 iters.] [3.5900e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 90384.8 size: 1448403.6 {} [00006.867 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 90384.8 size: 1448403.6 {} [00002.887 ms; 033 iters.] [4.8019e-6 err.] pagerankCuda [static]
-order: 90384.8 size: 1448403.6 {} [00006.914 ms; 000 iters.] [9.4142e-8 err.] pagerankNvgraph [dynamic]
-order: 90384.8 size: 1448403.6 {} [00002.888 ms; 033 iters.] [4.6573e-6 err.] pagerankCuda [dynamic]
+order: 90384.8 size: 1448403.6 {} [00006.914 ms; 000 iters.] [9.4142e-8 err.] pagerankNvgraph [incremental]
+order: 90384.8 size: 1448403.6 {} [00002.888 ms; 033 iters.] [4.6573e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph soc-Epinions1.mtx ...
@@ -583,74 +583,74 @@ order: 75888 size: 508838 {}
 # Batch size 1e+0
 order: 75888 size: 508838 {} [00006.934 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75888 size: 508838 {} [00003.535 ms; 054 iters.] [1.3270e-6 err.] pagerankCuda [static]
-order: 75888 size: 508838 {} [00000.971 ms; 000 iters.] [8.1628e-7 err.] pagerankNvgraph [dynamic]
-order: 75888 size: 508838 {} [00000.369 ms; 005 iters.] [1.5953e-6 err.] pagerankCuda [dynamic]
+order: 75888 size: 508838 {} [00000.971 ms; 000 iters.] [8.1628e-7 err.] pagerankNvgraph [incremental]
+order: 75888 size: 508838 {} [00000.369 ms; 005 iters.] [1.5953e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 75889 size: 508842 {} [00006.924 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75889 size: 508842 {} [00003.535 ms; 054 iters.] [1.2927e-6 err.] pagerankCuda [static]
-order: 75889 size: 508842 {} [00001.740 ms; 000 iters.] [7.1511e-7 err.] pagerankNvgraph [dynamic]
-order: 75889 size: 508842 {} [00000.642 ms; 009 iters.] [1.1481e-6 err.] pagerankCuda [dynamic]
+order: 75889 size: 508842 {} [00001.740 ms; 000 iters.] [7.1511e-7 err.] pagerankNvgraph [incremental]
+order: 75889 size: 508842 {} [00000.642 ms; 009 iters.] [1.1481e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 75889.4 size: 508847 {} [00006.911 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75889.4 size: 508847 {} [00003.530 ms; 054 iters.] [1.2837e-6 err.] pagerankCuda [static]
-order: 75889.4 size: 508847 {} [00001.549 ms; 000 iters.] [9.5634e-7 err.] pagerankNvgraph [dynamic]
-order: 75889.4 size: 508847 {} [00000.578 ms; 008 iters.] [2.1559e-6 err.] pagerankCuda [dynamic]
+order: 75889.4 size: 508847 {} [00001.549 ms; 000 iters.] [9.5634e-7 err.] pagerankNvgraph [incremental]
+order: 75889.4 size: 508847 {} [00000.578 ms; 008 iters.] [2.1559e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 75896.6 size: 508887 {} [00006.935 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75896.6 size: 508887 {} [00003.534 ms; 054 iters.] [1.2547e-6 err.] pagerankCuda [static]
-order: 75896.6 size: 508887 {} [00002.604 ms; 000 iters.] [5.5033e-7 err.] pagerankNvgraph [dynamic]
-order: 75896.6 size: 508887 {} [00000.967 ms; 014 iters.] [2.2177e-6 err.] pagerankCuda [dynamic]
+order: 75896.6 size: 508887 {} [00002.604 ms; 000 iters.] [5.5033e-7 err.] pagerankNvgraph [incremental]
+order: 75896.6 size: 508887 {} [00000.967 ms; 014 iters.] [2.2177e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 75905.6 size: 508937 {} [00006.902 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75905.6 size: 508937 {} [00003.532 ms; 054 iters.] [1.3227e-6 err.] pagerankCuda [static]
-order: 75905.6 size: 508937 {} [00003.423 ms; 000 iters.] [5.6120e-7 err.] pagerankNvgraph [dynamic]
-order: 75905.6 size: 508937 {} [00001.041 ms; 016 iters.] [3.6573e-6 err.] pagerankCuda [dynamic]
+order: 75905.6 size: 508937 {} [00003.423 ms; 000 iters.] [5.6120e-7 err.] pagerankNvgraph [incremental]
+order: 75905.6 size: 508937 {} [00001.041 ms; 016 iters.] [3.6573e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 75979.4 size: 509337 {} [00006.926 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 75979.4 size: 509337 {} [00003.534 ms; 054 iters.] [1.3454e-6 err.] pagerankCuda [static]
-order: 75979.4 size: 509337 {} [00004.221 ms; 000 iters.] [5.1702e-7 err.] pagerankNvgraph [dynamic]
-order: 75979.4 size: 509337 {} [00001.573 ms; 024 iters.] [3.7056e-6 err.] pagerankCuda [dynamic]
+order: 75979.4 size: 509337 {} [00004.221 ms; 000 iters.] [5.1702e-7 err.] pagerankNvgraph [incremental]
+order: 75979.4 size: 509337 {} [00001.573 ms; 024 iters.] [3.7056e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 76063.6 size: 509836.8 {} [00006.908 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 76063.6 size: 509836.8 {} [00003.535 ms; 054 iters.] [1.2890e-6 err.] pagerankCuda [static]
-order: 76063.6 size: 509836.8 {} [00004.681 ms; 000 iters.] [5.6523e-7 err.] pagerankNvgraph [dynamic]
-order: 76063.6 size: 509836.8 {} [00001.812 ms; 027 iters.] [3.7507e-6 err.] pagerankCuda [dynamic]
+order: 76063.6 size: 509836.8 {} [00004.681 ms; 000 iters.] [5.6523e-7 err.] pagerankNvgraph [incremental]
+order: 76063.6 size: 509836.8 {} [00001.812 ms; 027 iters.] [3.7507e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 76746.2 size: 513836.8 {} [00006.841 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 76746.2 size: 513836.8 {} [00003.490 ms; 053 iters.] [1.3320e-6 err.] pagerankCuda [static]
-order: 76746.2 size: 513836.8 {} [00005.224 ms; 000 iters.] [5.9690e-7 err.] pagerankNvgraph [dynamic]
-order: 76746.2 size: 513836.8 {} [00002.369 ms; 036 iters.] [3.8933e-6 err.] pagerankCuda [dynamic]
+order: 76746.2 size: 513836.8 {} [00005.224 ms; 000 iters.] [5.9690e-7 err.] pagerankNvgraph [incremental]
+order: 76746.2 size: 513836.8 {} [00002.369 ms; 036 iters.] [3.8933e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 77528 size: 518835.6 {} [00006.823 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 77528 size: 518835.6 {} [00003.453 ms; 053 iters.] [1.2835e-6 err.] pagerankCuda [static]
-order: 77528 size: 518835.6 {} [00005.544 ms; 000 iters.] [5.3291e-7 err.] pagerankNvgraph [dynamic]
-order: 77528 size: 518835.6 {} [00002.602 ms; 040 iters.] [3.2806e-6 err.] pagerankCuda [dynamic]
+order: 77528 size: 518835.6 {} [00005.544 ms; 000 iters.] [5.3291e-7 err.] pagerankNvgraph [incremental]
+order: 77528 size: 518835.6 {} [00002.602 ms; 040 iters.] [3.2806e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 81212 size: 558831.6 {} [00006.373 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 81212 size: 558831.6 {} [00003.051 ms; 046 iters.] [1.6818e-6 err.] pagerankCuda [static]
-order: 81212 size: 558831.6 {} [00005.719 ms; 000 iters.] [4.0404e-7 err.] pagerankNvgraph [dynamic]
-order: 81212 size: 558831.6 {} [00002.702 ms; 041 iters.] [3.2283e-6 err.] pagerankCuda [dynamic]
+order: 81212 size: 558831.6 {} [00005.719 ms; 000 iters.] [4.0404e-7 err.] pagerankNvgraph [incremental]
+order: 81212 size: 558831.6 {} [00002.702 ms; 041 iters.] [3.2283e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 82756.4 size: 608830.8 {} [00005.991 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 82756.4 size: 608830.8 {} [00002.529 ms; 038 iters.] [2.3570e-6 err.] pagerankCuda [static]
-order: 82756.4 size: 608830.8 {} [00005.450 ms; 000 iters.] [2.8116e-7 err.] pagerankNvgraph [dynamic]
-order: 82756.4 size: 608830.8 {} [00002.302 ms; 035 iters.] [3.6431e-6 err.] pagerankCuda [dynamic]
+order: 82756.4 size: 608830.8 {} [00005.450 ms; 000 iters.] [2.8116e-7 err.] pagerankNvgraph [incremental]
+order: 82756.4 size: 608830.8 {} [00002.302 ms; 035 iters.] [3.6431e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 83477 size: 1008800 {} [00003.737 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 83477 size: 1008800 {} [00002.115 ms; 028 iters.] [5.2513e-7 err.] pagerankCuda [static]
-order: 83477 size: 1008800 {} [00003.632 ms; 000 iters.] [2.0316e-6 err.] pagerankNvgraph [dynamic]
-order: 83477 size: 1008800 {} [00002.051 ms; 027 iters.] [2.5439e-6 err.] pagerankCuda [dynamic]
+order: 83477 size: 1008800 {} [00003.632 ms; 000 iters.] [2.0316e-6 err.] pagerankNvgraph [incremental]
+order: 83477 size: 1008800 {} [00002.051 ms; 027 iters.] [2.5439e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph coAuthorsDBLP.mtx ...
@@ -660,80 +660,80 @@ order: 299067 size: 1955353 {}
 # Batch size 1e+0
 order: 299067 size: 1955353 {} [00007.336 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299067 size: 1955353 {} [00003.722 ms; 045 iters.] [2.9377e-6 err.] pagerankCuda [static]
-order: 299067 size: 1955353 {} [00002.507 ms; 000 iters.] [1.3781e-6 err.] pagerankNvgraph [dynamic]
-order: 299067 size: 1955353 {} [00000.241 ms; 002 iters.] [3.6177e-6 err.] pagerankCuda [dynamic]
+order: 299067 size: 1955353 {} [00002.507 ms; 000 iters.] [1.3781e-6 err.] pagerankNvgraph [incremental]
+order: 299067 size: 1955353 {} [00000.241 ms; 002 iters.] [3.6177e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 299067.4 size: 1955357 {} [00007.335 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299067.4 size: 1955357 {} [00003.715 ms; 045 iters.] [2.9384e-6 err.] pagerankCuda [static]
-order: 299067.4 size: 1955357 {} [00003.288 ms; 000 iters.] [1.4530e-6 err.] pagerankNvgraph [dynamic]
-order: 299067.4 size: 1955357 {} [00000.793 ms; 009 iters.] [4.7458e-6 err.] pagerankCuda [dynamic]
+order: 299067.4 size: 1955357 {} [00003.288 ms; 000 iters.] [1.4530e-6 err.] pagerankNvgraph [incremental]
+order: 299067.4 size: 1955357 {} [00000.793 ms; 009 iters.] [4.7458e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 299069 size: 1955362 {} [00007.325 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299069 size: 1955362 {} [00003.711 ms; 045 iters.] [2.9352e-6 err.] pagerankCuda [static]
-order: 299069 size: 1955362 {} [00003.431 ms; 000 iters.] [1.5067e-6 err.] pagerankNvgraph [dynamic]
-order: 299069 size: 1955362 {} [00000.980 ms; 011 iters.] [4.5521e-6 err.] pagerankCuda [dynamic]
+order: 299069 size: 1955362 {} [00003.431 ms; 000 iters.] [1.5067e-6 err.] pagerankNvgraph [incremental]
+order: 299069 size: 1955362 {} [00000.980 ms; 011 iters.] [4.5521e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 299075.2 size: 1955402 {} [00007.333 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299075.2 size: 1955402 {} [00003.690 ms; 045 iters.] [2.9372e-6 err.] pagerankCuda [static]
-order: 299075.2 size: 1955402 {} [00004.151 ms; 000 iters.] [1.6498e-6 err.] pagerankNvgraph [dynamic]
-order: 299075.2 size: 1955402 {} [00001.588 ms; 019 iters.] [4.4445e-6 err.] pagerankCuda [dynamic]
+order: 299075.2 size: 1955402 {} [00004.151 ms; 000 iters.] [1.6498e-6 err.] pagerankNvgraph [incremental]
+order: 299075.2 size: 1955402 {} [00001.588 ms; 019 iters.] [4.4445e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 299084.2 size: 1955452 {} [00007.323 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299084.2 size: 1955452 {} [00003.673 ms; 045 iters.] [2.9368e-6 err.] pagerankCuda [static]
-order: 299084.2 size: 1955452 {} [00004.321 ms; 000 iters.] [1.7385e-6 err.] pagerankNvgraph [dynamic]
-order: 299084.2 size: 1955452 {} [00001.770 ms; 021 iters.] [4.3243e-6 err.] pagerankCuda [dynamic]
+order: 299084.2 size: 1955452 {} [00004.321 ms; 000 iters.] [1.7385e-6 err.] pagerankNvgraph [incremental]
+order: 299084.2 size: 1955452 {} [00001.770 ms; 021 iters.] [4.3243e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 299159.6 size: 1955852 {} [00007.322 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299159.6 size: 1955852 {} [00003.693 ms; 045 iters.] [2.9288e-6 err.] pagerankCuda [static]
-order: 299159.6 size: 1955852 {} [00004.992 ms; 000 iters.] [1.9058e-6 err.] pagerankNvgraph [dynamic]
-order: 299159.6 size: 1955852 {} [00002.272 ms; 027 iters.] [4.3940e-6 err.] pagerankCuda [dynamic]
+order: 299159.6 size: 1955852 {} [00004.992 ms; 000 iters.] [1.9058e-6 err.] pagerankNvgraph [incremental]
+order: 299159.6 size: 1955852 {} [00002.272 ms; 027 iters.] [4.3940e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 299248.2 size: 1956352 {} [00007.325 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299248.2 size: 1956352 {} [00003.694 ms; 045 iters.] [2.9168e-6 err.] pagerankCuda [static]
-order: 299248.2 size: 1956352 {} [00005.189 ms; 000 iters.] [2.0743e-6 err.] pagerankNvgraph [dynamic]
-order: 299248.2 size: 1956352 {} [00002.491 ms; 030 iters.] [4.2754e-6 err.] pagerankCuda [dynamic]
+order: 299248.2 size: 1956352 {} [00005.189 ms; 000 iters.] [2.0743e-6 err.] pagerankNvgraph [incremental]
+order: 299248.2 size: 1956352 {} [00002.491 ms; 030 iters.] [4.2754e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 299966.8 size: 1960352 {} [00007.299 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 299966.8 size: 1960352 {} [00003.743 ms; 045 iters.] [2.8028e-6 err.] pagerankCuda [static]
-order: 299966.8 size: 1960352 {} [00005.723 ms; 000 iters.] [2.3316e-6 err.] pagerankNvgraph [dynamic]
-order: 299966.8 size: 1960352 {} [00002.930 ms; 035 iters.] [4.3633e-6 err.] pagerankCuda [dynamic]
+order: 299966.8 size: 1960352 {} [00005.723 ms; 000 iters.] [2.3316e-6 err.] pagerankNvgraph [incremental]
+order: 299966.8 size: 1960352 {} [00002.930 ms; 035 iters.] [4.3633e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 300818.4 size: 1965352 {} [00007.268 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 300818.4 size: 1965352 {} [00003.751 ms; 045 iters.] [2.6205e-6 err.] pagerankCuda [static]
-order: 300818.4 size: 1965352 {} [00006.009 ms; 000 iters.] [2.1721e-6 err.] pagerankNvgraph [dynamic]
-order: 300818.4 size: 1965352 {} [00003.088 ms; 037 iters.] [4.1344e-6 err.] pagerankCuda [dynamic]
+order: 300818.4 size: 1965352 {} [00006.009 ms; 000 iters.] [2.1721e-6 err.] pagerankNvgraph [incremental]
+order: 300818.4 size: 1965352 {} [00003.088 ms; 037 iters.] [4.1344e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 306994.8 size: 2005351 {} [00007.104 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 306994.8 size: 2005351 {} [00003.735 ms; 044 iters.] [2.4234e-6 err.] pagerankCuda [static]
-order: 306994.8 size: 2005351 {} [00006.326 ms; 000 iters.] [1.7686e-6 err.] pagerankNvgraph [dynamic]
-order: 306994.8 size: 2005351 {} [00003.398 ms; 040 iters.] [3.1397e-6 err.] pagerankCuda [dynamic]
+order: 306994.8 size: 2005351 {} [00006.326 ms; 000 iters.] [1.7686e-6 err.] pagerankNvgraph [incremental]
+order: 306994.8 size: 2005351 {} [00003.398 ms; 040 iters.] [3.1397e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 312642.4 size: 2055350.8 {} [00007.159 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 312642.4 size: 2055350.8 {} [00003.765 ms; 043 iters.] [2.4391e-6 err.] pagerankCuda [static]
-order: 312642.4 size: 2055350.8 {} [00006.509 ms; 000 iters.] [1.1464e-6 err.] pagerankNvgraph [dynamic]
-order: 312642.4 size: 2055350.8 {} [00003.452 ms; 039 iters.] [3.0590e-6 err.] pagerankCuda [dynamic]
+order: 312642.4 size: 2055350.8 {} [00006.509 ms; 000 iters.] [1.1464e-6 err.] pagerankNvgraph [incremental]
+order: 312642.4 size: 2055350.8 {} [00003.452 ms; 039 iters.] [3.0590e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 327562.6 size: 2455341.8 {} [00007.048 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 327562.6 size: 2455341.8 {} [00003.567 ms; 037 iters.] [2.7809e-6 err.] pagerankCuda [static]
-order: 327562.6 size: 2455341.8 {} [00006.416 ms; 000 iters.] [2.9435e-7 err.] pagerankNvgraph [dynamic]
-order: 327562.6 size: 2455341.8 {} [00003.294 ms; 034 iters.] [2.5175e-6 err.] pagerankCuda [dynamic]
+order: 327562.6 size: 2455341.8 {} [00006.416 ms; 000 iters.] [2.9435e-7 err.] pagerankNvgraph [incremental]
+order: 327562.6 size: 2455341.8 {} [00003.294 ms; 034 iters.] [2.5175e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 328907.2 size: 2955333.8 {} [00007.160 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 328907.2 size: 2955333.8 {} [00003.563 ms; 033 iters.] [3.0148e-6 err.] pagerankCuda [static]
-order: 328907.2 size: 2955333.8 {} [00006.385 ms; 000 iters.] [1.9353e-7 err.] pagerankNvgraph [dynamic]
-order: 328907.2 size: 2955333.8 {} [00003.243 ms; 030 iters.] [2.5401e-6 err.] pagerankCuda [dynamic]
+order: 328907.2 size: 2955333.8 {} [00006.385 ms; 000 iters.] [1.9353e-7 err.] pagerankNvgraph [incremental]
+order: 328907.2 size: 2955333.8 {} [00003.243 ms; 030 iters.] [2.5401e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph coAuthorsCiteseer.mtx ...
@@ -743,80 +743,80 @@ order: 227320 size: 1628269 {}
 # Batch size 1e+0
 order: 227320 size: 1628269 {} [00006.910 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227320 size: 1628269 {} [00003.781 ms; 048 iters.] [2.1838e-6 err.] pagerankCuda [static]
-order: 227320 size: 1628269 {} [00002.562 ms; 000 iters.] [2.1485e-6 err.] pagerankNvgraph [dynamic]
-order: 227320 size: 1628269 {} [00000.302 ms; 003 iters.] [4.2664e-6 err.] pagerankCuda [dynamic]
+order: 227320 size: 1628269 {} [00002.562 ms; 000 iters.] [2.1485e-6 err.] pagerankNvgraph [incremental]
+order: 227320 size: 1628269 {} [00000.302 ms; 003 iters.] [4.2664e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 227321 size: 1628273 {} [00006.918 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227321 size: 1628273 {} [00003.786 ms; 048 iters.] [2.1893e-6 err.] pagerankCuda [static]
-order: 227321 size: 1628273 {} [00003.196 ms; 000 iters.] [2.2738e-6 err.] pagerankNvgraph [dynamic]
-order: 227321 size: 1628273 {} [00000.872 ms; 010 iters.] [5.6040e-6 err.] pagerankCuda [dynamic]
+order: 227321 size: 1628273 {} [00003.196 ms; 000 iters.] [2.2738e-6 err.] pagerankNvgraph [incremental]
+order: 227321 size: 1628273 {} [00000.872 ms; 010 iters.] [5.6040e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 227321.8 size: 1628278 {} [00006.924 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227321.8 size: 1628278 {} [00003.783 ms; 048 iters.] [2.1888e-6 err.] pagerankCuda [static]
-order: 227321.8 size: 1628278 {} [00003.405 ms; 000 iters.] [2.4016e-6 err.] pagerankNvgraph [dynamic]
-order: 227321.8 size: 1628278 {} [00001.149 ms; 014 iters.] [5.8316e-6 err.] pagerankCuda [dynamic]
+order: 227321.8 size: 1628278 {} [00003.405 ms; 000 iters.] [2.4016e-6 err.] pagerankNvgraph [incremental]
+order: 227321.8 size: 1628278 {} [00001.149 ms; 014 iters.] [5.8316e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 227329.8 size: 1628318 {} [00006.927 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227329.8 size: 1628318 {} [00003.782 ms; 048 iters.] [2.2317e-6 err.] pagerankCuda [static]
-order: 227329.8 size: 1628318 {} [00004.111 ms; 000 iters.] [2.5197e-6 err.] pagerankNvgraph [dynamic]
-order: 227329.8 size: 1628318 {} [00001.749 ms; 022 iters.] [5.4607e-6 err.] pagerankCuda [dynamic]
+order: 227329.8 size: 1628318 {} [00004.111 ms; 000 iters.] [2.5197e-6 err.] pagerankNvgraph [incremental]
+order: 227329.8 size: 1628318 {} [00001.749 ms; 022 iters.] [5.4607e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 227339.8 size: 1628368 {} [00006.927 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227339.8 size: 1628368 {} [00003.776 ms; 048 iters.] [2.2139e-6 err.] pagerankCuda [static]
-order: 227339.8 size: 1628368 {} [00004.392 ms; 000 iters.] [2.5922e-6 err.] pagerankNvgraph [dynamic]
-order: 227339.8 size: 1628368 {} [00001.992 ms; 025 iters.] [5.1368e-6 err.] pagerankCuda [dynamic]
+order: 227339.8 size: 1628368 {} [00004.392 ms; 000 iters.] [2.5922e-6 err.] pagerankNvgraph [incremental]
+order: 227339.8 size: 1628368 {} [00001.992 ms; 025 iters.] [5.1368e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 227420.2 size: 1628768 {} [00006.926 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227420.2 size: 1628768 {} [00003.776 ms; 048 iters.] [2.2149e-6 err.] pagerankCuda [static]
-order: 227420.2 size: 1628768 {} [00004.900 ms; 000 iters.] [2.8980e-6 err.] pagerankNvgraph [dynamic]
-order: 227420.2 size: 1628768 {} [00002.471 ms; 031 iters.] [5.1296e-6 err.] pagerankCuda [dynamic]
+order: 227420.2 size: 1628768 {} [00004.900 ms; 000 iters.] [2.8980e-6 err.] pagerankNvgraph [incremental]
+order: 227420.2 size: 1628768 {} [00002.471 ms; 031 iters.] [5.1296e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 227505.2 size: 1629268 {} [00006.929 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 227505.2 size: 1629268 {} [00003.787 ms; 048 iters.] [2.2266e-6 err.] pagerankCuda [static]
-order: 227505.2 size: 1629268 {} [00005.172 ms; 000 iters.] [2.9345e-6 err.] pagerankNvgraph [dynamic]
-order: 227505.2 size: 1629268 {} [00002.701 ms; 034 iters.] [4.7161e-6 err.] pagerankCuda [dynamic]
+order: 227505.2 size: 1629268 {} [00005.172 ms; 000 iters.] [2.9345e-6 err.] pagerankNvgraph [incremental]
+order: 227505.2 size: 1629268 {} [00002.701 ms; 034 iters.] [4.7161e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 228234.8 size: 1633268 {} [00006.937 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 228234.8 size: 1633268 {} [00003.775 ms; 048 iters.] [2.2696e-6 err.] pagerankCuda [static]
-order: 228234.8 size: 1633268 {} [00005.697 ms; 000 iters.] [2.8807e-6 err.] pagerankNvgraph [dynamic]
-order: 228234.8 size: 1633268 {} [00003.125 ms; 040 iters.] [4.0792e-6 err.] pagerankCuda [dynamic]
+order: 228234.8 size: 1633268 {} [00005.697 ms; 000 iters.] [2.8807e-6 err.] pagerankNvgraph [incremental]
+order: 228234.8 size: 1633268 {} [00003.125 ms; 040 iters.] [4.0792e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 229062.6 size: 1638267.8 {} [00006.928 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 229062.6 size: 1638267.8 {} [00003.776 ms; 048 iters.] [2.1807e-6 err.] pagerankCuda [static]
-order: 229062.6 size: 1638267.8 {} [00005.977 ms; 000 iters.] [2.5306e-6 err.] pagerankNvgraph [dynamic]
-order: 229062.6 size: 1638267.8 {} [00003.296 ms; 042 iters.] [3.5043e-6 err.] pagerankCuda [dynamic]
+order: 229062.6 size: 1638267.8 {} [00005.977 ms; 000 iters.] [2.5306e-6 err.] pagerankNvgraph [incremental]
+order: 229062.6 size: 1638267.8 {} [00003.296 ms; 042 iters.] [3.5043e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 234801 size: 1678267 {} [00007.048 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 234801 size: 1678267 {} [00003.778 ms; 048 iters.] [1.8525e-6 err.] pagerankCuda [static]
-order: 234801 size: 1678267 {} [00006.536 ms; 000 iters.] [1.3309e-6 err.] pagerankNvgraph [dynamic]
-order: 234801 size: 1678267 {} [00003.534 ms; 045 iters.] [2.3473e-6 err.] pagerankCuda [dynamic]
+order: 234801 size: 1678267 {} [00006.536 ms; 000 iters.] [1.3309e-6 err.] pagerankNvgraph [incremental]
+order: 234801 size: 1678267 {} [00003.534 ms; 045 iters.] [2.3473e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 239838.6 size: 1728265.4 {} [00007.162 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 239838.6 size: 1728265.4 {} [00003.724 ms; 047 iters.] [2.2323e-6 err.] pagerankCuda [static]
-order: 239838.6 size: 1728265.4 {} [00006.819 ms; 000 iters.] [6.4015e-7 err.] pagerankNvgraph [dynamic]
-order: 239838.6 size: 1728265.4 {} [00003.571 ms; 045 iters.] [2.1511e-6 err.] pagerankCuda [dynamic]
+order: 239838.6 size: 1728265.4 {} [00006.819 ms; 000 iters.] [6.4015e-7 err.] pagerankNvgraph [incremental]
+order: 239838.6 size: 1728265.4 {} [00003.571 ms; 045 iters.] [2.1511e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 249642.8 size: 2128255.4 {} [00006.807 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 249642.8 size: 2128255.4 {} [00003.634 ms; 041 iters.] [2.2232e-6 err.] pagerankCuda [static]
-order: 249642.8 size: 2128255.4 {} [00006.703 ms; 000 iters.] [1.2039e-7 err.] pagerankNvgraph [dynamic]
-order: 249642.8 size: 2128255.4 {} [00003.516 ms; 040 iters.] [2.4375e-6 err.] pagerankCuda [dynamic]
+order: 249642.8 size: 2128255.4 {} [00006.703 ms; 000 iters.] [1.2039e-7 err.] pagerankNvgraph [incremental]
+order: 249642.8 size: 2128255.4 {} [00003.516 ms; 040 iters.] [2.4375e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 250046.8 size: 2628245.4 {} [00006.678 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 250046.8 size: 2628245.4 {} [00003.782 ms; 036 iters.] [2.2109e-6 err.] pagerankCuda [static]
-order: 250046.8 size: 2628245.4 {} [00006.633 ms; 000 iters.] [1.2737e-7 err.] pagerankNvgraph [dynamic]
-order: 250046.8 size: 2628245.4 {} [00003.703 ms; 035 iters.] [2.1378e-6 err.] pagerankCuda [dynamic]
+order: 250046.8 size: 2628245.4 {} [00006.633 ms; 000 iters.] [1.2737e-7 err.] pagerankNvgraph [incremental]
+order: 250046.8 size: 2628245.4 {} [00003.703 ms; 035 iters.] [2.1378e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph soc-LiveJournal1.mtx ...
@@ -826,98 +826,98 @@ order: 4847572 size: 68993774 {}
 # Batch size 1e+0
 order: 4847571.4 size: 68993774 {} [00168.449 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847571.4 size: 68993774 {} [00158.919 ms; 051 iters.] [3.2012e-6 err.] pagerankCuda [static]
-order: 4847571.4 size: 68993774 {} [00014.478 ms; 000 iters.] [2.5781e-7 err.] pagerankNvgraph [dynamic]
-order: 4847571.4 size: 68993774 {} [00003.223 ms; 001 iters.] [3.0940e-7 err.] pagerankCuda [dynamic]
+order: 4847571.4 size: 68993774 {} [00014.478 ms; 000 iters.] [2.5781e-7 err.] pagerankNvgraph [incremental]
+order: 4847571.4 size: 68993774 {} [00003.223 ms; 001 iters.] [3.0940e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 4847572.2 size: 68993778 {} [00168.358 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847572.2 size: 68993778 {} [00158.904 ms; 051 iters.] [3.1609e-6 err.] pagerankCuda [static]
-order: 4847572.2 size: 68993778 {} [00020.177 ms; 000 iters.] [3.0107e-7 err.] pagerankNvgraph [dynamic]
-order: 4847572.2 size: 68993778 {} [00003.229 ms; 001 iters.] [7.3041e-7 err.] pagerankCuda [dynamic]
+order: 4847572.2 size: 68993778 {} [00020.177 ms; 000 iters.] [3.0107e-7 err.] pagerankNvgraph [incremental]
+order: 4847572.2 size: 68993778 {} [00003.229 ms; 001 iters.] [7.3041e-7 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 4847572.6 size: 68993783 {} [00168.505 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847572.6 size: 68993783 {} [00158.939 ms; 051 iters.] [3.1840e-6 err.] pagerankCuda [static]
-order: 4847572.6 size: 68993783 {} [00029.471 ms; 000 iters.] [3.5690e-7 err.] pagerankNvgraph [dynamic]
-order: 4847572.6 size: 68993783 {} [00005.714 ms; 002 iters.] [1.2775e-6 err.] pagerankCuda [dynamic]
+order: 4847572.6 size: 68993783 {} [00029.471 ms; 000 iters.] [3.5690e-7 err.] pagerankNvgraph [incremental]
+order: 4847572.6 size: 68993783 {} [00005.714 ms; 002 iters.] [1.2775e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 4847579.6 size: 68993823 {} [00168.357 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847579.6 size: 68993823 {} [00158.850 ms; 051 iters.] [3.1943e-6 err.] pagerankCuda [static]
-order: 4847579.6 size: 68993823 {} [00040.351 ms; 000 iters.] [4.1340e-7 err.] pagerankNvgraph [dynamic]
-order: 4847579.6 size: 68993823 {} [00016.352 ms; 005 iters.] [1.5645e-6 err.] pagerankCuda [dynamic]
+order: 4847579.6 size: 68993823 {} [00040.351 ms; 000 iters.] [4.1340e-7 err.] pagerankNvgraph [incremental]
+order: 4847579.6 size: 68993823 {} [00016.352 ms; 005 iters.] [1.5645e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 4847593.4 size: 68993873 {} [00168.375 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847593.4 size: 68993873 {} [00158.924 ms; 051 iters.] [3.2172e-6 err.] pagerankCuda [static]
-order: 4847593.4 size: 68993873 {} [00045.479 ms; 000 iters.] [3.8000e-7 err.] pagerankNvgraph [dynamic]
-order: 4847593.4 size: 68993873 {} [00020.080 ms; 006 iters.] [2.0526e-6 err.] pagerankCuda [dynamic]
+order: 4847593.4 size: 68993873 {} [00045.479 ms; 000 iters.] [3.8000e-7 err.] pagerankNvgraph [incremental]
+order: 4847593.4 size: 68993873 {} [00020.080 ms; 006 iters.] [2.0526e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 4847664 size: 68994273 {} [00168.223 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847664 size: 68994273 {} [00158.758 ms; 051 iters.] [3.1916e-6 err.] pagerankCuda [static]
-order: 4847664 size: 68994273 {} [00061.011 ms; 000 iters.] [3.5308e-7 err.] pagerankNvgraph [dynamic]
-order: 4847664 size: 68994273 {} [00031.181 ms; 010 iters.] [2.4921e-6 err.] pagerankCuda [dynamic]
+order: 4847664 size: 68994273 {} [00061.011 ms; 000 iters.] [3.5308e-7 err.] pagerankNvgraph [incremental]
+order: 4847664 size: 68994273 {} [00031.181 ms; 010 iters.] [2.4921e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 4847751.4 size: 68994773 {} [00168.302 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4847751.4 size: 68994773 {} [00158.856 ms; 051 iters.] [3.2357e-6 err.] pagerankCuda [static]
-order: 4847751.4 size: 68994773 {} [00071.313 ms; 000 iters.] [3.8162e-7 err.] pagerankNvgraph [dynamic]
-order: 4847751.4 size: 68994773 {} [00040.616 ms; 013 iters.] [3.0226e-6 err.] pagerankCuda [dynamic]
+order: 4847751.4 size: 68994773 {} [00071.313 ms; 000 iters.] [3.8162e-7 err.] pagerankNvgraph [incremental]
+order: 4847751.4 size: 68994773 {} [00040.616 ms; 013 iters.] [3.0226e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 4848488.2 size: 68998773 {} [00168.424 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4848488.2 size: 68998773 {} [00158.896 ms; 051 iters.] [3.2321e-6 err.] pagerankCuda [static]
-order: 4848488.2 size: 68998773 {} [00097.210 ms; 000 iters.] [3.4122e-7 err.] pagerankNvgraph [dynamic]
-order: 4848488.2 size: 68998773 {} [00053.127 ms; 017 iters.] [3.3493e-6 err.] pagerankCuda [dynamic]
+order: 4848488.2 size: 68998773 {} [00097.210 ms; 000 iters.] [3.4122e-7 err.] pagerankNvgraph [incremental]
+order: 4848488.2 size: 68998773 {} [00053.127 ms; 017 iters.] [3.3493e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 4849358.8 size: 69003772.8 {} [00168.413 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4849358.8 size: 69003772.8 {} [00158.831 ms; 051 iters.] [3.1586e-6 err.] pagerankCuda [static]
-order: 4849358.8 size: 69003772.8 {} [00100.402 ms; 000 iters.] [3.7737e-7 err.] pagerankNvgraph [dynamic]
-order: 4849358.8 size: 69003772.8 {} [00059.900 ms; 019 iters.] [3.7515e-6 err.] pagerankCuda [dynamic]
+order: 4849358.8 size: 69003772.8 {} [00100.402 ms; 000 iters.] [3.7737e-7 err.] pagerankNvgraph [incremental]
+order: 4849358.8 size: 69003772.8 {} [00059.900 ms; 019 iters.] [3.7515e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 4856615.8 size: 69043772.8 {} [00168.724 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4856615.8 size: 69043772.8 {} [00157.668 ms; 051 iters.] [3.3104e-6 err.] pagerankCuda [static]
-order: 4856615.8 size: 69043772.8 {} [00115.448 ms; 000 iters.] [3.4372e-7 err.] pagerankNvgraph [dynamic]
-order: 4856615.8 size: 69043772.8 {} [00083.845 ms; 027 iters.] [3.8729e-6 err.] pagerankCuda [dynamic]
+order: 4856615.8 size: 69043772.8 {} [00115.448 ms; 000 iters.] [3.4372e-7 err.] pagerankNvgraph [incremental]
+order: 4856615.8 size: 69043772.8 {} [00083.845 ms; 027 iters.] [3.8729e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 4865420 size: 69093773 {} [00169.227 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4865420 size: 69093773 {} [00157.476 ms; 051 iters.] [3.3977e-6 err.] pagerankCuda [static]
-order: 4865420 size: 69093773 {} [00120.910 ms; 000 iters.] [3.5480e-7 err.] pagerankNvgraph [dynamic]
-order: 4865420 size: 69093773 {} [00094.737 ms; 030 iters.] [4.1878e-6 err.] pagerankCuda [dynamic]
+order: 4865420 size: 69093773 {} [00120.910 ms; 000 iters.] [3.5480e-7 err.] pagerankNvgraph [incremental]
+order: 4865420 size: 69093773 {} [00094.737 ms; 030 iters.] [4.1878e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 4930552 size: 69493772 {} [00169.894 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4930552 size: 69493772 {} [00158.407 ms; 050 iters.] [3.5375e-6 err.] pagerankCuda [static]
-order: 4930552 size: 69493772 {} [00140.122 ms; 000 iters.] [3.3353e-7 err.] pagerankNvgraph [dynamic]
-order: 4930552 size: 69493772 {} [00120.348 ms; 038 iters.] [4.0407e-6 err.] pagerankCuda [dynamic]
+order: 4930552 size: 69493772 {} [00140.122 ms; 000 iters.] [3.3353e-7 err.] pagerankNvgraph [incremental]
+order: 4930552 size: 69493772 {} [00120.348 ms; 038 iters.] [4.0407e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 4999025.6 size: 69993770 {} [00172.167 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 4999025.6 size: 69993770 {} [00158.961 ms; 049 iters.] [3.8532e-6 err.] pagerankCuda [static]
-order: 4999025.6 size: 69993770 {} [00141.913 ms; 000 iters.] [4.2386e-7 err.] pagerankNvgraph [dynamic]
-order: 4999025.6 size: 69993770 {} [00132.405 ms; 041 iters.] [3.7711e-6 err.] pagerankCuda [dynamic]
+order: 4999025.6 size: 69993770 {} [00141.913 ms; 000 iters.] [4.2386e-7 err.] pagerankNvgraph [incremental]
+order: 4999025.6 size: 69993770 {} [00132.405 ms; 041 iters.] [3.7711e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 5258439.4 size: 73993760.2 {} [00193.943 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 5258439.4 size: 73993760.2 {} [00172.771 ms; 046 iters.] [3.8700e-6 err.] pagerankCuda [static]
-order: 5258439.4 size: 73993760.2 {} [00172.954 ms; 000 iters.] [3.0559e-7 err.] pagerankNvgraph [dynamic]
-order: 5258439.4 size: 73993760.2 {} [00161.416 ms; 043 iters.] [3.7434e-6 err.] pagerankCuda [dynamic]
+order: 5258439.4 size: 73993760.2 {} [00172.954 ms; 000 iters.] [3.0559e-7 err.] pagerankNvgraph [incremental]
+order: 5258439.4 size: 73993760.2 {} [00161.416 ms; 043 iters.] [3.7434e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 5321105.6 size: 78993745 {} [00213.113 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 5321105.6 size: 78993745 {} [00189.342 ms; 043 iters.] [3.4230e-6 err.] pagerankCuda [static]
-order: 5321105.6 size: 78993745 {} [00191.422 ms; 000 iters.] [2.9675e-7 err.] pagerankNvgraph [dynamic]
-order: 5321105.6 size: 78993745 {} [00180.495 ms; 041 iters.] [3.4062e-6 err.] pagerankCuda [dynamic]
+order: 5321105.6 size: 78993745 {} [00191.422 ms; 000 iters.] [2.9675e-7 err.] pagerankNvgraph [incremental]
+order: 5321105.6 size: 78993745 {} [00180.495 ms; 041 iters.] [3.4062e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+7
 order: 5332329 size: 118993642.2 {} [00318.800 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 5332329 size: 118993642.2 {} [00300.499 ms; 032 iters.] [2.0933e-6 err.] pagerankCuda [static]
-order: 5332329 size: 118993642.2 {} [00322.030 ms; 000 iters.] [1.3913e-7 err.] pagerankNvgraph [dynamic]
-order: 5332329 size: 118993642.2 {} [00281.682 ms; 030 iters.] [2.7472e-6 err.] pagerankCuda [dynamic]
+order: 5332329 size: 118993642.2 {} [00322.030 ms; 000 iters.] [1.3913e-7 err.] pagerankNvgraph [incremental]
+order: 5332329 size: 118993642.2 {} [00281.682 ms; 030 iters.] [2.7472e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph coPapersCiteseer.mtx ...
@@ -927,92 +927,92 @@ order: 434102 size: 32073441 {}
 # Batch size 1e+0
 order: 434102 size: 32073441 {} [00025.358 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434102 size: 32073441 {} [00036.024 ms; 051 iters.] [1.6817e-6 err.] pagerankCuda [static]
-order: 434102 size: 32073441 {} [00002.522 ms; 000 iters.] [1.7477e-6 err.] pagerankNvgraph [dynamic]
-order: 434102 size: 32073441 {} [00000.771 ms; 001 iters.] [9.3411e-7 err.] pagerankCuda [dynamic]
+order: 434102 size: 32073441 {} [00002.522 ms; 000 iters.] [1.7477e-6 err.] pagerankNvgraph [incremental]
+order: 434102 size: 32073441 {} [00000.771 ms; 001 iters.] [9.3411e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 434102.8 size: 32073445 {} [00025.239 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434102.8 size: 32073445 {} [00036.003 ms; 051 iters.] [1.5645e-6 err.] pagerankCuda [static]
-order: 434102.8 size: 32073445 {} [00008.512 ms; 000 iters.] [2.8902e-6 err.] pagerankNvgraph [dynamic]
-order: 434102.8 size: 32073445 {} [00003.304 ms; 005 iters.] [3.9743e-6 err.] pagerankCuda [dynamic]
+order: 434102.8 size: 32073445 {} [00008.512 ms; 000 iters.] [2.8902e-6 err.] pagerankNvgraph [incremental]
+order: 434102.8 size: 32073445 {} [00003.304 ms; 005 iters.] [3.9743e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 434102.6 size: 32073450 {} [00025.491 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434102.6 size: 32073450 {} [00035.998 ms; 051 iters.] [1.7818e-6 err.] pagerankCuda [static]
-order: 434102.6 size: 32073450 {} [00008.892 ms; 000 iters.] [2.7837e-6 err.] pagerankNvgraph [dynamic]
-order: 434102.6 size: 32073450 {} [00004.150 ms; 006 iters.] [4.9443e-6 err.] pagerankCuda [dynamic]
+order: 434102.6 size: 32073450 {} [00008.892 ms; 000 iters.] [2.7837e-6 err.] pagerankNvgraph [incremental]
+order: 434102.6 size: 32073450 {} [00004.150 ms; 006 iters.] [4.9443e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 434111 size: 32073490 {} [00025.255 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434111 size: 32073490 {} [00035.992 ms; 051 iters.] [1.5601e-6 err.] pagerankCuda [static]
-order: 434111 size: 32073490 {} [00010.847 ms; 000 iters.] [3.1252e-6 err.] pagerankNvgraph [dynamic]
-order: 434111 size: 32073490 {} [00008.515 ms; 012 iters.] [5.8542e-6 err.] pagerankCuda [dynamic]
+order: 434111 size: 32073490 {} [00010.847 ms; 000 iters.] [3.1252e-6 err.] pagerankNvgraph [incremental]
+order: 434111 size: 32073490 {} [00008.515 ms; 012 iters.] [5.8542e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 434119.8 size: 32073540 {} [00025.220 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434119.8 size: 32073540 {} [00035.953 ms; 051 iters.] [1.5701e-6 err.] pagerankCuda [static]
-order: 434119.8 size: 32073540 {} [00011.871 ms; 000 iters.] [3.1138e-6 err.] pagerankNvgraph [dynamic]
-order: 434119.8 size: 32073540 {} [00010.706 ms; 015 iters.] [5.6884e-6 err.] pagerankCuda [dynamic]
+order: 434119.8 size: 32073540 {} [00011.871 ms; 000 iters.] [3.1138e-6 err.] pagerankNvgraph [incremental]
+order: 434119.8 size: 32073540 {} [00010.706 ms; 015 iters.] [5.6884e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 434192.2 size: 32073939.8 {} [00025.322 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434192.2 size: 32073939.8 {} [00036.097 ms; 051 iters.] [1.6639e-6 err.] pagerankCuda [static]
-order: 434192.2 size: 32073939.8 {} [00013.909 ms; 000 iters.] [3.1065e-6 err.] pagerankNvgraph [dynamic]
-order: 434192.2 size: 32073939.8 {} [00015.559 ms; 022 iters.] [5.3613e-6 err.] pagerankCuda [dynamic]
+order: 434192.2 size: 32073939.8 {} [00013.909 ms; 000 iters.] [3.1065e-6 err.] pagerankNvgraph [incremental]
+order: 434192.2 size: 32073939.8 {} [00015.559 ms; 022 iters.] [5.3613e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 434284.6 size: 32074440 {} [00025.622 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434284.6 size: 32074440 {} [00036.006 ms; 051 iters.] [1.8790e-6 err.] pagerankCuda [static]
-order: 434284.6 size: 32074440 {} [00014.937 ms; 000 iters.] [2.8638e-6 err.] pagerankNvgraph [dynamic]
-order: 434284.6 size: 32074440 {} [00017.667 ms; 025 iters.] [4.9054e-6 err.] pagerankCuda [dynamic]
+order: 434284.6 size: 32074440 {} [00014.937 ms; 000 iters.] [2.8638e-6 err.] pagerankNvgraph [incremental]
+order: 434284.6 size: 32074440 {} [00017.667 ms; 025 iters.] [4.9054e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 434993.8 size: 32078439.2 {} [00025.515 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 434993.8 size: 32078439.2 {} [00036.030 ms; 051 iters.] [1.8079e-6 err.] pagerankCuda [static]
-order: 434993.8 size: 32078439.2 {} [00017.093 ms; 000 iters.] [2.7552e-6 err.] pagerankNvgraph [dynamic]
-order: 434993.8 size: 32078439.2 {} [00022.618 ms; 032 iters.] [4.0538e-6 err.] pagerankCuda [dynamic]
+order: 434993.8 size: 32078439.2 {} [00017.093 ms; 000 iters.] [2.7552e-6 err.] pagerankNvgraph [incremental]
+order: 434993.8 size: 32078439.2 {} [00022.618 ms; 032 iters.] [4.0538e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 435856.8 size: 32083437.8 {} [00025.530 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 435856.8 size: 32083437.8 {} [00036.030 ms; 051 iters.] [1.8893e-6 err.] pagerankCuda [static]
-order: 435856.8 size: 32083437.8 {} [00018.036 ms; 000 iters.] [2.4632e-6 err.] pagerankNvgraph [dynamic]
-order: 435856.8 size: 32083437.8 {} [00024.720 ms; 035 iters.] [3.5735e-6 err.] pagerankCuda [dynamic]
+order: 435856.8 size: 32083437.8 {} [00018.036 ms; 000 iters.] [2.4632e-6 err.] pagerankNvgraph [incremental]
+order: 435856.8 size: 32083437.8 {} [00024.720 ms; 035 iters.] [3.5735e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 442281.2 size: 32123432.2 {} [00025.722 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 442281.2 size: 32123432.2 {} [00036.125 ms; 051 iters.] [1.9259e-6 err.] pagerankCuda [static]
-order: 442281.2 size: 32123432.2 {} [00020.949 ms; 000 iters.] [1.8308e-6 err.] pagerankNvgraph [dynamic]
-order: 442281.2 size: 32123432.2 {} [00029.283 ms; 041 iters.] [2.9728e-6 err.] pagerankCuda [dynamic]
+order: 442281.2 size: 32123432.2 {} [00020.949 ms; 000 iters.] [1.8308e-6 err.] pagerankNvgraph [incremental]
+order: 442281.2 size: 32123432.2 {} [00029.283 ms; 041 iters.] [2.9728e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 448924 size: 32173422.6 {} [00025.846 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 448924 size: 32173422.6 {} [00036.182 ms; 051 iters.] [1.9231e-6 err.] pagerankCuda [static]
-order: 448924 size: 32173422.6 {} [00021.981 ms; 000 iters.] [1.6453e-6 err.] pagerankNvgraph [dynamic]
-order: 448924 size: 32173422.6 {} [00031.179 ms; 044 iters.] [2.6772e-6 err.] pagerankCuda [dynamic]
+order: 448924 size: 32173422.6 {} [00021.981 ms; 000 iters.] [1.6453e-6 err.] pagerankNvgraph [incremental]
+order: 448924 size: 32173422.6 {} [00031.179 ms; 044 iters.] [2.6772e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 472190.8 size: 32573371 {} [00026.118 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 472190.8 size: 32573371 {} [00036.339 ms; 050 iters.] [1.9828e-6 err.] pagerankCuda [static]
-order: 472190.8 size: 32573371 {} [00024.540 ms; 000 iters.] [8.2555e-7 err.] pagerankNvgraph [dynamic]
-order: 472190.8 size: 32573371 {} [00034.130 ms; 047 iters.] [2.1261e-6 err.] pagerankCuda [dynamic]
+order: 472190.8 size: 32573371 {} [00024.540 ms; 000 iters.] [8.2555e-7 err.] pagerankNvgraph [incremental]
+order: 472190.8 size: 32573371 {} [00034.130 ms; 047 iters.] [2.1261e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 476857.6 size: 33073298.6 {} [00026.596 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 476857.6 size: 33073298.6 {} [00036.513 ms; 049 iters.] [2.3003e-6 err.] pagerankCuda [static]
-order: 476857.6 size: 33073298.6 {} [00025.061 ms; 000 iters.] [5.9403e-7 err.] pagerankNvgraph [dynamic]
-order: 476857.6 size: 33073298.6 {} [00034.933 ms; 047 iters.] [2.0868e-6 err.] pagerankCuda [dynamic]
+order: 476857.6 size: 33073298.6 {} [00025.061 ms; 000 iters.] [5.9403e-7 err.] pagerankNvgraph [incremental]
+order: 476857.6 size: 33073298.6 {} [00034.933 ms; 047 iters.] [2.0868e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 477513 size: 37072735.8 {} [00028.714 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 477513 size: 37072735.8 {} [00037.405 ms; 044 iters.] [2.7926e-6 err.] pagerankCuda [static]
-order: 477513 size: 37072735.8 {} [00027.901 ms; 000 iters.] [2.5871e-7 err.] pagerankNvgraph [dynamic]
-order: 477513 size: 37072735.8 {} [00035.590 ms; 042 iters.] [3.0286e-6 err.] pagerankCuda [dynamic]
+order: 477513 size: 37072735.8 {} [00027.901 ms; 000 iters.] [2.5871e-7 err.] pagerankNvgraph [incremental]
+order: 477513 size: 37072735.8 {} [00035.590 ms; 042 iters.] [3.0286e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 477513 size: 42072044 {} [00031.534 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 477513 size: 42072044 {} [00041.607 ms; 041 iters.] [2.7031e-6 err.] pagerankCuda [static]
-order: 477513 size: 42072044 {} [00030.539 ms; 000 iters.] [1.8870e-7 err.] pagerankNvgraph [dynamic]
-order: 477513 size: 42072044 {} [00039.481 ms; 039 iters.] [3.0354e-6 err.] pagerankCuda [dynamic]
+order: 477513 size: 42072044 {} [00030.539 ms; 000 iters.] [1.8870e-7 err.] pagerankNvgraph [incremental]
+order: 477513 size: 42072044 {} [00039.481 ms; 039 iters.] [3.0354e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph coPapersDBLP.mtx ...
@@ -1022,92 +1022,92 @@ order: 540486 size: 30491459 {}
 # Batch size 1e+0
 order: 540486.2 size: 30491459 {} [00024.495 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540486.2 size: 30491459 {} [00037.303 ms; 049 iters.] [1.4657e-6 err.] pagerankCuda [static]
-order: 540486.2 size: 30491459 {} [00005.310 ms; 000 iters.] [2.5137e-6 err.] pagerankNvgraph [dynamic]
-order: 540486.2 size: 30491459 {} [00001.005 ms; 001 iters.] [1.4701e-6 err.] pagerankCuda [dynamic]
+order: 540486.2 size: 30491459 {} [00005.310 ms; 000 iters.] [2.5137e-6 err.] pagerankNvgraph [incremental]
+order: 540486.2 size: 30491459 {} [00001.005 ms; 001 iters.] [1.4701e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 540487.8 size: 30491463 {} [00024.548 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540487.8 size: 30491463 {} [00037.312 ms; 049 iters.] [1.4546e-6 err.] pagerankCuda [static]
-order: 540487.8 size: 30491463 {} [00007.206 ms; 000 iters.] [2.9606e-6 err.] pagerankNvgraph [dynamic]
-order: 540487.8 size: 30491463 {} [00003.282 ms; 004 iters.] [3.4026e-6 err.] pagerankCuda [dynamic]
+order: 540487.8 size: 30491463 {} [00007.206 ms; 000 iters.] [2.9606e-6 err.] pagerankNvgraph [incremental]
+order: 540487.8 size: 30491463 {} [00003.282 ms; 004 iters.] [3.4026e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 540488.2 size: 30491468 {} [00024.490 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540488.2 size: 30491468 {} [00037.319 ms; 049 iters.] [1.4388e-6 err.] pagerankCuda [static]
-order: 540488.2 size: 30491468 {} [00008.822 ms; 000 iters.] [3.0802e-6 err.] pagerankNvgraph [dynamic]
-order: 540488.2 size: 30491468 {} [00003.738 ms; 005 iters.] [4.1938e-6 err.] pagerankCuda [dynamic]
+order: 540488.2 size: 30491468 {} [00008.822 ms; 000 iters.] [3.0802e-6 err.] pagerankNvgraph [incremental]
+order: 540488.2 size: 30491468 {} [00003.738 ms; 005 iters.] [4.1938e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 540493.2 size: 30491508 {} [00024.487 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540493.2 size: 30491508 {} [00037.314 ms; 049 iters.] [1.4568e-6 err.] pagerankCuda [static]
-order: 540493.2 size: 30491508 {} [00010.526 ms; 000 iters.] [3.1678e-6 err.] pagerankNvgraph [dynamic]
-order: 540493.2 size: 30491508 {} [00008.285 ms; 011 iters.] [5.2528e-6 err.] pagerankCuda [dynamic]
+order: 540493.2 size: 30491508 {} [00010.526 ms; 000 iters.] [3.1678e-6 err.] pagerankNvgraph [incremental]
+order: 540493.2 size: 30491508 {} [00008.285 ms; 011 iters.] [5.2528e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 540502.2 size: 30491558 {} [00024.494 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540502.2 size: 30491558 {} [00037.303 ms; 049 iters.] [1.4452e-6 err.] pagerankCuda [static]
-order: 540502.2 size: 30491558 {} [00011.376 ms; 000 iters.] [3.1924e-6 err.] pagerankNvgraph [dynamic]
-order: 540502.2 size: 30491558 {} [00010.263 ms; 013 iters.] [5.1405e-6 err.] pagerankCuda [dynamic]
+order: 540502.2 size: 30491558 {} [00011.376 ms; 000 iters.] [3.1924e-6 err.] pagerankNvgraph [incremental]
+order: 540502.2 size: 30491558 {} [00010.263 ms; 013 iters.] [5.1405e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 540578.4 size: 30491958 {} [00024.485 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540578.4 size: 30491958 {} [00037.316 ms; 049 iters.] [1.4436e-6 err.] pagerankCuda [static]
-order: 540578.4 size: 30491958 {} [00013.081 ms; 000 iters.] [3.2128e-6 err.] pagerankNvgraph [dynamic]
-order: 540578.4 size: 30491958 {} [00014.965 ms; 020 iters.] [4.9525e-6 err.] pagerankCuda [dynamic]
+order: 540578.4 size: 30491958 {} [00013.081 ms; 000 iters.] [3.2128e-6 err.] pagerankNvgraph [incremental]
+order: 540578.4 size: 30491958 {} [00014.965 ms; 020 iters.] [4.9525e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 540678.4 size: 30492458 {} [00024.505 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 540678.4 size: 30492458 {} [00037.319 ms; 049 iters.] [1.4367e-6 err.] pagerankCuda [static]
-order: 540678.4 size: 30492458 {} [00014.038 ms; 000 iters.] [3.1030e-6 err.] pagerankNvgraph [dynamic]
-order: 540678.4 size: 30492458 {} [00016.796 ms; 022 iters.] [4.6364e-6 err.] pagerankCuda [dynamic]
+order: 540678.4 size: 30492458 {} [00014.038 ms; 000 iters.] [3.1030e-6 err.] pagerankNvgraph [incremental]
+order: 540678.4 size: 30492458 {} [00016.796 ms; 022 iters.] [4.6364e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 541385.8 size: 30496458 {} [00024.496 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 541385.8 size: 30496458 {} [00037.353 ms; 049 iters.] [1.4430e-6 err.] pagerankCuda [static]
-order: 541385.8 size: 30496458 {} [00015.936 ms; 000 iters.] [2.8520e-6 err.] pagerankNvgraph [dynamic]
-order: 541385.8 size: 30496458 {} [00021.351 ms; 028 iters.] [3.7914e-6 err.] pagerankCuda [dynamic]
+order: 541385.8 size: 30496458 {} [00015.936 ms; 000 iters.] [2.8520e-6 err.] pagerankNvgraph [incremental]
+order: 541385.8 size: 30496458 {} [00021.351 ms; 028 iters.] [3.7914e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 542274.6 size: 30501457 {} [00024.523 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 542274.6 size: 30501457 {} [00037.384 ms; 049 iters.] [1.4350e-6 err.] pagerankCuda [static]
-order: 542274.6 size: 30501457 {} [00016.895 ms; 000 iters.] [2.6140e-6 err.] pagerankNvgraph [dynamic]
-order: 542274.6 size: 30501457 {} [00023.656 ms; 031 iters.] [3.1796e-6 err.] pagerankCuda [dynamic]
+order: 542274.6 size: 30501457 {} [00016.895 ms; 000 iters.] [2.6140e-6 err.] pagerankNvgraph [incremental]
+order: 542274.6 size: 30501457 {} [00023.656 ms; 031 iters.] [3.1796e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 548857.6 size: 30541454.4 {} [00024.628 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 548857.6 size: 30541454.4 {} [00037.436 ms; 049 iters.] [1.4040e-6 err.] pagerankCuda [static]
-order: 548857.6 size: 30541454.4 {} [00019.346 ms; 000 iters.] [1.7371e-6 err.] pagerankNvgraph [dynamic]
-order: 548857.6 size: 30541454.4 {} [00028.246 ms; 037 iters.] [2.3191e-6 err.] pagerankCuda [dynamic]
+order: 548857.6 size: 30541454.4 {} [00019.346 ms; 000 iters.] [1.7371e-6 err.] pagerankNvgraph [incremental]
+order: 548857.6 size: 30541454.4 {} [00028.246 ms; 037 iters.] [2.3191e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 555787.8 size: 30591451 {} [00024.726 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 555787.8 size: 30591451 {} [00037.553 ms; 049 iters.] [1.3369e-6 err.] pagerankCuda [static]
-order: 555787.8 size: 30591451 {} [00020.367 ms; 000 iters.] [1.2571e-6 err.] pagerankNvgraph [dynamic]
-order: 555787.8 size: 30591451 {} [00030.497 ms; 040 iters.] [1.7872e-6 err.] pagerankCuda [dynamic]
+order: 555787.8 size: 30591451 {} [00020.367 ms; 000 iters.] [1.2571e-6 err.] pagerankNvgraph [incremental]
+order: 555787.8 size: 30591451 {} [00030.497 ms; 040 iters.] [1.7872e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 584530.8 size: 30991413.6 {} [00024.876 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 584530.8 size: 30991413.6 {} [00037.462 ms; 048 iters.] [1.1917e-6 err.] pagerankCuda [static]
-order: 584530.8 size: 30991413.6 {} [00022.396 ms; 000 iters.] [6.1449e-7 err.] pagerankNvgraph [dynamic]
-order: 584530.8 size: 30991413.6 {} [00033.561 ms; 043 iters.] [1.6982e-6 err.] pagerankCuda [dynamic]
+order: 584530.8 size: 30991413.6 {} [00022.396 ms; 000 iters.] [6.1449e-7 err.] pagerankNvgraph [incremental]
+order: 584530.8 size: 30991413.6 {} [00033.561 ms; 043 iters.] [1.6982e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 592663.8 size: 31491376 {} [00025.144 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 592663.8 size: 31491376 {} [00036.936 ms; 046 iters.] [1.7703e-6 err.] pagerankCuda [static]
-order: 592663.8 size: 31491376 {} [00023.059 ms; 000 iters.] [5.6811e-7 err.] pagerankNvgraph [dynamic]
-order: 592663.8 size: 31491376 {} [00034.395 ms; 043 iters.] [1.6428e-6 err.] pagerankCuda [dynamic]
+order: 592663.8 size: 31491376 {} [00023.059 ms; 000 iters.] [5.6811e-7 err.] pagerankNvgraph [incremental]
+order: 592663.8 size: 31491376 {} [00034.395 ms; 043 iters.] [1.6428e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 594535 size: 35491027.4 {} [00025.436 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 594535 size: 35491027.4 {} [00035.778 ms; 039 iters.] [1.8707e-6 err.] pagerankCuda [static]
-order: 594535 size: 35491027.4 {} [00024.191 ms; 000 iters.] [2.6040e-7 err.] pagerankNvgraph [dynamic]
-order: 594535 size: 35491027.4 {} [00033.960 ms; 037 iters.] [1.9947e-6 err.] pagerankCuda [dynamic]
+order: 594535 size: 35491027.4 {} [00024.191 ms; 000 iters.] [2.6040e-7 err.] pagerankNvgraph [incremental]
+order: 594535 size: 35491027.4 {} [00033.960 ms; 037 iters.] [1.9947e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 594535 size: 40490599.4 {} [00025.757 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 594535 size: 40490599.4 {} [00036.983 ms; 034 iters.] [1.8586e-6 err.] pagerankCuda [static]
-order: 594535 size: 40490599.4 {} [00024.809 ms; 000 iters.] [2.3477e-7 err.] pagerankNvgraph [dynamic]
-order: 594535 size: 40490599.4 {} [00035.832 ms; 033 iters.] [1.3555e-6 err.] pagerankCuda [dynamic]
+order: 594535 size: 40490599.4 {} [00024.809 ms; 000 iters.] [2.3477e-7 err.] pagerankNvgraph [incremental]
+order: 594535 size: 40490599.4 {} [00035.832 ms; 033 iters.] [1.3555e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph indochina-2004.mtx ...
@@ -1117,104 +1117,104 @@ order: 7414866 size: 194109312 {}
 # Batch size 1e+0
 order: 7414866.2 size: 194109312 {} [00194.102 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414866.2 size: 194109312 {} [00122.418 ms; 060 iters.] [1.7744e-6 err.] pagerankCuda [static]
-order: 7414866.2 size: 194109312 {} [00007.502 ms; 000 iters.] [3.3161e-7 err.] pagerankNvgraph [dynamic]
-order: 7414866.2 size: 194109312 {} [00002.965 ms; 001 iters.] [3.3590e-7 err.] pagerankCuda [dynamic]
+order: 7414866.2 size: 194109312 {} [00007.502 ms; 000 iters.] [3.3161e-7 err.] pagerankNvgraph [incremental]
+order: 7414866.2 size: 194109312 {} [00002.965 ms; 001 iters.] [3.3590e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 7414867 size: 194109316 {} [00194.106 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414867 size: 194109316 {} [00122.797 ms; 060 iters.] [1.7710e-6 err.] pagerankCuda [static]
-order: 7414867 size: 194109316 {} [00018.937 ms; 000 iters.] [4.9636e-7 err.] pagerankNvgraph [dynamic]
-order: 7414867 size: 194109316 {} [00002.158 ms; 001 iters.] [8.1303e-7 err.] pagerankCuda [dynamic]
+order: 7414867 size: 194109316 {} [00018.937 ms; 000 iters.] [4.9636e-7 err.] pagerankNvgraph [incremental]
+order: 7414867 size: 194109316 {} [00002.158 ms; 001 iters.] [8.1303e-7 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 7414868 size: 194109321 {} [00194.117 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414868 size: 194109321 {} [00122.597 ms; 060 iters.] [1.7529e-6 err.] pagerankCuda [static]
-order: 7414868 size: 194109321 {} [00022.296 ms; 000 iters.] [5.9445e-7 err.] pagerankNvgraph [dynamic]
-order: 7414868 size: 194109321 {} [00002.969 ms; 001 iters.] [1.0462e-6 err.] pagerankCuda [dynamic]
+order: 7414868 size: 194109321 {} [00022.296 ms; 000 iters.] [5.9445e-7 err.] pagerankNvgraph [incremental]
+order: 7414868 size: 194109321 {} [00002.969 ms; 001 iters.] [1.0462e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 7414873.2 size: 194109361 {} [00194.127 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414873.2 size: 194109361 {} [00122.396 ms; 060 iters.] [1.8060e-6 err.] pagerankCuda [static]
-order: 7414873.2 size: 194109361 {} [00058.074 ms; 000 iters.] [7.4072e-7 err.] pagerankNvgraph [dynamic]
-order: 7414873.2 size: 194109361 {} [00011.482 ms; 006 iters.] [3.4267e-6 err.] pagerankCuda [dynamic]
+order: 7414873.2 size: 194109361 {} [00058.074 ms; 000 iters.] [7.4072e-7 err.] pagerankNvgraph [incremental]
+order: 7414873.2 size: 194109361 {} [00011.482 ms; 006 iters.] [3.4267e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 7414886.4 size: 194109411 {} [00194.066 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414886.4 size: 194109411 {} [00122.634 ms; 060 iters.] [1.8104e-6 err.] pagerankCuda [static]
-order: 7414886.4 size: 194109411 {} [00052.448 ms; 000 iters.] [8.4698e-7 err.] pagerankNvgraph [dynamic]
-order: 7414886.4 size: 194109411 {} [00012.292 ms; 006 iters.] [3.6069e-6 err.] pagerankCuda [dynamic]
+order: 7414886.4 size: 194109411 {} [00052.448 ms; 000 iters.] [8.4698e-7 err.] pagerankNvgraph [incremental]
+order: 7414886.4 size: 194109411 {} [00012.292 ms; 006 iters.] [3.6069e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 7414958.6 size: 194109811 {} [00194.033 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7414958.6 size: 194109811 {} [00122.880 ms; 060 iters.] [1.7280e-6 err.] pagerankCuda [static]
-order: 7414958.6 size: 194109811 {} [00068.882 ms; 000 iters.] [9.7979e-7 err.] pagerankNvgraph [dynamic]
-order: 7414958.6 size: 194109811 {} [00025.326 ms; 012 iters.] [4.3910e-6 err.] pagerankCuda [dynamic]
+order: 7414958.6 size: 194109811 {} [00068.882 ms; 000 iters.] [9.7979e-7 err.] pagerankNvgraph [incremental]
+order: 7414958.6 size: 194109811 {} [00025.326 ms; 012 iters.] [4.3910e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 7415052 size: 194110311 {} [00194.023 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7415052 size: 194110311 {} [00122.606 ms; 060 iters.] [1.7078e-6 err.] pagerankCuda [static]
-order: 7415052 size: 194110311 {} [00079.147 ms; 000 iters.] [1.1181e-6 err.] pagerankNvgraph [dynamic]
-order: 7415052 size: 194110311 {} [00034.637 ms; 017 iters.] [4.7046e-6 err.] pagerankCuda [dynamic]
+order: 7415052 size: 194110311 {} [00079.147 ms; 000 iters.] [1.1181e-6 err.] pagerankNvgraph [incremental]
+order: 7415052 size: 194110311 {} [00034.637 ms; 017 iters.] [4.7046e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 7415775.4 size: 194114311 {} [00194.253 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7415775.4 size: 194114311 {} [00121.838 ms; 060 iters.] [1.7448e-6 err.] pagerankCuda [static]
-order: 7415775.4 size: 194114311 {} [00111.037 ms; 000 iters.] [9.6436e-7 err.] pagerankNvgraph [dynamic]
-order: 7415775.4 size: 194114311 {} [00052.445 ms; 026 iters.] [4.6558e-6 err.] pagerankCuda [dynamic]
+order: 7415775.4 size: 194114311 {} [00111.037 ms; 000 iters.] [9.6436e-7 err.] pagerankNvgraph [incremental]
+order: 7415775.4 size: 194114311 {} [00052.445 ms; 026 iters.] [4.6558e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 7416702.2 size: 194119310.8 {} [00194.204 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7416702.2 size: 194119310.8 {} [00122.236 ms; 060 iters.] [1.7434e-6 err.] pagerankCuda [static]
-order: 7416702.2 size: 194119310.8 {} [00106.399 ms; 000 iters.] [1.3573e-6 err.] pagerankNvgraph [dynamic]
-order: 7416702.2 size: 194119310.8 {} [00057.477 ms; 028 iters.] [4.8314e-6 err.] pagerankCuda [dynamic]
+order: 7416702.2 size: 194119310.8 {} [00106.399 ms; 000 iters.] [1.3573e-6 err.] pagerankNvgraph [incremental]
+order: 7416702.2 size: 194119310.8 {} [00057.477 ms; 028 iters.] [4.8314e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 7423866.6 size: 194159311 {} [00193.668 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7423866.6 size: 194159311 {} [00122.351 ms; 060 iters.] [1.7037e-6 err.] pagerankCuda [static]
-order: 7423866.6 size: 194159311 {} [00132.170 ms; 000 iters.] [1.3294e-6 err.] pagerankNvgraph [dynamic]
-order: 7423866.6 size: 194159311 {} [00075.325 ms; 037 iters.] [4.6269e-6 err.] pagerankCuda [dynamic]
+order: 7423866.6 size: 194159311 {} [00132.170 ms; 000 iters.] [1.3294e-6 err.] pagerankNvgraph [incremental]
+order: 7423866.6 size: 194159311 {} [00075.325 ms; 037 iters.] [4.6269e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 7432827.6 size: 194209310.8 {} [00192.028 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7432827.6 size: 194209310.8 {} [00122.910 ms; 060 iters.] [1.7313e-6 err.] pagerankCuda [static]
-order: 7432827.6 size: 194209310.8 {} [00147.767 ms; 000 iters.] [1.1070e-6 err.] pagerankNvgraph [dynamic]
-order: 7432827.6 size: 194209310.8 {} [00082.917 ms; 041 iters.] [4.6609e-6 err.] pagerankCuda [dynamic]
+order: 7432827.6 size: 194209310.8 {} [00147.767 ms; 000 iters.] [1.1070e-6 err.] pagerankNvgraph [incremental]
+order: 7432827.6 size: 194209310.8 {} [00082.917 ms; 041 iters.] [4.6609e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 7500643.6 size: 194609309.4 {} [00189.050 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7500643.6 size: 194609309.4 {} [00123.581 ms; 058 iters.] [2.1920e-6 err.] pagerankCuda [static]
-order: 7500643.6 size: 194609309.4 {} [00163.721 ms; 000 iters.] [1.3474e-6 err.] pagerankNvgraph [dynamic]
-order: 7500643.6 size: 194609309.4 {} [00100.475 ms; 048 iters.] [4.5444e-6 err.] pagerankCuda [dynamic]
+order: 7500643.6 size: 194609309.4 {} [00163.721 ms; 000 iters.] [1.3474e-6 err.] pagerankNvgraph [incremental]
+order: 7500643.6 size: 194609309.4 {} [00100.475 ms; 048 iters.] [4.5444e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 7576171.4 size: 195109307.8 {} [00192.101 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7576171.4 size: 195109307.8 {} [00125.522 ms; 057 iters.] [2.3861e-6 err.] pagerankCuda [static]
-order: 7576171.4 size: 195109307.8 {} [00174.634 ms; 000 iters.] [1.0955e-6 err.] pagerankNvgraph [dynamic]
-order: 7576171.4 size: 195109307.8 {} [00108.057 ms; 049 iters.] [4.1951e-6 err.] pagerankCuda [dynamic]
+order: 7576171.4 size: 195109307.8 {} [00174.634 ms; 000 iters.] [1.0955e-6 err.] pagerankNvgraph [incremental]
+order: 7576171.4 size: 195109307.8 {} [00108.057 ms; 049 iters.] [4.1951e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 7939386 size: 199109295 {} [00221.344 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7939386 size: 199109295 {} [00144.758 ms; 053 iters.] [3.8273e-6 err.] pagerankCuda [static]
-order: 7939386 size: 199109295 {} [00209.844 ms; 000 iters.] [5.3645e-7 err.] pagerankNvgraph [dynamic]
-order: 7939386 size: 199109295 {} [00135.914 ms; 050 iters.] [4.0394e-6 err.] pagerankCuda [dynamic]
+order: 7939386 size: 199109295 {} [00209.844 ms; 000 iters.] [5.3645e-7 err.] pagerankNvgraph [incremental]
+order: 7939386 size: 199109295 {} [00135.914 ms; 050 iters.] [4.0394e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 8093105.2 size: 204109279.4 {} [00242.133 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8093105.2 size: 204109279.4 {} [00174.777 ms; 051 iters.] [3.4870e-6 err.] pagerankCuda [static]
-order: 8093105.2 size: 204109279.4 {} [00237.571 ms; 000 iters.] [5.6816e-7 err.] pagerankNvgraph [dynamic]
-order: 8093105.2 size: 204109279.4 {} [00163.934 ms; 048 iters.] [4.0382e-6 err.] pagerankCuda [dynamic]
+order: 8093105.2 size: 204109279.4 {} [00237.571 ms; 000 iters.] [5.6816e-7 err.] pagerankNvgraph [incremental]
+order: 8093105.2 size: 204109279.4 {} [00163.934 ms; 048 iters.] [4.0382e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+7
 order: 8156350.6 size: 244109167.8 {} [00418.967 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8156350.6 size: 244109167.8 {} [00390.586 ms; 044 iters.] [1.7114e-6 err.] pagerankCuda [static]
-order: 8156350.6 size: 244109167.8 {} [00411.640 ms; 000 iters.] [4.6685e-7 err.] pagerankNvgraph [dynamic]
-order: 8156350.6 size: 244109167.8 {} [00372.852 ms; 042 iters.] [2.2809e-6 err.] pagerankCuda [dynamic]
+order: 8156350.6 size: 244109167.8 {} [00411.640 ms; 000 iters.] [4.6685e-7 err.] pagerankNvgraph [incremental]
+order: 8156350.6 size: 244109167.8 {} [00372.852 ms; 042 iters.] [2.2809e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+8
 order: 8156353 size: 294109004.2 {} [00718.221 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8156353 size: 294109004.2 {} [00702.201 ms; 044 iters.] [1.8711e-6 err.] pagerankCuda [static]
-order: 8156353 size: 294109004.2 {} [00709.219 ms; 000 iters.] [3.5487e-7 err.] pagerankNvgraph [dynamic]
-order: 8156353 size: 294109004.2 {} [00676.592 ms; 042 iters.] [2.3494e-6 err.] pagerankCuda [dynamic]
+order: 8156353 size: 294109004.2 {} [00709.219 ms; 000 iters.] [3.5487e-7 err.] pagerankNvgraph [incremental]
+order: 8156353 size: 294109004.2 {} [00676.592 ms; 042 iters.] [2.3494e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph italy_osm.mtx ...
@@ -1224,92 +1224,92 @@ order: 6686493 size: 14027957 {}
 # Batch size 1e+0
 order: 6686493 size: 14027957 {} [00062.115 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686493 size: 14027957 {} [00029.940 ms; 063 iters.] [6.4911e-7 err.] pagerankCuda [static]
-order: 6686493 size: 14027957 {} [00020.326 ms; 000 iters.] [3.0020e-7 err.] pagerankNvgraph [dynamic]
-order: 6686493 size: 14027957 {} [00000.597 ms; 001 iters.] [7.9977e-7 err.] pagerankCuda [dynamic]
+order: 6686493 size: 14027957 {} [00020.326 ms; 000 iters.] [3.0020e-7 err.] pagerankNvgraph [incremental]
+order: 6686493 size: 14027957 {} [00000.597 ms; 001 iters.] [7.9977e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 6686493.8 size: 14027961 {} [00061.872 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686493.8 size: 14027961 {} [00029.949 ms; 063 iters.] [5.8931e-7 err.] pagerankCuda [static]
-order: 6686493.8 size: 14027961 {} [00024.893 ms; 000 iters.] [2.7520e-7 err.] pagerankNvgraph [dynamic]
-order: 6686493.8 size: 14027961 {} [00000.692 ms; 001 iters.] [1.9941e-6 err.] pagerankCuda [dynamic]
+order: 6686493.8 size: 14027961 {} [00024.893 ms; 000 iters.] [2.7520e-7 err.] pagerankNvgraph [incremental]
+order: 6686493.8 size: 14027961 {} [00000.692 ms; 001 iters.] [1.9941e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 6686494 size: 14027966 {} [00061.704 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686494 size: 14027966 {} [00029.943 ms; 063 iters.] [4.9606e-7 err.] pagerankCuda [static]
-order: 6686494 size: 14027966 {} [00025.298 ms; 000 iters.] [3.0937e-7 err.] pagerankNvgraph [dynamic]
-order: 6686494 size: 14027966 {} [00001.545 ms; 003 iters.] [2.4673e-6 err.] pagerankCuda [dynamic]
+order: 6686494 size: 14027966 {} [00025.298 ms; 000 iters.] [3.0937e-7 err.] pagerankNvgraph [incremental]
+order: 6686494 size: 14027966 {} [00001.545 ms; 003 iters.] [2.4673e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 6686503.2 size: 14028006 {} [00061.427 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686503.2 size: 14028006 {} [00029.938 ms; 063 iters.] [3.6518e-7 err.] pagerankCuda [static]
-order: 6686503.2 size: 14028006 {} [00034.439 ms; 000 iters.] [3.0981e-7 err.] pagerankNvgraph [dynamic]
-order: 6686503.2 size: 14028006 {} [00004.673 ms; 010 iters.] [3.1537e-6 err.] pagerankCuda [dynamic]
+order: 6686503.2 size: 14028006 {} [00034.439 ms; 000 iters.] [3.0981e-7 err.] pagerankNvgraph [incremental]
+order: 6686503.2 size: 14028006 {} [00004.673 ms; 010 iters.] [3.1537e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 6686510.6 size: 14028056 {} [00061.721 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686510.6 size: 14028056 {} [00029.940 ms; 063 iters.] [4.7775e-7 err.] pagerankCuda [static]
-order: 6686510.6 size: 14028056 {} [00036.179 ms; 000 iters.] [3.0953e-7 err.] pagerankNvgraph [dynamic]
-order: 6686510.6 size: 14028056 {} [00006.282 ms; 013 iters.] [3.3717e-6 err.] pagerankCuda [dynamic]
+order: 6686510.6 size: 14028056 {} [00036.179 ms; 000 iters.] [3.0953e-7 err.] pagerankNvgraph [incremental]
+order: 6686510.6 size: 14028056 {} [00006.282 ms; 013 iters.] [3.3717e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 6686583.4 size: 14028456 {} [00061.584 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686583.4 size: 14028456 {} [00029.950 ms; 063 iters.] [5.8265e-7 err.] pagerankCuda [static]
-order: 6686583.4 size: 14028456 {} [00040.462 ms; 000 iters.] [3.6148e-7 err.] pagerankNvgraph [dynamic]
-order: 6686583.4 size: 14028456 {} [00010.533 ms; 022 iters.] [3.4053e-6 err.] pagerankCuda [dynamic]
+order: 6686583.4 size: 14028456 {} [00040.462 ms; 000 iters.] [3.6148e-7 err.] pagerankNvgraph [incremental]
+order: 6686583.4 size: 14028456 {} [00010.533 ms; 022 iters.] [3.4053e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 6686665 size: 14028956 {} [00060.903 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6686665 size: 14028956 {} [00029.950 ms; 063 iters.] [2.9111e-7 err.] pagerankCuda [static]
-order: 6686665 size: 14028956 {} [00042.432 ms; 000 iters.] [3.9589e-7 err.] pagerankNvgraph [dynamic]
-order: 6686665 size: 14028956 {} [00012.429 ms; 026 iters.] [3.4210e-6 err.] pagerankCuda [dynamic]
+order: 6686665 size: 14028956 {} [00042.432 ms; 000 iters.] [3.9589e-7 err.] pagerankNvgraph [incremental]
+order: 6686665 size: 14028956 {} [00012.429 ms; 026 iters.] [3.4210e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 6687410.4 size: 14032956 {} [00061.240 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6687410.4 size: 14032956 {} [00029.978 ms; 063 iters.] [2.9658e-7 err.] pagerankCuda [static]
-order: 6687410.4 size: 14032956 {} [00046.836 ms; 000 iters.] [5.2119e-7 err.] pagerankNvgraph [dynamic]
-order: 6687410.4 size: 14032956 {} [00016.805 ms; 035 iters.] [3.4007e-6 err.] pagerankCuda [dynamic]
+order: 6687410.4 size: 14032956 {} [00046.836 ms; 000 iters.] [5.2119e-7 err.] pagerankNvgraph [incremental]
+order: 6687410.4 size: 14032956 {} [00016.805 ms; 035 iters.] [3.4007e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 6688316 size: 14037956 {} [00061.467 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6688316 size: 14037956 {} [00030.012 ms; 063 iters.] [4.8046e-7 err.] pagerankCuda [static]
-order: 6688316 size: 14037956 {} [00048.227 ms; 000 iters.] [6.1017e-7 err.] pagerankNvgraph [dynamic]
-order: 6688316 size: 14037956 {} [00018.722 ms; 039 iters.] [3.2698e-6 err.] pagerankCuda [dynamic]
+order: 6688316 size: 14037956 {} [00048.227 ms; 000 iters.] [6.1017e-7 err.] pagerankNvgraph [incremental]
+order: 6688316 size: 14037956 {} [00018.722 ms; 039 iters.] [3.2698e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 6695483.4 size: 14077956 {} [00061.558 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6695483.4 size: 14077956 {} [00030.305 ms; 063 iters.] [3.9385e-7 err.] pagerankCuda [static]
-order: 6695483.4 size: 14077956 {} [00052.836 ms; 000 iters.] [7.2409e-7 err.] pagerankNvgraph [dynamic]
-order: 6695483.4 size: 14077956 {} [00023.114 ms; 048 iters.] [2.8000e-6 err.] pagerankCuda [dynamic]
+order: 6695483.4 size: 14077956 {} [00052.836 ms; 000 iters.] [7.2409e-7 err.] pagerankNvgraph [incremental]
+order: 6695483.4 size: 14077956 {} [00023.114 ms; 048 iters.] [2.8000e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 6704483 size: 14127956 {} [00061.543 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6704483 size: 14127956 {} [00030.731 ms; 063 iters.] [2.5911e-7 err.] pagerankCuda [static]
-order: 6704483 size: 14127956 {} [00054.844 ms; 000 iters.] [7.3298e-7 err.] pagerankNvgraph [dynamic]
-order: 6704483 size: 14127956 {} [00025.379 ms; 052 iters.] [2.1980e-6 err.] pagerankCuda [dynamic]
+order: 6704483 size: 14127956 {} [00054.844 ms; 000 iters.] [7.3298e-7 err.] pagerankNvgraph [incremental]
+order: 6704483 size: 14127956 {} [00025.379 ms; 052 iters.] [2.1980e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 6771667.8 size: 14527955.8 {} [00064.151 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6771667.8 size: 14527955.8 {} [00033.345 ms; 062 iters.] [7.7137e-7 err.] pagerankCuda [static]
-order: 6771667.8 size: 14527955.8 {} [00060.265 ms; 000 iters.] [5.7505e-7 err.] pagerankNvgraph [dynamic]
-order: 6771667.8 size: 14527955.8 {} [00031.299 ms; 058 iters.] [1.3292e-6 err.] pagerankCuda [dynamic]
+order: 6771667.8 size: 14527955.8 {} [00060.265 ms; 000 iters.] [5.7505e-7 err.] pagerankNvgraph [incremental]
+order: 6771667.8 size: 14527955.8 {} [00031.299 ms; 058 iters.] [1.3292e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 6846207.4 size: 15027955.8 {} [00067.011 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 6846207.4 size: 15027955.8 {} [00036.525 ms; 061 iters.] [7.3265e-7 err.] pagerankCuda [static]
-order: 6846207.4 size: 15027955.8 {} [00063.879 ms; 000 iters.] [6.0801e-7 err.] pagerankNvgraph [dynamic]
-order: 6846207.4 size: 15027955.8 {} [00034.738 ms; 058 iters.] [1.1671e-6 err.] pagerankCuda [dynamic]
+order: 6846207.4 size: 15027955.8 {} [00063.879 ms; 000 iters.] [6.0801e-7 err.] pagerankNvgraph [incremental]
+order: 6846207.4 size: 15027955.8 {} [00034.738 ms; 058 iters.] [1.1671e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 7184101.6 size: 19027955 {} [00083.627 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7184101.6 size: 19027955 {} [00050.798 ms; 047 iters.] [1.5507e-6 err.] pagerankCuda [static]
-order: 7184101.6 size: 19027955 {} [00082.118 ms; 000 iters.] [2.5824e-7 err.] pagerankNvgraph [dynamic]
-order: 7184101.6 size: 19027955 {} [00050.835 ms; 047 iters.] [1.5608e-6 err.] pagerankCuda [dynamic]
+order: 7184101.6 size: 19027955 {} [00082.118 ms; 000 iters.] [2.5824e-7 err.] pagerankNvgraph [incremental]
+order: 7184101.6 size: 19027955 {} [00050.835 ms; 047 iters.] [1.5608e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 7311611.8 size: 24027954 {} [00096.318 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7311611.8 size: 24027954 {} [00062.232 ms; 036 iters.] [1.5833e-6 err.] pagerankCuda [static]
-order: 7311611.8 size: 24027954 {} [00095.529 ms; 000 iters.] [1.0961e-7 err.] pagerankNvgraph [dynamic]
-order: 7311611.8 size: 24027954 {} [00062.194 ms; 036 iters.] [1.5988e-6 err.] pagerankCuda [dynamic]
+order: 7311611.8 size: 24027954 {} [00095.529 ms; 000 iters.] [1.0961e-7 err.] pagerankNvgraph [incremental]
+order: 7311611.8 size: 24027954 {} [00062.194 ms; 036 iters.] [1.5988e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph great-britain_osm.mtx ...
@@ -1319,92 +1319,92 @@ order: 7733822 size: 16313035 {}
 # Batch size 1e+0
 order: 7733822.2 size: 16313035 {} [00076.211 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733822.2 size: 16313035 {} [00039.529 ms; 067 iters.] [1.7728e-7 err.] pagerankCuda [static]
-order: 7733822.2 size: 16313035 {} [00025.248 ms; 000 iters.] [3.0728e-7 err.] pagerankNvgraph [dynamic]
-order: 7733822.2 size: 16313035 {} [00000.722 ms; 001 iters.] [8.0685e-7 err.] pagerankCuda [dynamic]
+order: 7733822.2 size: 16313035 {} [00025.248 ms; 000 iters.] [3.0728e-7 err.] pagerankNvgraph [incremental]
+order: 7733822.2 size: 16313035 {} [00000.722 ms; 001 iters.] [8.0685e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 7733823.2 size: 16313039 {} [00076.282 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733823.2 size: 16313039 {} [00039.440 ms; 067 iters.] [1.7428e-7 err.] pagerankCuda [static]
-order: 7733823.2 size: 16313039 {} [00029.701 ms; 000 iters.] [3.0971e-7 err.] pagerankNvgraph [dynamic]
-order: 7733823.2 size: 16313039 {} [00001.074 ms; 002 iters.] [1.4680e-6 err.] pagerankCuda [dynamic]
+order: 7733823.2 size: 16313039 {} [00029.701 ms; 000 iters.] [3.0971e-7 err.] pagerankNvgraph [incremental]
+order: 7733823.2 size: 16313039 {} [00001.074 ms; 002 iters.] [1.4680e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 7733825.2 size: 16313044 {} [00076.293 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733825.2 size: 16313044 {} [00039.436 ms; 067 iters.] [2.1306e-7 err.] pagerankCuda [static]
-order: 7733825.2 size: 16313044 {} [00032.509 ms; 000 iters.] [3.1871e-7 err.] pagerankNvgraph [dynamic]
-order: 7733825.2 size: 16313044 {} [00002.015 ms; 003 iters.] [1.9860e-6 err.] pagerankCuda [dynamic]
+order: 7733825.2 size: 16313044 {} [00032.509 ms; 000 iters.] [3.1871e-7 err.] pagerankNvgraph [incremental]
+order: 7733825.2 size: 16313044 {} [00002.015 ms; 003 iters.] [1.9860e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 7733833 size: 16313084 {} [00076.265 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733833 size: 16313084 {} [00039.441 ms; 067 iters.] [1.9850e-7 err.] pagerankCuda [static]
-order: 7733833 size: 16313084 {} [00040.121 ms; 000 iters.] [3.2058e-7 err.] pagerankNvgraph [dynamic]
-order: 7733833 size: 16313084 {} [00005.416 ms; 009 iters.] [3.1201e-6 err.] pagerankCuda [dynamic]
+order: 7733833 size: 16313084 {} [00040.121 ms; 000 iters.] [3.2058e-7 err.] pagerankNvgraph [incremental]
+order: 7733833 size: 16313084 {} [00005.416 ms; 009 iters.] [3.1201e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 7733840.6 size: 16313134 {} [00076.373 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733840.6 size: 16313134 {} [00039.444 ms; 067 iters.] [2.7409e-7 err.] pagerankCuda [static]
-order: 7733840.6 size: 16313134 {} [00042.034 ms; 000 iters.] [3.2895e-7 err.] pagerankNvgraph [dynamic]
-order: 7733840.6 size: 16313134 {} [00007.766 ms; 013 iters.] [3.0330e-6 err.] pagerankCuda [dynamic]
+order: 7733840.6 size: 16313134 {} [00042.034 ms; 000 iters.] [3.2895e-7 err.] pagerankNvgraph [incremental]
+order: 7733840.6 size: 16313134 {} [00007.766 ms; 013 iters.] [3.0330e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 7733914.6 size: 16313534 {} [00076.236 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733914.6 size: 16313534 {} [00039.447 ms; 067 iters.] [1.8378e-7 err.] pagerankCuda [static]
-order: 7733914.6 size: 16313534 {} [00046.500 ms; 000 iters.] [3.9535e-7 err.] pagerankNvgraph [dynamic]
-order: 7733914.6 size: 16313534 {} [00012.461 ms; 021 iters.] [3.6130e-6 err.] pagerankCuda [dynamic]
+order: 7733914.6 size: 16313534 {} [00046.500 ms; 000 iters.] [3.9535e-7 err.] pagerankNvgraph [incremental]
+order: 7733914.6 size: 16313534 {} [00012.461 ms; 021 iters.] [3.6130e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 7733999.4 size: 16314034 {} [00076.127 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7733999.4 size: 16314034 {} [00039.458 ms; 067 iters.] [1.8776e-7 err.] pagerankCuda [static]
-order: 7733999.4 size: 16314034 {} [00048.688 ms; 000 iters.] [4.2679e-7 err.] pagerankNvgraph [dynamic]
-order: 7733999.4 size: 16314034 {} [00014.924 ms; 025 iters.] [3.5185e-6 err.] pagerankCuda [dynamic]
+order: 7733999.4 size: 16314034 {} [00048.688 ms; 000 iters.] [4.2679e-7 err.] pagerankNvgraph [incremental]
+order: 7733999.4 size: 16314034 {} [00014.924 ms; 025 iters.] [3.5185e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 7734709.2 size: 16318034 {} [00076.156 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7734709.2 size: 16318034 {} [00039.644 ms; 067 iters.] [1.7314e-7 err.] pagerankCuda [static]
-order: 7734709.2 size: 16318034 {} [00053.653 ms; 000 iters.] [5.6668e-7 err.] pagerankNvgraph [dynamic]
-order: 7734709.2 size: 16318034 {} [00020.575 ms; 035 iters.] [3.2951e-6 err.] pagerankCuda [dynamic]
+order: 7734709.2 size: 16318034 {} [00053.653 ms; 000 iters.] [5.6668e-7 err.] pagerankNvgraph [incremental]
+order: 7734709.2 size: 16318034 {} [00020.575 ms; 035 iters.] [3.2951e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 7735636 size: 16323034 {} [00076.353 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7735636 size: 16323034 {} [00039.551 ms; 067 iters.] [1.8120e-7 err.] pagerankCuda [static]
-order: 7735636 size: 16323034 {} [00056.070 ms; 000 iters.] [6.5430e-7 err.] pagerankNvgraph [dynamic]
-order: 7735636 size: 16323034 {} [00023.072 ms; 039 iters.] [3.0733e-6 err.] pagerankCuda [dynamic]
+order: 7735636 size: 16323034 {} [00056.070 ms; 000 iters.] [6.5430e-7 err.] pagerankNvgraph [incremental]
+order: 7735636 size: 16323034 {} [00023.072 ms; 039 iters.] [3.0733e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 7742909.6 size: 16363034 {} [00076.533 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7742909.6 size: 16363034 {} [00040.075 ms; 067 iters.] [1.7827e-7 err.] pagerankCuda [static]
-order: 7742909.6 size: 16363034 {} [00061.194 ms; 000 iters.] [8.3387e-7 err.] pagerankNvgraph [dynamic]
-order: 7742909.6 size: 16363034 {} [00028.646 ms; 048 iters.] [2.5510e-6 err.] pagerankCuda [dynamic]
+order: 7742909.6 size: 16363034 {} [00061.194 ms; 000 iters.] [8.3387e-7 err.] pagerankNvgraph [incremental]
+order: 7742909.6 size: 16363034 {} [00028.646 ms; 048 iters.] [2.5510e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 7751759.4 size: 16413034 {} [00077.076 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7751759.4 size: 16413034 {} [00039.733 ms; 066 iters.] [7.3466e-7 err.] pagerankCuda [static]
-order: 7751759.4 size: 16413034 {} [00063.693 ms; 000 iters.] [8.5808e-7 err.] pagerankNvgraph [dynamic]
-order: 7751759.4 size: 16413034 {} [00030.737 ms; 051 iters.] [2.3912e-6 err.] pagerankCuda [dynamic]
+order: 7751759.4 size: 16413034 {} [00063.693 ms; 000 iters.] [8.5808e-7 err.] pagerankNvgraph [incremental]
+order: 7751759.4 size: 16413034 {} [00030.737 ms; 051 iters.] [2.3912e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 7819653 size: 16813034 {} [00079.152 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7819653 size: 16813034 {} [00042.696 ms; 065 iters.] [6.9624e-7 err.] pagerankCuda [static]
-order: 7819653 size: 16813034 {} [00070.315 ms; 000 iters.] [8.2395e-7 err.] pagerankNvgraph [dynamic]
-order: 7819653 size: 16813034 {} [00037.402 ms; 057 iters.] [1.6085e-6 err.] pagerankCuda [dynamic]
+order: 7819653 size: 16813034 {} [00070.315 ms; 000 iters.] [8.2395e-7 err.] pagerankNvgraph [incremental]
+order: 7819653 size: 16813034 {} [00037.402 ms; 057 iters.] [1.6085e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 7895823.2 size: 17313033.6 {} [00081.588 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 7895823.2 size: 17313033.6 {} [00045.325 ms; 063 iters.] [7.2979e-7 err.] pagerankCuda [static]
-order: 7895823.2 size: 17313033.6 {} [00075.167 ms; 000 iters.] [6.8833e-7 err.] pagerankNvgraph [dynamic]
-order: 7895823.2 size: 17313033.6 {} [00041.004 ms; 057 iters.] [1.6026e-6 err.] pagerankCuda [dynamic]
+order: 7895823.2 size: 17313033.6 {} [00075.167 ms; 000 iters.] [6.8833e-7 err.] pagerankNvgraph [incremental]
+order: 7895823.2 size: 17313033.6 {} [00041.004 ms; 057 iters.] [1.6026e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 8269133.8 size: 21313032.8 {} [00100.920 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8269133.8 size: 21313032.8 {} [00062.018 ms; 050 iters.] [1.1234e-6 err.] pagerankCuda [static]
-order: 8269133.8 size: 21313032.8 {} [00097.357 ms; 000 iters.] [2.7324e-7 err.] pagerankNvgraph [dynamic]
-order: 8269133.8 size: 21313032.8 {} [00059.504 ms; 048 iters.] [1.9540e-6 err.] pagerankCuda [dynamic]
+order: 8269133.8 size: 21313032.8 {} [00097.357 ms; 000 iters.] [2.7324e-7 err.] pagerankNvgraph [incremental]
+order: 8269133.8 size: 21313032.8 {} [00059.504 ms; 048 iters.] [1.9540e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 8434453.4 size: 26313031.8 {} [00116.256 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 8434453.4 size: 26313031.8 {} [00075.599 ms; 039 iters.] [1.4962e-6 err.] pagerankCuda [static]
-order: 8434453.4 size: 26313031.8 {} [00114.808 ms; 000 iters.] [1.2771e-7 err.] pagerankNvgraph [dynamic]
-order: 8434453.4 size: 26313031.8 {} [00073.601 ms; 038 iters.] [2.0326e-6 err.] pagerankCuda [dynamic]
+order: 8434453.4 size: 26313031.8 {} [00114.808 ms; 000 iters.] [1.2771e-7 err.] pagerankNvgraph [incremental]
+order: 8434453.4 size: 26313031.8 {} [00073.601 ms; 038 iters.] [2.0326e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph germany_osm.mtx ...
@@ -1414,92 +1414,92 @@ order: 11548845 size: 24738363 {}
 # Batch size 1e+0
 order: 11548845.4 size: 24738363 {} [00113.876 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548845.4 size: 24738363 {} [00061.695 ms; 065 iters.] [1.9179e-7 err.] pagerankCuda [static]
-order: 11548845.4 size: 24738363 {} [00033.020 ms; 000 iters.] [3.2104e-7 err.] pagerankNvgraph [dynamic]
-order: 11548845.4 size: 24738363 {} [00001.153 ms; 001 iters.] [7.0903e-7 err.] pagerankCuda [dynamic]
+order: 11548845.4 size: 24738363 {} [00033.020 ms; 000 iters.] [3.2104e-7 err.] pagerankNvgraph [incremental]
+order: 11548845.4 size: 24738363 {} [00001.153 ms; 001 iters.] [7.0903e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 11548845.8 size: 24738367 {} [00113.795 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548845.8 size: 24738367 {} [00061.696 ms; 065 iters.] [1.9030e-7 err.] pagerankCuda [static]
-order: 11548845.8 size: 24738367 {} [00042.521 ms; 000 iters.] [3.3248e-7 err.] pagerankNvgraph [dynamic]
-order: 11548845.8 size: 24738367 {} [00001.153 ms; 001 iters.] [1.4498e-6 err.] pagerankCuda [dynamic]
+order: 11548845.8 size: 24738367 {} [00042.521 ms; 000 iters.] [3.3248e-7 err.] pagerankNvgraph [incremental]
+order: 11548845.8 size: 24738367 {} [00001.153 ms; 001 iters.] [1.4498e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 11548848 size: 24738372 {} [00113.825 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548848 size: 24738372 {} [00061.691 ms; 065 iters.] [1.9282e-7 err.] pagerankCuda [static]
-order: 11548848 size: 24738372 {} [00050.639 ms; 000 iters.] [3.0714e-7 err.] pagerankNvgraph [dynamic]
-order: 11548848 size: 24738372 {} [00002.291 ms; 002 iters.] [1.4856e-6 err.] pagerankCuda [dynamic]
+order: 11548848 size: 24738372 {} [00050.639 ms; 000 iters.] [3.0714e-7 err.] pagerankNvgraph [incremental]
+order: 11548848 size: 24738372 {} [00002.291 ms; 002 iters.] [1.4856e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 11548853.2 size: 24738412 {} [00113.917 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548853.2 size: 24738412 {} [00061.915 ms; 065 iters.] [2.1681e-7 err.] pagerankCuda [static]
-order: 11548853.2 size: 24738412 {} [00058.061 ms; 000 iters.] [3.4224e-7 err.] pagerankNvgraph [dynamic]
-order: 11548853.2 size: 24738412 {} [00007.016 ms; 007 iters.] [2.9353e-6 err.] pagerankCuda [dynamic]
+order: 11548853.2 size: 24738412 {} [00058.061 ms; 000 iters.] [3.4224e-7 err.] pagerankNvgraph [incremental]
+order: 11548853.2 size: 24738412 {} [00007.016 ms; 007 iters.] [2.9353e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 11548863.6 size: 24738462 {} [00113.792 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548863.6 size: 24738462 {} [00061.915 ms; 065 iters.] [1.8718e-7 err.] pagerankCuda [static]
-order: 11548863.6 size: 24738462 {} [00061.507 ms; 000 iters.] [3.5886e-7 err.] pagerankNvgraph [dynamic]
-order: 11548863.6 size: 24738462 {} [00010.236 ms; 011 iters.] [3.0748e-6 err.] pagerankCuda [dynamic]
+order: 11548863.6 size: 24738462 {} [00061.507 ms; 000 iters.] [3.5886e-7 err.] pagerankNvgraph [incremental]
+order: 11548863.6 size: 24738462 {} [00010.236 ms; 011 iters.] [3.0748e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 11548936.2 size: 24738862 {} [00113.889 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11548936.2 size: 24738862 {} [00061.707 ms; 065 iters.] [2.2008e-7 err.] pagerankCuda [static]
-order: 11548936.2 size: 24738862 {} [00069.564 ms; 000 iters.] [3.9073e-7 err.] pagerankNvgraph [dynamic]
-order: 11548936.2 size: 24738862 {} [00018.177 ms; 019 iters.] [3.4509e-6 err.] pagerankCuda [dynamic]
+order: 11548936.2 size: 24738862 {} [00069.564 ms; 000 iters.] [3.9073e-7 err.] pagerankNvgraph [incremental]
+order: 11548936.2 size: 24738862 {} [00018.177 ms; 019 iters.] [3.4509e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 11549024.8 size: 24739362 {} [00113.863 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11549024.8 size: 24739362 {} [00061.701 ms; 065 iters.] [1.7831e-7 err.] pagerankCuda [static]
-order: 11549024.8 size: 24739362 {} [00073.700 ms; 000 iters.] [4.1955e-7 err.] pagerankNvgraph [dynamic]
-order: 11549024.8 size: 24739362 {} [00021.976 ms; 023 iters.] [3.4189e-6 err.] pagerankCuda [dynamic]
+order: 11549024.8 size: 24739362 {} [00073.700 ms; 000 iters.] [4.1955e-7 err.] pagerankNvgraph [incremental]
+order: 11549024.8 size: 24739362 {} [00021.976 ms; 023 iters.] [3.4189e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 11549743.8 size: 24743362 {} [00113.836 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11549743.8 size: 24743362 {} [00061.742 ms; 065 iters.] [2.3592e-7 err.] pagerankCuda [static]
-order: 11549743.8 size: 24743362 {} [00080.487 ms; 000 iters.] [5.4472e-7 err.] pagerankNvgraph [dynamic]
-order: 11549743.8 size: 24743362 {} [00030.695 ms; 032 iters.] [3.4887e-6 err.] pagerankCuda [dynamic]
+order: 11549743.8 size: 24743362 {} [00080.487 ms; 000 iters.] [5.4472e-7 err.] pagerankNvgraph [incremental]
+order: 11549743.8 size: 24743362 {} [00030.695 ms; 032 iters.] [3.4887e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 11550660.6 size: 24748362 {} [00113.979 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11550660.6 size: 24748362 {} [00061.762 ms; 065 iters.] [2.1574e-7 err.] pagerankCuda [static]
-order: 11550660.6 size: 24748362 {} [00083.831 ms; 000 iters.] [6.2420e-7 err.] pagerankNvgraph [dynamic]
-order: 11550660.6 size: 24748362 {} [00034.507 ms; 036 iters.] [3.4220e-6 err.] pagerankCuda [dynamic]
+order: 11550660.6 size: 24748362 {} [00083.831 ms; 000 iters.] [6.2420e-7 err.] pagerankNvgraph [incremental]
+order: 11550660.6 size: 24748362 {} [00034.507 ms; 036 iters.] [3.4220e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 11557902 size: 24788362 {} [00114.234 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11557902 size: 24788362 {} [00062.160 ms; 065 iters.] [2.1753e-7 err.] pagerankCuda [static]
-order: 11557902 size: 24788362 {} [00092.422 ms; 000 iters.] [7.7341e-7 err.] pagerankNvgraph [dynamic]
-order: 11557902 size: 24788362 {} [00043.094 ms; 045 iters.] [3.1033e-6 err.] pagerankCuda [dynamic]
+order: 11557902 size: 24788362 {} [00092.422 ms; 000 iters.] [7.7341e-7 err.] pagerankNvgraph [incremental]
+order: 11557902 size: 24788362 {} [00043.094 ms; 045 iters.] [3.1033e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 11566850.8 size: 24838362 {} [00114.990 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11566850.8 size: 24838362 {} [00062.621 ms; 065 iters.] [1.7813e-7 err.] pagerankCuda [static]
-order: 11566850.8 size: 24838362 {} [00096.182 ms; 000 iters.] [8.1459e-7 err.] pagerankNvgraph [dynamic]
-order: 11566850.8 size: 24838362 {} [00047.333 ms; 049 iters.] [2.5742e-6 err.] pagerankCuda [dynamic]
+order: 11566850.8 size: 24838362 {} [00096.182 ms; 000 iters.] [8.1459e-7 err.] pagerankNvgraph [incremental]
+order: 11566850.8 size: 24838362 {} [00047.333 ms; 049 iters.] [2.5742e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 11636371.4 size: 25238362 {} [00118.718 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11636371.4 size: 25238362 {} [00065.391 ms; 064 iters.] [6.1386e-7 err.] pagerankCuda [static]
-order: 11636371.4 size: 25238362 {} [00104.773 ms; 000 iters.] [8.8241e-7 err.] pagerankNvgraph [dynamic]
-order: 11636371.4 size: 25238362 {} [00056.231 ms; 055 iters.] [1.9572e-6 err.] pagerankCuda [dynamic]
+order: 11636371.4 size: 25238362 {} [00104.773 ms; 000 iters.] [8.8241e-7 err.] pagerankNvgraph [incremental]
+order: 11636371.4 size: 25238362 {} [00056.231 ms; 055 iters.] [1.9572e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 11717022.6 size: 25738362 {} [00121.835 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11717022.6 size: 25738362 {} [00069.283 ms; 063 iters.] [7.0140e-7 err.] pagerankCuda [static]
-order: 11717022.6 size: 25738362 {} [00110.951 ms; 000 iters.] [7.5771e-7 err.] pagerankNvgraph [dynamic]
-order: 11717022.6 size: 25738362 {} [00062.523 ms; 057 iters.] [1.5449e-6 err.] pagerankCuda [dynamic]
+order: 11717022.6 size: 25738362 {} [00110.951 ms; 000 iters.] [7.5771e-7 err.] pagerankNvgraph [incremental]
+order: 11717022.6 size: 25738362 {} [00062.523 ms; 057 iters.] [1.5449e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 12178874.4 size: 29738361.6 {} [00145.681 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12178874.4 size: 29738361.6 {} [00090.894 ms; 054 iters.] [7.6099e-7 err.] pagerankCuda [static]
-order: 12178874.4 size: 29738361.6 {} [00140.732 ms; 000 iters.] [3.5333e-7 err.] pagerankNvgraph [dynamic]
-order: 12178874.4 size: 29738361.6 {} [00087.800 ms; 052 iters.] [1.4434e-6 err.] pagerankCuda [dynamic]
+order: 12178874.4 size: 29738361.6 {} [00140.732 ms; 000 iters.] [3.5333e-7 err.] pagerankNvgraph [incremental]
+order: 12178874.4 size: 29738361.6 {} [00087.800 ms; 052 iters.] [1.4434e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 12465980.4 size: 34738360.4 {} [00169.860 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12465980.4 size: 34738360.4 {} [00112.268 ms; 045 iters.] [1.2895e-6 err.] pagerankCuda [static]
-order: 12465980.4 size: 34738360.4 {} [00166.730 ms; 000 iters.] [1.9914e-7 err.] pagerankNvgraph [dynamic]
-order: 12465980.4 size: 34738360.4 {} [00109.808 ms; 044 iters.] [1.7967e-6 err.] pagerankCuda [dynamic]
+order: 12465980.4 size: 34738360.4 {} [00166.730 ms; 000 iters.] [1.9914e-7 err.] pagerankNvgraph [incremental]
+order: 12465980.4 size: 34738360.4 {} [00109.808 ms; 044 iters.] [1.7967e-6 err.] pagerankCuda [incremental]
 
 
 Loading graph asia_osm.mtx ...
@@ -1509,89 +1509,89 @@ order: 11950757 size: 25423207 {}
 # Batch size 1e+0
 order: 11950757.2 size: 25423207 {} [00107.697 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950757.2 size: 25423207 {} [00051.449 ms; 063 iters.] [6.7315e-7 err.] pagerankCuda [static]
-order: 11950757.2 size: 25423207 {} [00034.822 ms; 000 iters.] [2.6801e-7 err.] pagerankNvgraph [dynamic]
-order: 11950757.2 size: 25423207 {} [00000.998 ms; 001 iters.] [6.1217e-7 err.] pagerankCuda [dynamic]
+order: 11950757.2 size: 25423207 {} [00034.822 ms; 000 iters.] [2.6801e-7 err.] pagerankNvgraph [incremental]
+order: 11950757.2 size: 25423207 {} [00000.998 ms; 001 iters.] [6.1217e-7 err.] pagerankCuda [incremental]
 
 # Batch size 5e+0
 order: 11950758.4 size: 25423211 {} [00107.802 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950758.4 size: 25423211 {} [00051.355 ms; 063 iters.] [6.6539e-7 err.] pagerankCuda [static]
-order: 11950758.4 size: 25423211 {} [00045.016 ms; 000 iters.] [2.8661e-7 err.] pagerankNvgraph [dynamic]
-order: 11950758.4 size: 25423211 {} [00000.997 ms; 001 iters.] [1.2555e-6 err.] pagerankCuda [dynamic]
+order: 11950758.4 size: 25423211 {} [00045.016 ms; 000 iters.] [2.8661e-7 err.] pagerankNvgraph [incremental]
+order: 11950758.4 size: 25423211 {} [00000.997 ms; 001 iters.] [1.2555e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+1
 order: 11950758.6 size: 25423216 {} [00107.864 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950758.6 size: 25423216 {} [00051.384 ms; 063 iters.] [6.8214e-7 err.] pagerankCuda [static]
-order: 11950758.6 size: 25423216 {} [00046.683 ms; 000 iters.] [2.6550e-7 err.] pagerankNvgraph [dynamic]
-order: 11950758.6 size: 25423216 {} [00001.323 ms; 001 iters.] [1.8917e-6 err.] pagerankCuda [dynamic]
+order: 11950758.6 size: 25423216 {} [00046.683 ms; 000 iters.] [2.6550e-7 err.] pagerankNvgraph [incremental]
+order: 11950758.6 size: 25423216 {} [00001.323 ms; 001 iters.] [1.8917e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+1
 order: 11950766.8 size: 25423256 {} [00107.804 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950766.8 size: 25423256 {} [00051.351 ms; 063 iters.] [6.8980e-7 err.] pagerankCuda [static]
-order: 11950766.8 size: 25423256 {} [00056.159 ms; 000 iters.] [2.7713e-7 err.] pagerankNvgraph [dynamic]
-order: 11950766.8 size: 25423256 {} [00006.033 ms; 007 iters.] [2.7449e-6 err.] pagerankCuda [dynamic]
+order: 11950766.8 size: 25423256 {} [00056.159 ms; 000 iters.] [2.7713e-7 err.] pagerankNvgraph [incremental]
+order: 11950766.8 size: 25423256 {} [00006.033 ms; 007 iters.] [2.7449e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+2
 order: 11950775.6 size: 25423306 {} [00107.842 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950775.6 size: 25423306 {} [00051.356 ms; 063 iters.] [6.7743e-7 err.] pagerankCuda [static]
-order: 11950775.6 size: 25423306 {} [00060.226 ms; 000 iters.] [2.9225e-7 err.] pagerankNvgraph [dynamic]
-order: 11950775.6 size: 25423306 {} [00008.305 ms; 010 iters.] [3.1957e-6 err.] pagerankCuda [dynamic]
+order: 11950775.6 size: 25423306 {} [00060.226 ms; 000 iters.] [2.9225e-7 err.] pagerankNvgraph [incremental]
+order: 11950775.6 size: 25423306 {} [00008.305 ms; 010 iters.] [3.1957e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+2
 order: 11950854.8 size: 25423706 {} [00107.804 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950854.8 size: 25423706 {} [00051.393 ms; 063 iters.] [6.7114e-7 err.] pagerankCuda [static]
-order: 11950854.8 size: 25423706 {} [00068.093 ms; 000 iters.] [3.1484e-7 err.] pagerankNvgraph [dynamic]
-order: 11950854.8 size: 25423706 {} [00015.624 ms; 019 iters.] [3.1520e-6 err.] pagerankCuda [dynamic]
+order: 11950854.8 size: 25423706 {} [00068.093 ms; 000 iters.] [3.1484e-7 err.] pagerankNvgraph [incremental]
+order: 11950854.8 size: 25423706 {} [00015.624 ms; 019 iters.] [3.1520e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+3
 order: 11950934.6 size: 25424206 {} [00107.951 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11950934.6 size: 25424206 {} [00051.372 ms; 063 iters.] [6.8668e-7 err.] pagerankCuda [static]
-order: 11950934.6 size: 25424206 {} [00070.739 ms; 000 iters.] [3.6921e-7 err.] pagerankNvgraph [dynamic]
-order: 11950934.6 size: 25424206 {} [00018.560 ms; 023 iters.] [3.3958e-6 err.] pagerankCuda [dynamic]
+order: 11950934.6 size: 25424206 {} [00070.739 ms; 000 iters.] [3.6921e-7 err.] pagerankNvgraph [incremental]
+order: 11950934.6 size: 25424206 {} [00018.560 ms; 023 iters.] [3.3958e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+3
 order: 11951665 size: 25428206 {} [00108.043 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11951665 size: 25428206 {} [00051.421 ms; 063 iters.] [6.5977e-7 err.] pagerankCuda [static]
-order: 11951665 size: 25428206 {} [00079.965 ms; 000 iters.] [4.4312e-7 err.] pagerankNvgraph [dynamic]
-order: 11951665 size: 25428206 {} [00026.202 ms; 032 iters.] [3.2669e-6 err.] pagerankCuda [dynamic]
+order: 11951665 size: 25428206 {} [00079.965 ms; 000 iters.] [4.4312e-7 err.] pagerankNvgraph [incremental]
+order: 11951665 size: 25428206 {} [00026.202 ms; 032 iters.] [3.2669e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+4
 order: 11952570 size: 25433206 {} [00107.595 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11952570 size: 25433206 {} [00051.574 ms; 063 iters.] [6.6206e-7 err.] pagerankCuda [static]
-order: 11952570 size: 25433206 {} [00082.094 ms; 000 iters.] [4.9488e-7 err.] pagerankNvgraph [dynamic]
-order: 11952570 size: 25433206 {} [00029.493 ms; 036 iters.] [3.2264e-6 err.] pagerankCuda [dynamic]
+order: 11952570 size: 25433206 {} [00082.094 ms; 000 iters.] [4.9488e-7 err.] pagerankNvgraph [incremental]
+order: 11952570 size: 25433206 {} [00029.493 ms; 036 iters.] [3.2264e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+4
 order: 11959696.6 size: 25473206 {} [00108.125 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11959696.6 size: 25473206 {} [00051.732 ms; 063 iters.] [6.7990e-7 err.] pagerankCuda [static]
-order: 11959696.6 size: 25473206 {} [00088.672 ms; 000 iters.] [7.0544e-7 err.] pagerankNvgraph [dynamic]
-order: 11959696.6 size: 25473206 {} [00037.009 ms; 045 iters.] [2.9419e-6 err.] pagerankCuda [dynamic]
+order: 11959696.6 size: 25473206 {} [00088.672 ms; 000 iters.] [7.0544e-7 err.] pagerankNvgraph [incremental]
+order: 11959696.6 size: 25473206 {} [00037.009 ms; 045 iters.] [2.9419e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+5
 order: 11968829 size: 25523206 {} [00108.645 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 11968829 size: 25523206 {} [00052.223 ms; 063 iters.] [6.9461e-7 err.] pagerankCuda [static]
-order: 11968829 size: 25523206 {} [00092.095 ms; 000 iters.] [7.4989e-7 err.] pagerankNvgraph [dynamic]
-order: 11968829 size: 25523206 {} [00040.686 ms; 049 iters.] [2.5166e-6 err.] pagerankCuda [dynamic]
+order: 11968829 size: 25523206 {} [00092.095 ms; 000 iters.] [7.4989e-7 err.] pagerankNvgraph [incremental]
+order: 11968829 size: 25523206 {} [00040.686 ms; 049 iters.] [2.5166e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+5
 order: 12038173.4 size: 25923206 {} [00109.709 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12038173.4 size: 25923206 {} [00055.713 ms; 063 iters.] [2.3055e-7 err.] pagerankCuda [static]
-order: 12038173.4 size: 25923206 {} [00101.304 ms; 000 iters.] [7.1720e-7 err.] pagerankNvgraph [dynamic]
-order: 12038173.4 size: 25923206 {} [00049.617 ms; 056 iters.] [1.6589e-6 err.] pagerankCuda [dynamic]
+order: 12038173.4 size: 25923206 {} [00101.304 ms; 000 iters.] [7.1720e-7 err.] pagerankNvgraph [incremental]
+order: 12038173.4 size: 25923206 {} [00049.617 ms; 056 iters.] [1.6589e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+6
 order: 12119355.6 size: 26423205.4 {} [00114.040 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12119355.6 size: 26423205.4 {} [00059.057 ms; 062 iters.] [7.6001e-7 err.] pagerankCuda [static]
-order: 12119355.6 size: 26423205.4 {} [00106.951 ms; 000 iters.] [5.7293e-7 err.] pagerankNvgraph [dynamic]
-order: 12119355.6 size: 26423205.4 {} [00055.325 ms; 058 iters.] [1.3316e-6 err.] pagerankCuda [dynamic]
+order: 12119355.6 size: 26423205.4 {} [00106.951 ms; 000 iters.] [5.7293e-7 err.] pagerankNvgraph [incremental]
+order: 12119355.6 size: 26423205.4 {} [00055.325 ms; 058 iters.] [1.3316e-6 err.] pagerankCuda [incremental]
 
 # Batch size 5e+6
 order: 12588003.4 size: 30423205 {} [00139.311 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12588003.4 size: 30423205 {} [00081.935 ms; 054 iters.] [1.1846e-6 err.] pagerankCuda [static]
-order: 12588003.4 size: 30423205 {} [00137.333 ms; 000 iters.] [3.1536e-7 err.] pagerankNvgraph [dynamic]
-order: 12588003.4 size: 30423205 {} [00080.585 ms; 053 iters.] [1.4565e-6 err.] pagerankCuda [dynamic]
+order: 12588003.4 size: 30423205 {} [00137.333 ms; 000 iters.] [3.1536e-7 err.] pagerankNvgraph [incremental]
+order: 12588003.4 size: 30423205 {} [00080.585 ms; 053 iters.] [1.4565e-6 err.] pagerankCuda [incremental]
 
 # Batch size 1e+7
 order: 12886434.4 size: 35423204 {} [00165.387 ms; 000 iters.] [0.0000e+0 err.] pagerankNvgraph [static]
 order: 12886434.4 size: 35423204 {} [00105.586 ms; 046 iters.] [1.3514e-6 err.] pagerankCuda [static]
-order: 12886434.4 size: 35423204 {} [00162.302 ms; 000 iters.] [2.2652e-7 err.] pagerankNvgraph [dynamic]
-order: 12886434.4 size: 35423204 {} [00103.316 ms; 045 iters.] [1.8609e-6 err.] pagerankCuda [dynamic]
+order: 12886434.4 size: 35423204 {} [00162.302 ms; 000 iters.] [2.2652e-7 err.] pagerankNvgraph [incremental]
+order: 12886434.4 size: 35423204 {} [00103.316 ms; 045 iters.] [1.8609e-6 err.] pagerankCuda [incremental]
