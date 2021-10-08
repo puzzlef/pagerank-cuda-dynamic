@@ -138,9 +138,9 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, R)/N;
     pagerankSwitchedCu(aD, cD, vfromD, efromD, i, ns, c0);
-    l2NormCu(eD, rD, aD, n);
+    l2NormCu(eD, rD, aD, n);  // L2-norm in use, for comparing with nvGraph
     TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
-    T el = sqrt(sum(e, R));
+    T el = sqrt(sum(e, R));   // sqrt for L2-norm
     if (el < E) break;
     swap(aD, rD);
   }
