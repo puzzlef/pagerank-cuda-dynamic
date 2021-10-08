@@ -2,7 +2,7 @@
 import os
 from IPython.display import FileLink
 src="pagerank-cuda-static-vs-incremental"
-inp="/kaggle/input/graphs"
+inp="/kaggle/input/temporal-graphs"
 out="{}.txt".format(src)
 !printf "" > "$out"
 display(FileLink(out))
