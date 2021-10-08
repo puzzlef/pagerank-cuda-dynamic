@@ -21,17 +21,17 @@ class DiGraph {
   using TEdge   = E;
 
   private:
-  vector<int>  none;
-  vector<bool> vex;
-  vector<vector<int>> vto;
-  vector<vector<E>> edata;
-  vector<V>         vdata;
+  vector<int>   none;
+  vector<bool>  vex;
+  vector2d<int> vto;
+  vector2d<E>   edata;
+  vector<V>     vdata;
   int N = 0, M = 0;
 
   // Cute helpers
   private:
   int s() const { return vto.size(); }
-  int ei(int u, int v) const { return findIndex(vto[u], v); }
+  int ei(int u, int v) const { return findEqIndex(vto[u], v); }
 
   // Read operations
   public:
@@ -41,12 +41,12 @@ class DiGraph {
 
   bool hasVertex(int u)      const { return u < s() && vex[u]; }
   bool hasEdge(int u, int v) const { return u < s() && ei(u, v) >= 0; }
-  auto edges(int u)          const { return u < s()? iterable(vto[u]) : iterable(none); }
+  auto edges(int u)          const { return u < s()? makeIter(vto[u]) : makeIter(none); }
   int degree(int u)          const { return u < s()? vto[u].size()    : 0; }
-  auto vertices()      const { return filter(range(s()), [&](int u) { return  vex[u]; }); }
-  auto nonVertices()   const { return filter(range(s()), [&](int u) { return !vex[u]; }); }
-  auto inEdges(int v)  const { return filter(range(s()), [&](int u) { return ei(u, v) >= 0; }); }
-  int inDegree(int v) const { return countIf(range(s()), [&](int u) { return ei(u, v) >= 0; }); }
+  auto vertices()      const { return filterIter(rangeIter(s()), [&](int u) { return  vex[u]; }); }
+  auto nonVertices()   const { return filterIter(rangeIter(s()), [&](int u) { return !vex[u]; }); }
+  auto inEdges(int v)  const { return filterIter(rangeIter(s()), [&](int u) { return ei(u, v) >= 0; }); }
+  int inDegree(int v) const { return countIf(rangeIter(s()), [&](int u) { return ei(u, v) >= 0; }); }
 
   V vertexData(int u)   const { return hasVertex(u)? vdata[u] : V(); }
   void setVertexData(int u, V d) { if (hasVertex(u)) vdata[u] = d; }
@@ -113,7 +113,6 @@ class DiGraph {
 // DI-GRAPH PRINT
 // --------------
 
-
 template <class V, class E>
 void write(ostream& a, const DiGraph<V, E>& x, bool all=false) {
   a << "order: " << x.order() << " size: " << x.size();
@@ -129,7 +128,7 @@ void write(ostream& a, const DiGraph<V, E>& x, bool all=false) {
 }
 
 template <class V, class E>
-void print(const DiGraph<V, E>& x, bool all=false) { write(cout, x, all); }
-
-template <class V, class E>
-void println(const DiGraph<V, E>& x, bool all=false) { print(x, all); cout << "\n"; }
+ostream& operator<<(ostream& a, const DiGraph<V, E>& x) {
+  write(a, x);
+  return a;
+}

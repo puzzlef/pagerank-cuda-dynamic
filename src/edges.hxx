@@ -36,6 +36,24 @@ auto edges(const G& x, int u) {
 
 
 
+// EDGE
+// ----
+
+template <class G, class F>
+auto edge(const G& x, int u, F fm) {
+  for (int v : x.edges(u))
+    return fm(v);
+  return -1;
+}
+
+template <class G>
+auto edge(const G& x, int u) {
+  return edge(x, u, [](int v) { return v; });
+}
+
+
+
+
 // EDGE-DATA
 // ---------
 

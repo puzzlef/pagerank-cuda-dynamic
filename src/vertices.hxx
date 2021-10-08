@@ -7,6 +7,7 @@
 using std::vector;
 using std::transform;
 using std::back_inserter;
+using std::equal;
 
 
 
@@ -136,10 +137,11 @@ auto compressContainer(const G& x, const vector<T>& vs) {
 template <class G>
 bool verticesEqual(const G& x, int u, const G& y, int v) {
   if (x.degree(u) != y.degree(v)) return false;
-  auto uj = x.edges(u), vj = y.edges(v);
-  auto ui = uj.begin(), ue = uj.end();
-  auto vi = vj.begin(), ve = vj.end();
-  for (; ui!=ue && vi!=ve; ++ui, ++vi)
-    if (*ui != *vi) return false;
-  return true;
+  auto xe = x.edges(u), ye = y.edges(v);
+  return equal(xe.begin(), xe.end(), ye.begin());
+}
+
+template <class G, class H>
+bool verticesEqual(const G& x, const H& xt, int u, const G& y, const H& yt, int v) {
+  return verticesEqual(x, u, y, u) && verticesEqual(xt, u, yt, u);
 }

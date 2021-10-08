@@ -1,15 +1,19 @@
 #pragma once
+#include <utility>
 #include <string>
 #include <vector>
 #include <ostream>
 #include <fstream>
 #include <iostream>
+#include <type_traits>
 
-using std::ios;
+using std::pair;
 using std::string;
 using std::vector;
+using std::ios;
 using std::ostream;
 using std::ifstream;
+using std::is_fundamental;
 using std::cout;
 
 
@@ -33,54 +37,37 @@ string readFile(const char *pth) {
 // WRITE
 // -----
 
-template <class T>
-void write(ostream& a, const T *x, int N) {
-  a << "{";
-  for (int i=0; i<N; i++)
-    a << " " << x[i];
-  a << " }";
+template <class K, class V>
+ostream& operator<<(ostream& a, const pair<K, V>& x) {
+  a << x.first << ": " << x.second;
+  return a;
 }
 
 template <class T>
-void write(ostream& a, const vector<T>& x) {
-  write(a, x.data(), x.size());
-}
-
-template <class T>
-void write(ostream& a, const vector<vector<T>>& x) {
-  a << "{\n";
-  for (const auto& v : x) {
-    a << "  "; write(a, v);
+ostream& operator<<(ostream& a, const vector<T>& x) {
+  if (is_fundamental<T>::value) {
+    a << "{";
+    for (T v : x)
+      a << " " << v;
+    a << " }";
   }
-  a << "\n}";
+  else {
+    a << "{\n";
+    for (const T& v : x)
+      a << "  " << v << "\n";
+    a << "}";
+  }
+  return a;
 }
 
 
 
 
-// PRINT
-// -----
+// PRINT*
+// ------
 
 template <class T>
-void print(const T *x, int N) { write(cout, x, N); }
+void print(const T& x) {cout << x; }
 
 template <class T>
-void print(const vector<T>& x) { write(cout, x); }
-
-template <class T>
-void print(const vector<vector<T>>& x) { write(cout, x); }
-
-
-
-
-// PRINTLN
-// -------
-
-template <class T>
-void println(const T *x, int N) { print(x, N); cout << "\n"; }
-
-template <class T>
-void println(const vector<T>& x) { print(x); cout << "\n"; }
-
-template <class T>
-void println(const vector<vector<T>>& x) { print(x); cout << "\n"; }
+void println(const T& x) { cout << x << "\n"; }

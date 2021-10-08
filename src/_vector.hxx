@@ -13,6 +13,45 @@ using std::sqrt;
 
 
 
+// 2D/3D
+// -----
+
+template <class T>
+using vector2d = vector<vector<T>>;
+
+template <class T>
+using vector3d = vector<vector<vector<T>>>;
+
+
+
+
+// SIZE
+// ----
+
+template <class T>
+size_t size(const vector<T>& x) {
+  return x.size();
+}
+
+template <class T>
+size_t size2d(const vector2d<T>& x) {
+  size_t a = 0;
+  for (const auto& v : x)
+    a += size(v);
+  return a;
+}
+
+template <class T>
+size_t size3d(const vector3d<T>& x) {
+  size_t a = 0;
+  for (const auto& v : x)
+    a += size2d(v);
+  return a;
+}
+
+
+
+
 // REORDER
 // -------
 // Ref: https://stackoverflow.com/a/22183350/1413259
@@ -46,6 +85,22 @@ void eraseIndex(vector<T>& a, int i, int I) {
 
 
 
+// INSERT
+// ------
+
+template <class T>
+void insertIndex(vector<T>& a, int i, const T& v) {
+  a.insert(a.begin()+i, v);
+}
+
+template <class T>
+void insertIndex(vector<T>& a, int i, int n, const T& v) {
+  a.insert(a.begin()+i, n, v);
+}
+
+
+
+
 // APPEND
 // ------
 
@@ -67,26 +122,88 @@ void append(vector<T>& a, J&& vs) {
 // ----
 
 template <class T, class F>
-auto joinIf(const vector<vector<T>>& xs, F fn) {
-  vector<vector<T>> a;
+void joinIf(vector2d<T>& a, const vector2d<T>& xs, F fn) {
   for (const auto& x : xs) {
     auto& b = a.back();
     if (a.empty() || !fn(b, x)) a.push_back(x);
     else b.insert(b.end(), x.begin(), x.end());
   }
+}
+
+template <class T, class F>
+auto joinIf(const vector2d<T>& xs, F fn) {
+  vector2d<T> a; joinIf(a, xs, fn);
   return a;
 }
 
+
 template <class T>
-auto joinUntilSize(const vector<vector<T>>& xs, int N) {
-  return joinIf(xs, [&](const auto& b, const auto& x) { return b.size()<N; });
+void joinUntilSize(vector2d<T>& a, const vector2d<T>& xs, int N) {
+  joinIf(a, xs, [&](const auto& b, const auto& x) { return b.size()<N; });
 }
 
 template <class T>
-auto join(const vector<vector<T>>& xs) {
-  vector<T> a;
+auto joinUntilSize(const vector2d<T>& xs, int N) {
+  vector2d<T> a; joinUntilSize(a, xs, N);
+  return a;
+}
+
+
+template <class T>
+void join(vector<T>& a, const vector2d<T>& xs) {
   for (const auto& x : xs)
     a.insert(a.end(), x.begin(), x.end());
+}
+
+template <class T>
+auto join(const vector2d<T>& xs) {
+  vector<T> a; join(a, xs);
+  return a;
+}
+
+
+
+
+// JOIN-AT
+// -------
+
+template <class T, class J, class F>
+void joinAtIf(vector2d<T>& a, const vector2d<T>& xs, J&& is, F fn) {
+  for (int i : is) {
+    auto& b = a.back();
+    if (a.empty() || !fn(b, xs[i])) a.push_back(xs[i]);
+    else b.insert(b.end(), xs[i].begin(), xs[i].end());
+  }
+}
+
+template <class T, class J, class F>
+auto joinAtIf(const vector2d<T>& xs, J&& is, F fn) {
+  vector2d<T> a; joinAtIf(a, xs, is, fn);
+  return a;
+}
+
+
+template <class T, class J>
+void joinAtUntilSize(vector2d<T>& a, const vector2d<T>& xs, J&& is, int N) {
+  joinAtIf(a, xs, is, [&](const auto& b, const auto& x) { return b.size()<N; });
+}
+
+template <class T, class J>
+auto joinAtUntilSize(const vector2d<T>& xs, J&& is, int N) {
+  vector2d<T> a; joinAtUntilSize(a, xs, is, N);
+  return a;
+}
+
+
+template <class T, class J>
+void joinAt(vector<T>& a, const vector2d<T>& xs, J&& is) {
+  for (int i : is)
+    a.insert(a.end(), xs[i].begin(), xs[i].end());
+}
+
+template <class T, class J>
+auto joinAt(const vector2d<T>& xs, J&& is) {
+  vector<T> a; joinAt(a, xs, is);
   return a;
 }
 
@@ -448,7 +565,7 @@ V l1NormOmp(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
 template <class T, class U, class V=T>
 V l2Norm(const T *x, const U *y, int N, V a=V()) {
   for (int i=0; i<N; i++)
-    a += x[i]*x[i] - y[i]*y[i];
+    a += (x[i] - y[i]) * (x[i] - y[i]);
   return sqrt(a);
 }
 
@@ -467,7 +584,7 @@ template <class T, class U, class V=T>
 V l2NormOmp(const T *x, const U *y, int N, V a=V()) {
   #pragma omp parallel for schedule(static,4096) reduction(+:a)
   for (int i=0; i<N; i++)
-    a += x[i]*x[i] - y[i]*y[i];
+    a += (x[i] - y[i]) * (x[i] - y[i]);
   return sqrt(a);
 }
 
@@ -561,4 +678,44 @@ void multiplyOmp(vector<T>& a, const vector<U>& x, const vector<V>& y) {
 template <class T, class U, class V>
 void multiplyOmp(vector<T>& a, const vector<U>& x, const vector<V>& y, int i, int N) {
   multiplyOmp(a.data()+i, x.data()+i, y.data()+i, N);
+}
+
+
+
+
+// MULTIPLY-VALUE
+// --------------
+
+template <class T, class U, class V>
+void multiplyValue(T *a, const U *x, const V& y, int N) {
+  for (int i=0; i<N; i++)
+    a[i] = x[i] * y;
+}
+
+template <class T, class U, class V>
+void multiplyValue(vector<T>& a, const vector<U>& x, const V& y) {
+  multiplyValue(a.data(), x.data(), y, int(x.size()));
+}
+
+template <class T, class U, class V>
+void multiplyValue(vector<T>& a, const vector<U>& x, const V& y, int i, int N) {
+  multiplyValue(a.data()+i, x.data()+i, y, N);
+}
+
+
+template <class T, class U, class V>
+void multiplyValueOmp(T *a, const U *x, const V& y, int N) {
+  #pragma omp parallel for schedule(static,4096)
+  for (int i=0; i<N; i++)
+    a[i] = x[i] * y;
+}
+
+template <class T, class U, class V>
+void multiplyValueOmp(vector<T>& a, const vector<U>& x, const V& y) {
+  multiplyValueOmp(a.data(), x.data(), y, int(x.size()));
+}
+
+template <class T, class U, class V>
+void multiplyValueOmp(vector<T>& a, const vector<U>& x, const V& y, int i, int N) {
+  multiplyValueOmp(a.data()+i, x.data()+i, y, N);
 }
