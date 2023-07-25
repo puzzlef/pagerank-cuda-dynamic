@@ -258,7 +258,7 @@ inline int pagerankBasicLoop(vector<V>& a, vector<V>& r, const H& xt, V P, V E, 
   int l = 0;
   while (l<L) {
     V C0 = (1-P)/N;
-    pagerankCalculateRanks(a, xt, r, C0, P, E, fa, fr); ++l;  // update ranks of vertices
+    pagerankCalculateRanks(a, xt, r, C0, P, fa, fr); ++l;  // update ranks of vertices
     V el = liNorm(a, r);     // compare previous and current ranks
     if (!ASYNC) swap(a, r);  // final ranks in (r)
     if (el<E) break;         // check tolerance
@@ -287,7 +287,7 @@ inline int pagerankBasicLoopOmp(vector<V>& a, vector<V>& r, const H& xt, V P, V 
   int l = 0;
   while (l<L) {
     V C0 = (1-P)/N;
-    pagerankCalculateRanksOmp(a, xt, r, C0, P, E, fa, fr); ++l;  // update ranks of vertices
+    pagerankCalculateRanksOmp(a, xt, r, C0, P, fa, fr); ++l;  // update ranks of vertices
     V el = liNormOmp(a, r);  // compare previous and current ranks
     if (!ASYNC) swap(a, r);  // final ranks in (r)
     if (el<E) break;         // check tolerance
@@ -406,11 +406,11 @@ inline PagerankResult<V> pagerankBasicDynamicFrontier(const G& x, const H& xt, c
   V D = 0.001 * o.tolerance;  // see adjust-tolerance
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
-  return pagerankSeq<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
+  return pagerankInvoke<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
     auto fa = [&](K u) { return vaff[u]==FLAG(1); };
     auto fr = [&](K u, V eu) { if (eu>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
     pagerankAffectedFrontierW(vaff, x, y, deletions, insertions);
-    return pagerankBasicSeqLoop<ASYNC>(a, r, xt, P, E, L, fa, fr);
+    return pagerankBasicLoop<ASYNC>(a, r, xt, P, E, L, fa, fr);
   });
 }
 
@@ -433,11 +433,11 @@ inline PagerankResult<V> pagerankBasicDynamicFrontierOmp(const G& x, const H& xt
   V D = 0.001 * o.tolerance;  // see adjust-tolerance
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
-  return pagerankOmp<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
+  return pagerankInvokeOmp<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
     auto fa = [&](K u) { return vaff[u]==FLAG(1); };
     auto fr = [&](K u, V eu) { if (eu>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
     pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions);
-    return pagerankBasicOmpLoop<ASYNC>(a, r, xt, P, E, L, fa, fr);
+    return pagerankBasicLoopOmp<ASYNC>(a, r, xt, P, E, L, fa, fr);
   });
 }
 #endif
