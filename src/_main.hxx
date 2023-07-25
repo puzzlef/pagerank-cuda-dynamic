@@ -15,3 +15,6 @@
 #ifdef OPENMP
 #include "_openmp.hxx"
 #endif
+#ifdef CUDA
+#include "_cuda.hxx"
+#endif
