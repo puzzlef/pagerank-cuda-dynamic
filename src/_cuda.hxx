@@ -957,6 +957,57 @@ void sumMultiplyAtCuW(T *a, const T *x, const T *y, const K *is, size_t IS) {
 
 
 
+// SUM-DIVIDE-AT
+// ---------------
+
+template <class T, class K>
+__device__ T sumDivideAtDev(const T *x, const T *y, const K *is, size_t IS, size_t i, size_t DI) {
+  ASSERT(x && y && is && DI);
+  T a = T();
+  for (; i<IS; i+=DI)
+    a += x[is[i]] / y[is[i]];
+  return a;
+}
+
+template <class T, class K, int S=BLOCK_LIMIT_REDUCE>
+__global__ void sumDivideAtKernelW(T *a, const T *x, const T *y, const K *is, size_t IS) {
+  DEFINE(t, b, B, G);
+  ASSERT(a && x && y && is);
+  __shared__ T cache[S];
+  cache[t] = sumDivideAtDev(x, y, is, IS, B*b+t, G*B);
+  sumValuesReduceDevU(cache, B, t);
+  if (t==0) a[b] = cache[0];
+}
+
+template <class T, class K>
+void sumDivideAtMemcpyCuW(T *a, const T *x, const T *y, const K *is, size_t IS) {
+  ASSERT(a && x && y && is);
+  const int B = BLOCK_SIZE(IS,  BLOCK_LIMIT_REDUCE);
+  const int G = GRID_SIZE(IS, B, GRID_LIMIT_REDUCE);
+  sumDivideAtKernelW<<<G, B>>>(a, x, y, is, IS);
+  ASSERT_KERNEL();
+}
+
+template <class T, class K>
+void sumDivideAtInplaceCuW(T *a, const T *x, const T *y, const K *is, size_t IS) {
+  ASSERT(a && x && y && is);
+  const int B = BLOCK_SIZE(IS,  BLOCK_LIMIT_REDUCE);
+  const int G = GRID_SIZE(IS, B, GRID_LIMIT_REDUCE);
+  sumDivideAtKernelW<<<G, B>>>(a, x, y, is, IS);
+  ASSERT_KERNEL();
+  sumValuesKernelW<<<1, G>>>(a, a, G);
+  ASSERT_KERNEL();
+}
+
+template <class T, class K>
+void sumDivideAtCuW(T *a, const T *x, const T *y, const K *is, size_t IS) {
+  ASSERT(a && x && y && is);
+  sumDivideAtMemcpyCuW(a, x, y, is, IS);
+}
+
+
+
+
 // COUNT
 // -----
 

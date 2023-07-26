@@ -172,6 +172,82 @@ inline void pagerankCalculateRanksOmp(vector<V>& a, const H& xt, const vector<V>
   }
 }
 #endif
+
+
+#ifdef CUDA
+/**
+ * Calculate ranks for vertices in a graph (using CUDA).
+ * @tparam CACHE size of shared memory cache
+ * @param a current rank of each vertex (output)
+ * @param xv csr offsets of transposed graph
+ * @param xe csr edges of transposed graph
+ * @param xd csr degrees of transposed graph
+ * @param xi start index of vertices to process
+ * @param xn number of vertices to process
+ * @param r previous rank of each vertex
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (vertex)
+ * @param fr called with vertex rank change (vertex, delta)
+ */
+template <size_t CACHE=BLOCK_LIMIT, class O, class K, class V, class FA, class FR>
+__global__ void pagerankCalculateRanksBlockKernel(V *a, const O *xv, const K *xe, const K *xd, size_t xi, size_t xn, const V *r, V C0, V P, FA fa, FR fr) {
+  DEFINE(t, b, B, G);
+  __shared__ V cache[CACHE];
+  for (K v=xi+b; v<xi+xn; v+=G) {
+    if (!fa(v)) continue;
+    O eo = xv[v];
+    O en = xv[v+1] - xv[v];
+    cache[t] = sumDivideAtDev(r, xd, xe+eo, en, t, B);
+    if (t==0) {
+      V rv = r[v];
+      V av = C0 + P*cache[0];
+      V ev = abs(av - rv);
+      a[v] = av;
+      fr(v, ev);
+    }
+  }
+}
+
+
+/**
+ * Calculate ranks for vertices in a graph (using CUDA).
+ * @param a current rank of each vertex (output)
+ * @param xv csr offsets of transposed graph
+ * @param xe csr edges of transposed graph
+ * @param xd csr degrees of transposed graph
+ * @param xi start index of vertices to process
+ * @param xn number of vertices to process
+ * @param r previous rank of each vertex
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (vertex)
+ * @param fr called with vertex rank change (vertex, delta)
+ */
+template <class O, class K, class V, class FA, class FR>
+__global__ void pagerankCalculateRanksThreadKernel(V *a, const O *xv, const K *xe, const K *xd, size_t xi, size_t xn, const V *r, V C0, V P, FA fa, FR fr) {
+  DEFINE(t, b, B, G);
+  for (K v=xi+B*b+t; v<xi+xn; v+=G*B) {
+    if (!fa(v)) continue;
+    O eo = xv[v];
+    O en = xv[v+1] - xv[v];
+    V rv = r[v];
+    V av = C0 + P*sumDivideAtDev(r, xd, xe+eo, en, 0, 1);
+    V ev = abs(av - rv);
+    a[v] = av;
+    fr(v, ev);
+  }
+}
+
+
+// TODO:
+template <class O, class K, class V, class FA, class FR>
+inline void pagerankCalculateRanksThreadKernel(V *a, const O *xv, const K *xe, const K *xd, size_t xi, size_t xn, const V *r, V C0, V P, FA fa, FR fr) {
+  int B = 64;
+  int G = min(xn, GRID_LIMIT);
+  pagerankCalculateRanksBlockKernel<<<G, B>>>(a, xv, xe, xd, xi, xn, r, C0, P, fa, fr);
+}
+#endif
 #pragma endregion
 
 
@@ -241,6 +317,46 @@ inline void pagerankCalculateContributionsOmp(vector<V>& a, const H& xt, const v
   for (K v=0; v<S; ++v) {
     if (!xt.hasVertex(v) || !fa(v)) continue;
     V ev = pagerankCalculateContribution(a, xt, f, c, v, C0, P);
+    fr(v, ev / f[v]);
+  }
+}
+#endif
+
+
+#ifdef CUDA
+// TODO:
+template <size_t CACHE=BLOCK_LIMIT, class O, class K, class V, class FA, class FR>
+inline __global__ pagerankCalculateContributionsBlockKernel(V *a, const O *xv, const K *xe, size_t xi, size_t xn, const V *f, const V *c, V C0, V P, FA fa, FR fr) {
+  DEFINE(t, b, B, G);
+  __shared__ V cache[CACHE];
+  for (K v=xi+b; v<xi+xn; v+=G) {
+    if (!fa(v)) continue;
+    O eo = xv[v];
+    O en = xv[v+1] - xv[v];
+    cache[t] = sumAtDev(c, xe+eo, en, t, B);
+    if (t==0) {
+      V cv = c[v];
+      V av = (C0 + P*cache[0]) * f[v];
+      V ev = abs(av - cv);
+      a[v] = av;
+      fr(v, ev / f[v]);
+    }
+  }
+}
+
+
+// TODO:
+template <class O, class K, class V, class FA, class FR>
+inline __global__ pagerankCalculateContributionsThreadKernel(V *a, const O *xv, const K *xe, size_t xi, size_t xn, const V *f, const V *c, V C0, V P, FA fa, FR fr) {
+  DEFINE(t, b, B, G);
+  for (K v=xi+B*b+t; v<xi+xn; v+=G*B) {
+    if (!fa(v)) continue;
+    O eo = xv[v];
+    O en = xv[v+1] - xv[v];
+    V cv = c[v];
+    V av = (C0 + P*sumAtDev(c, xe+eo, en, 0, 1)) * f[v];
+    V ev = abs(av - cv);
+    a[v] = av;
     fr(v, ev / f[v]);
   }
 }
