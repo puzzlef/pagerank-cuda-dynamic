@@ -6,50 +6,37 @@ using std::vector;
 
 
 
-// DFS
-// ---
-// Depth First Search (DFS) graph traversal.
+#pragma region METHODS
+/**
+ * Find vertices visited with DFS.
+ * @param vis vertex visited flags (updated)
+ * @param x original graph
+ * @param u start vertex
+ * @param ft should vertex be visited? (vertex)
+ * @param fp action to perform on every visited vertex (vertex)
+ */
+template <class B, class G, class K, class FT, class FP>
+inline void dfsVisitedForEachW(vector<B>& vis, const G& x, K u, FT ft, FP fp) {
+  if (vis[u] || !ft(u)) return;
+  vis[u] = B(1); fp(u);
+  x.forEachEdgeKey(u, [&](K v) {
+    dfsVisitedForEachW(vis, x, v, ft, fp);
+  });
+}
+
 
 /**
  * Find vertices visited with DFS.
- * @param vis vertex visited? (updated)
  * @param x original graph
  * @param u start vertex
- * @param fn action to perform on every visited vertex
+ * @param ft should vertex be visited? (vertex)
+ * @param fp action to perform on every visited vertex (vertex)
+ * @returns vertex visited flags
  */
-template <class B=bool, class G, class K, class F>
-inline void dfsVisitedForEachW(vector<B>& vis, const G& x, K u, F fn) {
-  if (vis[u]) return;
-  vis[u] = B(1); fn(u);
-  x.forEachEdgeKey(u, [&](K v) {
-    if (!vis[v]) dfsVisitedForEachW(vis, x, v, fn);
-  });
-}
-template <class B=bool, class G, class K, class F>
-inline vector<B> dfsVisitedForEach(const G& x, K u, F fn) {
+template <class B=bool, class G, class K, class FT, class FP>
+inline vector<B> dfsVisitedForEach(const G& x, K u, FT ft, FP fp) {
   vector<B> vis(x.span());
-  dfsVisitedForEachW(vis, x, u, fn);
+  dfsVisitedForEachW(vis, x, u, ft, fp);
   return vis;
 }
-
-
-template <class B=bool, class G, class K, class F>
-inline void dfsVisitedForEachNonRecursiveW(vector<B>& vis, const G& x, K u, F fn) {
-  if (vis[u]) return;
-  vector<K> stack;
-  stack.reserve(x.span());
-  stack.push_back(u);
-  do {
-    K u = stack.back(); stack.pop_back();
-    vis[u] = B(1); fn(u);
-    x.forEachEdgeKey(u, [&](K v) {
-      if (!vis[v]) stack.push_back(v);
-    });
-  } while (!stack.empty());
-}
-template <class B=bool, class G, class K, class F>
-inline vector<B> dfsVisitedForEachNonRecursiveW(const G& x, K u, F fn) {
-  vector<B> vis(x.span());
-  dfsVisitedForEachNonRecursiveW(vis, x, u, fn);
-  return vis;
-}
+#pragma endregion
