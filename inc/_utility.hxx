@@ -13,7 +13,6 @@ using std::chrono::duration_cast;
 
 
 
-#pragma region FUNCTORS
 #pragma region PAIR ACCESSORS
 /**
  * Accessor for the first element (key) of a pair.
@@ -63,12 +62,10 @@ struct PairFirstValue  { inline K operator()(const pair<K, V>& x) noexcept { ret
 template <class K, class V>
 struct PairSecondValue { inline V operator()(const pair<K, V>& x) noexcept { return x.second; } };
 #pragma endregion
-#pragma endregion
 
 
 
 
-#pragma region METHODS
 #pragma region MEASURE DURATION
 /**
  * Get current time.
@@ -201,6 +198,48 @@ inline bool retry(F fn, int N=2) {
 
 
 
+#pragma region SUBSCRIPT
+#ifndef SUBSCRIPT2D
+/**
+ * Access value at given x, i index of 2D array.
+ * @param a 2D array
+ * @param x x index
+ * @param y y index
+ * @param X size of x dimension
+ */
+#define SUBSCRIPT2D(a, x, y, X)  (a)[x + (X)*(y)]
+#endif
+
+
+#ifndef SUBSCRIPT3D
+/**
+ * Access value at given x, y, z index of 3D array.
+ * @param a 3D array
+ * @param x x index
+ * @param y y index
+ * @param z z index
+ * @param X size of x dimension
+ * @param Y size of y dimension
+ */
+#define SUBSCRIPT3D(a, x, y, z, X, Y)  (a)[x + (X)*(y + (Y)*(z))]
+#endif
+
+
+#ifndef SUBSCRIPTRC
+/**
+ * Access value at given row, column of 2D array.
+ * @param a 2D array
+ * @param r row index
+ * @param c column index
+ * @param C number of columns in 2D array
+ */
+#define SUBSCRIPTRC(a, r, c, C)  (a)[(C)*(r) + (c)]
+#endif
+#pragma endregion
+
+
+
+
 #pragma region MOVE
 /**
  * Conditional move.
@@ -231,5 +270,4 @@ inline bool retry(F fn, int N=2) {
  */
 #define CMOVE_GRAPH(t, f) \
   CMOVE((t).order()>0, t, f)
-#pragma endregion
 #pragma endregion

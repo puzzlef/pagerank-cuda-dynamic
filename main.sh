@@ -47,7 +47,7 @@ DEFINES=(""
 )
 
 # Run
-g++ ${DEFINES[*]} -std=c++17 -O3 -fopenmp main.cxx -o "a$1.out"
+nvcc ${DEFINES[*]} -std=c++17 -O3 -Xcompiler -fopenmp main.cu -o "a$1.out"
 # stdbuf --output=L ./"a$1.out" ~/Data/soc-Epinions1.mtx  2>&1 | tee -a "$out"
 stdbuf --output=L ./"a$1.out" ~/Data/indochina-2004.mtx  2>&1 | tee -a "$out"
 stdbuf --output=L ./"a$1.out" ~/Data/uk-2002.mtx         2>&1 | tee -a "$out"
