@@ -370,8 +370,8 @@ void __global__ copyValuesCukW(T *a, const T *x, size_t N) {
 template <class T>
 inline void copyValuesCuW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_MAP_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_MAP_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_MAP_CUDA);
   copyValuesCukW<<<G, B>>>(a, x, N);
 }
 #pragma endregion
@@ -419,8 +419,8 @@ void __global__ fillValueCukW(T *a, size_t N, T v) {
 template <class T>
 inline void fillValueCuW(T *a, size_t N, T v) {
   ASSERT(a);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_MAP_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_MAP_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_MAP_CUDA);
   fillValueCukW<<<G, B>>>(a, N, v);
 }
 #pragma endregion
@@ -454,7 +454,7 @@ inline T __device__ sumValuesCud(const T *x, size_t N, size_t i, size_t DI) {
  * @param i thread index
  */
 template <class T>
-inline void __device__ sumValuesBlockCudU(const T *a, size_t N, size_t i) {
+inline void __device__ sumValuesBlockCudU(T *a, size_t N, size_t i) {
   ASSERT(a);
   // Reduce values in a to a[0] in reverse binary tree fashion.
   for (; N>1;) {
@@ -498,8 +498,8 @@ void __global__ sumValuesCukW(T *a, const T *x, size_t N) {
 template <class T>
 inline void sumValuesMemcpyCuW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
 }
 
@@ -513,8 +513,8 @@ inline void sumValuesMemcpyCuW(T *a, const T *x, size_t N) {
 template <class T>
 inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N ,  BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
   sumValuesCukW<<<1, G>>>(a, a, G);
@@ -536,7 +536,7 @@ inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
 template <class T>
 inline T __device__ liNormCud(const T *x, size_t N, size_t i, size_t DI) {
   ASSERT(x && DI);
-  T a = numeric_limits<T>::min();
+  T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
     a = max(a, x[i]);
   return a;
@@ -550,7 +550,7 @@ inline T __device__ liNormCud(const T *x, size_t N, size_t i, size_t DI) {
  * @param i thread index
  */
 template <class T>
-inline void __device__ liNormBlockCudU(const T *a, size_t N, size_t i) {
+inline void __device__ liNormBlockCudU(T *a, size_t N, size_t i) {
   ASSERT(a);
   // Reduce values in a to a[0] in reverse binary tree fashion.
   for (; N>1;) {
@@ -594,8 +594,8 @@ void __global__ liNormCukW(T *a, const T *x, size_t N) {
 template <class T>
 inline void liNormMemcpyCuW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
 }
 
@@ -609,8 +609,8 @@ inline void liNormMemcpyCuW(T *a, const T *x, size_t N) {
 template <class T>
 inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
   liNormCukW<<<1, G>>>(a, a, G);
@@ -633,7 +633,7 @@ inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
 template <class T>
 inline T __device__ liNormDeltaCud(const T *x, const T *y, size_t N, size_t i, size_t DI) {
   ASSERT(x && y && DI);
-  T a = numeric_limits<T>::min();
+  T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
     a = max(a, abs(x[i] - y[i]));
   return a;
@@ -654,7 +654,7 @@ void __global__ liNormDeltaCukW(T *a, const T *x, const T *y, size_t N) {
   DEFINE_CUDA(t, b, B, G);
   __shared__ T cache[CACHE];
   // Store per-thread delta L∞-norm in shared cache (for further reduction).
-  cache[t] = liNormDeltaCud(x, N, B*b+t, G*B);
+  cache[t] = liNormDeltaCud(x, y, N, B*b+t, G*B);
   // Wait for all threads within the block to finish.
   __syncthreads();
   // Reduce the delta L∞-norms in cache to a single value in reverse binary tree fashion.
@@ -674,8 +674,8 @@ void __global__ liNormDeltaCukW(T *a, const T *x, const T *y, size_t N) {
 template <class T>
 inline void liNormDeltaMemcpyCuW(T *a, const T *x, const T *y, size_t N) {
   ASSERT(a && x && y);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
 }
 
@@ -690,8 +690,8 @@ inline void liNormDeltaMemcpyCuW(T *a, const T *x, const T *y, size_t N) {
 template <class T>
 inline void liNormDeltaInplaceCuW(T *a, const T *x, const T *y, size_t N) {
   ASSERT(a && x && y);
-  const int B = blockSizeCu(N,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
   TRY_CUDA( cudaDeviceSynchronize() );
   liNormCukW<<<1, G>>>(a, a, G);

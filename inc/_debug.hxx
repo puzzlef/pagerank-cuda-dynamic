@@ -16,6 +16,7 @@ using std::tm;
 using std::localtime;
 using std::fprintf;
 using std::printf;
+using std::exit;
 
 
 

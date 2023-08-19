@@ -6,6 +6,7 @@
 #include "Graph.hxx"
 #include "mtx.hxx"
 #include "csr.hxx"
+#include "properties.hxx"
 #include "duplicate.hxx"
 #include "transpose.hxx"
 #include "symmetricize.hxx"
@@ -14,3 +15,4 @@
 #include "bfs.hxx"
 #include "batch.hxx"
 #include "pagerank.hxx"
+#include "pagerankCuda.hxx"

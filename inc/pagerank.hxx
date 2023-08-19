@@ -99,9 +99,9 @@ struct PagerankResult {
 
 
 #pragma region METHODS
-#pragma region CALCULATE RANKS
+#pragma region UPDATE RANKS
 /**
- * Calculate rank for a given vertex.
+ * Update rank for a given vertex.
  * @param a current rank of each vertex (output)
  * @param xt transpose of original graph
  * @param r previous rank of each vertex
@@ -111,21 +111,21 @@ struct PagerankResult {
  * @returns change between previous and current rank value
  */
 template <class H, class K, class V>
-inline V pagerankCalculateRank(vector<V>& a, const H& xt, const vector<V>& r, K v, V C0, V P) {
-  V av = V();
+inline V pagerankUpdateRank(vector<V>& a, const H& xt, const vector<V>& r, K v, V C0, V P) {
+  V cv = V();
   V rv = r[v];
   xt.forEachEdgeKey(v, [&](auto u) {
     K d = xt.vertexValue(u);
-    av += r[u]/d;
+    cv += r[u]/d;
   });
-  av   = C0 + P * av;
+  V av = C0 + P * cv;
   a[v] = av;
   return abs(av - rv);
 }
 
 
 /**
- * Calculate ranks for vertices in a graph.
+ * Update ranks for vertices in a graph.
  * @param a current rank of each vertex (output)
  * @param xt transpose of original graph
  * @param r previous rank of each vertex
@@ -135,10 +135,10 @@ inline V pagerankCalculateRank(vector<V>& a, const H& xt, const vector<V>& r, K 
  * @param fr called with vertex rank change (vertex, delta)
  */
 template <class H, class V, class FA, class FR>
-inline void pagerankCalculateRanks(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FR fr) {
+inline void pagerankUpdateRanks(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FR fr) {
   xt.forEachVertexKey([&](auto v) {
     if (!fa(v)) return;
-    V ev = pagerankCalculateRank(a, xt, r, v, C0, P);
+    V ev = pagerankUpdateRank(a, xt, r, v, C0, P);
     fr(v, ev);
   });
 }
@@ -146,7 +146,7 @@ inline void pagerankCalculateRanks(vector<V>& a, const H& xt, const vector<V>& r
 
 #ifdef OPENMP
 /**
- * Calculate ranks for vertices in a graph (using OpenMP).
+ * Update ranks for vertices in a graph (using OpenMP).
  * @param a current rank of each vertex (output)
  * @param xt transpose of original graph
  * @param r previous rank of each vertex
@@ -156,13 +156,13 @@ inline void pagerankCalculateRanks(vector<V>& a, const H& xt, const vector<V>& r
  * @param fr called with vertex rank change (vertex, delta)
  */
 template <class H, class V, class FA, class FR>
-inline void pagerankCalculateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FR fr) {
+inline void pagerankUpdateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FR fr) {
   using  K = typename H::key_type;
   size_t S = xt.span();
   #pragma omp parallel for schedule(dynamic, 2048)
   for (K v=0; v<S; ++v) {
     if (!xt.hasVertex(v) || !fa(v)) continue;
-    V ev = pagerankCalculateRank(a, xt, r, v, C0, P);
+    V ev = pagerankUpdateRank(a, xt, r, v, C0, P);
     fr(v, ev);
   }
 }
@@ -312,38 +312,6 @@ inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, cons
 
 
 
-#pragma region DELTA RANKS
-/**
- * Calculate rank delta between two rank vectors.
- * @param xt transpose of original graph
- * @param a current rank of each vertex
- * @param r previous rank of each vertex
- * @returns ||a - r||_∞
- */
-template <class H, class V>
-inline V pagerankDeltaRanks(const H& xt, const vector<V>& a, const vector<V>& r) {
-  return liNormDelta(a, r);
-}
-
-
-#ifdef OPENMP
-/**
- * Calculate rank delta between two rank vectors (using OpenMP).
- * @param xt transpose of original graph
- * @param a current rank of each vertex
- * @param r previous rank of each vertex
- * @returns ||a - r||_∞
- */
-template <class H, class V>
-inline V pagerankDeltaRanksOmp(const H& xt, const vector<V>& a, const vector<V>& r) {
-  return liNormDeltaOmp(a, r);
-}
-#endif
-#pragma endregion
-
-
-
-
 #pragma region COMPUTATION LOOP
 /**
  * Perform PageRank iterations upon a graph.
@@ -355,7 +323,7 @@ inline V pagerankDeltaRanksOmp(const H& xt, const vector<V>& a, const vector<V>&
  * @param L max. iterations [500]
  * @param fa is vertex affected? (vertex)
  * @param fr called if vertex rank changes (vertex, delta)
- * @returns iterations performed
+ * @returns number of iterations performed
  */
 template <bool ASYNC=false, class H, class V, class FA, class FR>
 inline int pagerankLoop(vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L, FA fa, FR fr) {
@@ -364,10 +332,10 @@ inline int pagerankLoop(vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L
   int l = 0;
   V  C0 = (1-P)/N;
   while (l<L) {
-    pagerankCalculateRanks(a, xt, r, C0, P, fa, fr); ++l;  // Update ranks of vertices
-    V el = pagerankDeltaRanks(xt, a, r);  // Compare previous and current ranks
-    if (!ASYNC) swap(a, r);               // Final ranks in (r)
-    if (el<E) break;                      // Check tolerance
+    pagerankUpdateRanks(a, xt, r, C0, P, fa, fr); ++l;  // Update ranks of vertices
+    V el = liNormDelta(a, r);  // Compare previous and current ranks
+    if (!ASYNC) swap(a, r);    // Final ranks in (r)
+    if (el<E) break;           // Check tolerance
   }
   return l;
 }
@@ -384,7 +352,7 @@ inline int pagerankLoop(vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L
  * @param L max. iterations [500]
  * @param fa is vertex affected? (vertex)
  * @param fr called if vertex rank changes (vertex, delta)
- * @returns iterations performed
+ * @returns number of iterations performed
  */
 template <bool ASYNC=false, class H, class V, class FA, class FR>
 inline int pagerankLoopOmp(vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L, FA fa, FR fr) {
@@ -393,10 +361,10 @@ inline int pagerankLoopOmp(vector<V>& a, vector<V>& r, const H& xt, V P, V E, in
   int l = 0;
   V  C0 = (1-P)/N;
   while (l<L) {
-    pagerankCalculateRanksOmp(a, xt, r, C0, P, fa, fr); ++l;  // Update ranks of vertices
-    V el = pagerankDeltaRanksOmp(xt, a, r);  // Compare previous and current ranks
-    if (!ASYNC) swap(a, r);                  // Final ranks in (r)
-    if (el<E) break;                         // Check tolerance
+    pagerankUpdateRanksOmp(a, xt, r, C0, P, fa, fr); ++l;  // Update ranks of vertices
+    V el = liNormDeltaOmp(a, r);  // Compare previous and current ranks
+    if (!ASYNC) swap(a, r);       // Final ranks in (r)
+    if (el<E) break;              // Check tolerance
   }
   return l;
 }
@@ -408,14 +376,14 @@ inline int pagerankLoopOmp(vector<V>& a, vector<V>& r, const H& xt, V P, V E, in
 
 #pragma region STATIC/NAIVE-DYNAMIC
 /**
- * Find the rank of each vertex in a dynamic graph with Naive-dynamic approach.
+ * Find the rank of each vertex in a dynamic graph with Static/Naive-dynamic approach.
  * @param xt transpose of original graph
  * @param q initial ranks
  * @param o pagerank options
  * @returns pagerank result
  */
 template <bool ASYNC=false, class H, class V>
-inline PagerankResult<V> pagerankNaiveDynamic(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
+inline PagerankResult<V> pagerankStatic(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   return pagerankInvoke<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
@@ -428,14 +396,14 @@ inline PagerankResult<V> pagerankNaiveDynamic(const H& xt, const vector<V> *q, c
 
 #ifdef OPENMP
 /**
- * Find the rank of each vertex in a dynamic graph with Naive-dynamic approach.
+ * Find the rank of each vertex in a dynamic graph with Static/Naive-dynamic approach.
  * @param xt transpose of original graph
  * @param q initial ranks
  * @param o pagerank options
  * @returns pagerank result
  */
 template <bool ASYNC=false, class H, class V>
-inline PagerankResult<V> pagerankNaiveDynamicOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
+inline PagerankResult<V> pagerankStaticOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   return pagerankInvokeOmp<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
