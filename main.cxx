@@ -6,7 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <omp.h>
-#include "src/main.hxx"
+#include "inc/main.hxx"
 
 using namespace std;
 
