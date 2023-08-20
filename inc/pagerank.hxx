@@ -429,9 +429,9 @@ inline PagerankResult<V> pagerankStaticOmp(const H& xt, const vector<V> *q, cons
  */
 template <class B, class G, class K, class E>
 inline void pagerankAffectedFrontierW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, E>>& insertions) {
-  for (const auto& [u, v] : deletions)
+  for (const auto& [u, v]    : deletions)
     x.forEachEdgeKey(u, [&](auto v) { vis[v] = B(1); });
-  for (const auto& [u, v] : insertions)
+  for (const auto& [u, v, w] : insertions)
     y.forEachEdgeKey(u, [&](auto v) { vis[v] = B(1); });
 }
 

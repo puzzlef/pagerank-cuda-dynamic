@@ -439,7 +439,7 @@ inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, co
   using F = FLAG;
   V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
   if (xt.empty()) return {};
-  auto fm = [&](vector<F>& vaff) { pagerankAffectedFrontierW(vaff, x, y, deletions, insertions); };
+  auto fm = [&](vector<F>& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
   return pagerankInvokeCuda<true, ASYNC, FLAG>(y, yt, q, o, D, fm);
 }
 #pragma endregion
