@@ -517,7 +517,7 @@ inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  sumValuesCukW<<<1, G>>>(a, a, G);
+  sumValuesCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -613,7 +613,7 @@ inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<<<1, G>>>(a, a, G);
+  liNormCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -694,7 +694,7 @@ inline void liNormDeltaInplaceCuW(T *a, const T *x, const T *y, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<<<1, G>>>(a, a, G);
+  liNormCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 #pragma endregion

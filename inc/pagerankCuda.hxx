@@ -146,9 +146,9 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, const O *xoff, const
     V rv = r[v];
     cache[t] = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, t, B);
     __syncthreads();
-    sumValuesBlockCudU(cache, t, B);
-    V cv = t==0? cache[0]    : V();
-    V av = t==0? C0 + P * cv : V();
+    sumValuesBlockCudU(cache, B, t);
+    V cv = cache[0];
+    V av = C0 + P * cv;
     if (t==0) a[v] = av;
     if (!DYNAMIC || abs(av - rv) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
@@ -176,8 +176,8 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, const O *xoff, const
  */
 template <bool DYNAMIC=false, class O, class K, class V, class F>
 inline void pagerankUpdateRanksBlockCuU(V *a, F *vaff, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V D) {
-  const int B = blockSizeCu(NE-NB, 256);
-  const int G = gridSizeCu (NE-NB, B, GRID_LIMIT_MAP_CUDA);
+  const int B = BLOCK_LIMIT_REDUCE_CUDA;
+  const int G = int(min(NE-NB, K(GRID_LIMIT_MAP_CUDA)));
   pagerankUpdateRanksBlockCukU<DYNAMIC><<<G, B>>>(a, vaff, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, D);
 }
 #pragma endregion
