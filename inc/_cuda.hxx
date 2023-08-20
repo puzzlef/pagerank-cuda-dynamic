@@ -69,35 +69,41 @@ using std::exit;
 
 /**
  * Get the block size for kernel launch, based on number of elements to process.
+ * @tparam COARSE an element-per-block kernel?
  * @param N number of elements to process
  * @param BLIM block limit
  * @returns block size
  */
+template <bool COARSE=false>
 inline int blockSizeCu(size_t N, int BLIM=BLOCK_LIMIT_CUDA) noexcept {
-  return int(min(N, size_t(BLIM)));
+  return COARSE? BLIM : int(min(N, size_t(BLIM)));
 }
 
 
 /**
  * Get the grid size for kernel launch, based on number of elements to process.
+ * @tparam COARSE an element-per-block kernel?
  * @param N number of elements to process
  * @param B block size
  * @param GLIM grid limit
  * @returns grid size
  */
+template <bool COARSE=false>
 inline int gridSizeCu(size_t N, int B, int GLIM=GRID_LIMIT_CUDA) noexcept {
-  return int(min(ceilDiv(N, size_t(B)), size_t(GLIM)));
+  return COARSE? int(min(N, size_t(GLIM))) : int(min(ceilDiv(N, size_t(B)), size_t(GLIM)));
 }
 
 
 /**
  * Get the number of elements produced by a reduce-like kernel.
+ * @tparam COARSE an element-per-block kernel?
  * @param N number of elements to process
  * @returns number of reduced elements
  */
+template <bool COARSE=false>
 inline int reduceSizeCu(size_t N) noexcept {
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu<COARSE>(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu <COARSE>(N, B, GRID_LIMIT_REDUCE_CUDA);
   return G;
 }
 #pragma endregion
@@ -171,7 +177,7 @@ void tryFailedCuda(cudaError err, const char* exp, const char* func, int line, c
  * Mark CUDA variable as unused.
  */
 template <class T>
-__device__ void unusedCuda(T&&) {}
+inline void __device__ unusedCuda(T&&) {}
 
 
 #ifndef UNUSED_CUDA
@@ -473,7 +479,7 @@ inline void __device__ sumValuesBlockCudU(T *a, size_t N, size_t i) {
  * @param x array to sum
  * @param N size of array to sum
  */
-template <class T, int CACHE=BLOCK_LIMIT_REDUCE_CUDA>
+template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ sumValuesCukW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
   DEFINE_CUDA(t, b, B, G);
@@ -517,7 +523,7 @@ inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  sumValuesCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  sumValuesCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -569,7 +575,7 @@ inline void __device__ liNormBlockCudU(T *a, size_t N, size_t i) {
  * @param x array to compute on
  * @param N size of array to compute on
  */
-template <class T, int CACHE=BLOCK_LIMIT_REDUCE_CUDA>
+template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ liNormCukW(T *a, const T *x, size_t N) {
   ASSERT(a && x);
   DEFINE_CUDA(t, b, B, G);
@@ -613,7 +619,7 @@ inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  liNormCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -648,7 +654,7 @@ inline T __device__ liNormDeltaCud(const T *x, const T *y, size_t N, size_t i, s
  * @param y second array
  * @param N size of each array
  */
-template <class T, int CACHE=BLOCK_LIMIT_REDUCE_CUDA>
+template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ liNormDeltaCukW(T *a, const T *x, const T *y, size_t N) {
   ASSERT(a && x);
   DEFINE_CUDA(t, b, B, G);
@@ -694,7 +700,7 @@ inline void liNormDeltaInplaceCuW(T *a, const T *x, const T *y, size_t N) {
   const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
   TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<T, GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  liNormCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 #pragma endregion
