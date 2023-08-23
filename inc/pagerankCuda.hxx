@@ -230,11 +230,12 @@ inline void pagerankInitializeRanksCuW(V *a, V *r, K N, K NB, K NE) {
  * Partition vertices into low-degree and high-degree sets.
  * @param ks vertex keys (updated)
  * @param xt transposed graph
+ * @param o pagerank options
  * @returns number of low-degree vertices
  */
-template <class H, class K>
-inline K pagerankPartitionVerticesCudaU(vector<K>& ks, const H& xt) {
-  K SWITCH_DEGREE = 64;  // Switch to block-per-vertex approach if degree >= SWITCH_DEGREE
+template <class H, class K, class V>
+inline K pagerankPartitionVerticesCudaU(vector<K>& ks, const H& xt, const PagerankOptions<V>& o) {
+  K SWITCH_DEGREE = o.switchDegree;  // Switch to block-per-vertex approach if degree >= SWITCH_DEGREE
   K SWITCH_LIMIT  = 64;  // Avoid switching if number of vertices < SWITCH_LIMIT
   size_t N = ks.size();
   auto  kb = ks.begin(), ke = ks.end();
@@ -339,7 +340,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   V *bufvD  = nullptr;
   // Partition vertices into low-degree and high-degree sets.
   vector<K> ks = vertexKeys(xt);
-  K NL = pagerankPartitionVerticesCudaU(ks, xt);
+  K NL = pagerankPartitionVerticesCudaU(ks, xt, o);
   // Obtain data for CSR.
   if (DYNAMIC) csrCreateOffsetsW (xoff,  x,  ks);
   if (DYNAMIC) csrCreateEdgeKeysW(xedg,  x,  ks);

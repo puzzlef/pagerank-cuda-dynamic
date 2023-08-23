@@ -117,18 +117,24 @@ inline void runExperiment(const G& x, const H& xt) {
       // Find multi-threaded OpenMP-based Static PageRank (synchronous, no dead ends).
       auto a0 = pagerankStaticOmp(yt, init, {repeat});
       flog(a0, s0, "pagerankStaticOmp");
-      auto b0 = pagerankStaticCuda(y, yt, init, {repeat});
-      flog(b0, s0, "pagerankStaticCuda");
+      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
+        auto b0 = pagerankStaticCuda(y, yt, init, {repeat});
+        flog(b0, s0, (string("pagerankStaticCuda") + to_string(switchDegree)).c_str());
+      }
       // Find multi-threaded OpenMP-based Naive-dynamic PageRank (synchronous, no dead ends).
       auto a1 = pagerankStaticOmp(yt, &r0.ranks, {repeat});
       flog(a1, s0, "pagerankNaiveDynamicOmp");
-      auto b1 = pagerankStaticCuda(y, yt, &r0.ranks, {repeat});
-      flog(b1, s0, "pagerankNaiveDynamicCuda");
+      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
+        auto b1 = pagerankStaticCuda(y, yt, &r0.ranks, {repeat});
+        flog(b1, s0, (string("pagerankNaiveDynamicCuda") + to_string(switchDegree)).c_str());
+      }
       // Find multi-threaded OpenMP-based Frontier-based Dynamic PageRank (synchronous, no dead ends).
       auto a2 = pagerankDynamicFrontierOmp(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
       flog(a2, s0, "pagerankDynamicFrontierOmp");
-      auto b2 = pagerankDynamicFrontierCuda(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
-      flog(b2, s0, "pagerankDynamicFrontierCuda");
+      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
+        auto b2 = pagerankDynamicFrontierCuda(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
+        flog(b2, s0, (string("pagerankDynamicFrontierCuda") + to_string(switchDegree)).c_str());
+      }
     });
   });
 }

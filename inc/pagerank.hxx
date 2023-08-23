@@ -32,6 +32,8 @@ struct PagerankOptions {
   V   damping;
   /** Maximum number of iterations [500]. */
   int maxIterations;
+  /** When to switch to block-per-vertex approach with CUDA-based PageRank [64]. */
+  int switchDegree;
   #pragma endregion
 
 
@@ -42,9 +44,10 @@ struct PagerankOptions {
    * @param tolerance tolerance for convergence [10^-10]
    * @param damping damping factor [0.85]
    * @param maxIterations maximum number of iterations [500]
+   * @param switchDegree when to switch to block-per-vertex approach with CUDA-based PageRank [64]
    */
-  PagerankOptions(int repeat=1, V tolerance=1e-10, V damping=0.85, int maxIterations=500) :
-  repeat(repeat), tolerance(tolerance), damping(damping), maxIterations(maxIterations) {}
+  PagerankOptions(int repeat=1, V tolerance=1e-10, V damping=0.85, int maxIterations=500, int switchDegree=64) :
+  repeat(repeat), tolerance(tolerance), damping(damping), maxIterations(maxIterations), switchDegree(switchDegree) {}
   #pragma endregion
 };
 
