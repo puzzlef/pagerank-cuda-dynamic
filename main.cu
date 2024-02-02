@@ -20,7 +20,7 @@ using namespace std;
 #endif
 #ifndef MAX_THREADS
 /** Maximum number of threads to use. */
-#define MAX_THREADS 32
+#define MAX_THREADS 64
 #endif
 #ifndef REPEAT_BATCH
 /** Number of times to repeat each batch. */
@@ -28,7 +28,7 @@ using namespace std;
 #endif
 #ifndef REPEAT_METHOD
 /** Number of times to repeat each method. */
-#define REPEAT_METHOD 1
+#define REPEAT_METHOD 5
 #endif
 #pragma endregion
 
@@ -36,107 +36,94 @@ using namespace std;
 
 
 #pragma region METHODS
-#pragma region EXPERIMENTAL SETUP
-/**
- * Run a function on each batch update, with a specified range of batch sizes.
- * @param x original graph
- * @param rnd random number generator
- * @param fn function to run on each batch update
- */
-template <class G, class R, class F>
-inline void runBatches(const G& x, R& rnd, F fn) {
-  auto  fl = [](auto u) { return true; };
-  double d = BATCH_DELETIONS_BEGIN;
-  double i = BATCH_INSERTIONS_BEGIN;
-  while (true) {
-    for (int r=0; r<REPEAT_BATCH; ++r) {
-      auto y  = duplicate(x);
-      auto deletions  = removeRandomEdges(y, rnd, size_t(d * x.size() + 0.5), 1, x.span()-1);
-      auto insertions = addRandomEdges   (y, rnd, size_t(i * x.size() + 0.5), 1, x.span()-1, None());
-      addSelfLoopsOmpU(y, None(), fl);
-      auto yt = transposeWithDegreeOmp(y);
-      fn(y, yt, d, deletions, i, insertions);
-    }
-    if (d>=BATCH_DELETIONS_END && i>=BATCH_INSERTIONS_END) break;
-    d BATCH_DELETIONS_STEP;
-    i BATCH_INSERTIONS_STEP;
-    d = min(d, double(BATCH_DELETIONS_END));
-    i = min(i, double(BATCH_INSERTIONS_END));
-  }
-}
-
-
-/**
- * Run a function on each number of threads, with a specified range of thread counts.
- * @param fn function to run on each number of threads
- */
-template <class F>
-inline void runThreads(F fn) {
-  for (int t=NUM_THREADS_BEGIN; t<=NUM_THREADS_END; t NUM_THREADS_STEP) {
-    omp_set_num_threads(t);
-    fn(t);
-    omp_set_num_threads(MAX_THREADS);
-  }
-}
-#pragma endregion
-
-
-
-
 #pragma region PERFORM EXPERIMENT
 /**
  * Perform the experiment.
- * @param x original graph
- * @param xt transposed graph with degree
+ * @param x input graph
+ * @param xt transpose of the input graph
+ * @param fstream input file stream
+ * @param rows number of rows/vetices in the graph
+ * @param size number of lines/edges (temporal) in the graph
+ * @param batchFraction fraction of edges to use in each batch
  */
 template <class G, class H>
-inline void runExperiment(const G& x, const H& xt) {
+void runExperiment(G& x, H& xt, istream& fstream, size_t rows, size_t size, double batchFraction) {
   using  K = typename G::key_type;
   using  V = TYPE;
-  vector<V> *init = nullptr;
-  random_device dev;
-  default_random_engine rnd(dev());
-  int repeat = REPEAT_METHOD;
+  int repeat     = REPEAT_METHOD;
+  int numThreads = MAX_THREADS;
   // Follow a specific result logging format, which can be easily parsed later.
-  auto glog  = [&](const auto& ans, const auto& ref, const char *technique, auto deletionsf, auto insertionsf, int numThreads) {
-    auto err = liNormDeltaOmp(ans.ranks, ref.ranks);
+  auto glog  = [&](const auto& ans, const auto& ref, const char *technique, int numThreads, double deletionsf, double insertionsf, int batchIndex, V frontierTolerance=0.0, V pruneTolerance=0.0) {
+    auto err = l1NormDeltaOmp(ans.ranks, ref.ranks);
     printf(
-      "{-%.3e/+%.3e batchf, %03d threads} -> {%09.1fms, %03d iter, %.2e err} %s\n",
-      deletionsf, insertionsf, numThreads, ans.time, ans.iterations, err, technique
+      "{-%.3e/+%.3e batchf, %03d batchi, %03d threads, %.0e frontier, %.0e prune} -> {%09.1fms, %09.1fms init, %09.1fms mark, %09.1fms comp, %03d iter, %.2e err} %s\n",
+      deletionsf, insertionsf, batchIndex, numThreads, frontierTolerance, pruneTolerance,
+      ans.time, ans.initializationTime, ans.markingTime, ans.computationTime, ans.iterations, err, technique
     );
   };
+  V tolerance = 1e-10;
+  V frontierTolerance = 1e-6;
+  V pruneTolerance    = 1e-6;
+  vector<tuple<K, K>> deletions;
+  vector<tuple<K, K>> insertions;
   // Get ranks of vertices on original graph (static).
-  auto r0   = pagerankStaticOmp(xt, init, {1, 1e-100});
+  auto r0 = pagerankStaticOmp(xt, PagerankOptions<V>(1, 1e-100));
+  auto R10 = r0.ranks;
+  auto R12 = r0.ranks;
+  auto R20 = r0.ranks;
+  auto R22 = r0.ranks;
+  auto R30 = r0.ranks;
+  auto R31 = r0.ranks;
+  auto R32 = r0.ranks;
+  auto R33 = r0.ranks;
   // Get ranks of vertices on updated graph (dynamic).
-  runBatches(x, rnd, [&](const auto& y, const auto& yt, double deletionsf, const auto& deletions, double insertionsf, const auto& insertions) {
-    runThreads([&](int numThreads) {
-      auto flog = [&](const auto& ans, const auto& ref, const char *technique) {
-        glog(ans, ref, technique, deletionsf, insertionsf, numThreads);
-      };
-      auto s0 = pagerankStaticOmp(yt, init, {1, 1e-100});
-      // Find multi-threaded OpenMP-based Static PageRank (synchronous, no dead ends).
-      auto a0 = pagerankStaticOmp(yt, init, {repeat});
-      flog(a0, s0, "pagerankStaticOmp");
-      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
-        auto b0 = pagerankStaticCuda(y, yt, init, {repeat});
-        flog(b0, s0, (string("pagerankStaticCuda") + to_string(switchDegree)).c_str());
-      }
-      // Find multi-threaded OpenMP-based Naive-dynamic PageRank (synchronous, no dead ends).
-      auto a1 = pagerankStaticOmp(yt, &r0.ranks, {repeat});
-      flog(a1, s0, "pagerankNaiveDynamicOmp");
-      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
-        auto b1 = pagerankStaticCuda(y, yt, &r0.ranks, {repeat});
-        flog(b1, s0, (string("pagerankNaiveDynamicCuda") + to_string(switchDegree)).c_str());
-      }
-      // Find multi-threaded OpenMP-based Frontier-based Dynamic PageRank (synchronous, no dead ends).
-      auto a2 = pagerankDynamicFrontierOmp(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
-      flog(a2, s0, "pagerankDynamicFrontierOmp");
-      for (int switchDegree=16; switchDegree<=256; switchDegree*=2) {
-        auto b2 = pagerankDynamicFrontierCuda(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
-        flog(b2, s0, (string("pagerankDynamicFrontierCuda") + to_string(switchDegree)).c_str());
-      }
-    });
-  });
+  for (int batchIndex=0; batchIndex<BATCH_LENGTH; ++batchIndex) {
+    auto y = duplicate(x);
+    insertions.clear();
+    auto fb = [&](auto u, auto v, auto w) {
+      insertions.push_back({u, v});
+      y.addEdge(u, v);
+    };
+    readTemporalDo(fstream, false, false, rows, size_t(batchFraction * size), fb);
+    updateOmpU(y);
+    auto yt = transposeWithDegreeOmp(y);
+    LOG(""); print(y); printf(" (insertions=%zu)\n", insertions.size());
+    auto s0 = pagerankStaticOmp(yt, PagerankOptions<V>(1, 1e-100));
+    // Find multi-threaded OpenMP-based Static PageRank.
+    auto a0 = pagerankStaticOmp<false>(yt, PagerankOptions<V>(repeat, tolerance));
+    glog(a0, s0, "pagerankStaticOmp", numThreads, 0.0, batchFraction, batchIndex);
+    auto c0 = pagerankStaticCuda<false>(y, yt, PagerankOptions<V>(repeat, tolerance));
+    glog(c0, s0, "pagerankStaticCuda", numThreads, 0.0, batchFraction, batchIndex);
+    // Find multi-threaded OpenMP-based Naive-dynamic PageRank.
+    auto a1 = pagerankNaiveDynamicOmp<true>(yt, &R10, {repeat, tolerance});
+    glog(a1, s0, "pagerankNaiveDynamicOmp", numThreads, 0.0, batchFraction, batchIndex);
+    auto c1 = pagerankNaiveDynamicCuda<true>(y, yt, &R12, {repeat, tolerance});
+    glog(c1, s0, "pagerankNaiveDynamicCuda", numThreads, 0.0, batchFraction, batchIndex);
+    // Find multi-threaded OpenMP-based Traversal-based Dynamic PageRank.
+    auto a2 = pagerankDynamicTraversalOmp<true>(x, xt, y, yt, deletions, insertions, &R20, {repeat, tolerance});
+    glog(a2, s0, "pagerankDynamicTraversalOmp", numThreads, 0.0, batchFraction, batchIndex);
+    auto c2 = pagerankDynamicTraversalCuda<true>(x, xt, y, yt, deletions, insertions, &R22, {repeat, tolerance});
+    glog(c2, s0, "pagerankDynamicTraversalCuda", numThreads, 0.0, batchFraction, batchIndex);
+    // Find multi-threaded OpenMP-based Frontier-based Dynamic PageRank.
+    auto a3 = pagerankDynamicFrontierOmp<true, true>(x, xt, y, yt, deletions, insertions, &R30, {repeat, tolerance, frontierTolerance});
+    glog(a3, s0, "pagerankDynamicFrontierOmp", numThreads, 0.0, batchFraction, batchIndex, frontierTolerance);
+    auto b3 = pagerankPruneDynamicFrontierOmp<true, true>(x, xt, y, yt, deletions, insertions, &R31, {repeat, tolerance, frontierTolerance, pruneTolerance});
+    glog(b3, s0, "pagerankPruneDynamicFrontierOmp", numThreads, 0.0, batchFraction, batchIndex, frontierTolerance, pruneTolerance);
+    auto c3 = pagerankDynamicFrontierCuda<true>(x, xt, y, yt, deletions, insertions, &R32, {repeat, tolerance, frontierTolerance});
+    glog(c3, s0, "pagerankDynamicFrontierCuda", numThreads, 0.0, batchFraction, batchIndex, frontierTolerance);
+    auto d3 = pagerankPruneDynamicFrontierCuda<true>(x, xt, y, yt, deletions, insertions, &R33, {repeat, tolerance, frontierTolerance, pruneTolerance});
+    glog(d3, s0, "pagerankPruneDynamicFrontierCuda", numThreads, 0.0, batchFraction, batchIndex, frontierTolerance, pruneTolerance);
+    copyValuesOmpW(R10, a1.ranks);
+    copyValuesOmpW(R12, c1.ranks);
+    copyValuesOmpW(R20, a2.ranks);
+    copyValuesOmpW(R22, c2.ranks);
+    copyValuesOmpW(R30, a3.ranks);
+    copyValuesOmpW(R31, b3.ranks);
+    copyValuesOmpW(R32, c3.ranks);
+    copyValuesOmpW(R33, d3.ranks);
+    swap(x, y);
+    swap(xt, yt);
+  }
 }
 
 
@@ -148,15 +135,19 @@ inline void runExperiment(const G& x, const H& xt) {
  */
 int main(int argc, char **argv) {
   char *file = argv[1];
+  size_t rows = strtoull(argv[2], nullptr, 10);
+  size_t size = strtoull(argv[3], nullptr, 10);
+  double batchFraction = strtod(argv[5], nullptr);
   omp_set_num_threads(MAX_THREADS);
   LOG("OMP_NUM_THREADS=%d\n", MAX_THREADS);
   LOG("Loading graph %s ...\n", file);
   DiGraph<uint32_t> x;
-  readMtxOmpW(x, file); LOG(""); println(x);
+  ifstream fstream(file);
+  readTemporalOmpW(x, fstream, false, false, rows, size_t(0.90 * size)); LOG(""); print(x); printf(" (90%%)\n");
   auto fl = [](auto u) { return true; };
   x = addSelfLoopsOmp(x, None(), fl);  LOG(""); print(x);  printf(" (selfLoopAllVertices)\n");
   auto xt = transposeWithDegreeOmp(x); LOG(""); print(xt); printf(" (transposeWithDegree)\n");
-  runExperiment(x, xt);
+  runExperiment(x, xt, fstream, rows, size, batchFraction);
   printf("\n");
   return 0;
 }

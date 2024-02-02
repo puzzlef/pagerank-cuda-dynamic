@@ -155,7 +155,11 @@ template <class F>
 inline float measureDurationMarked(F fn, int N=1) {
   float total = 0;
   for (int i=0; i<N; ++i)
-    fn([&](auto fm) { total += measureDuration(fm); });
+    fn([&](auto fm) {
+      float t = measureDuration(fm);
+      total  += t;
+      return t;
+    });
   return total/N;
 }
 
@@ -171,7 +175,11 @@ template <class F>
 inline float measureDurationMarkedMpi(F fn, int N=1) {
   float total = 0;
   for (int i=0; i<N; ++i)
-    fn([&](auto fm) { total += measureDurationMpi(fm); });
+    fn([&](auto fm) {
+      float t = measureDurationMpi(fm);
+      total  += t;
+      return t;
+    });
   return total/N;
 }
 #endif
