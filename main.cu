@@ -20,7 +20,7 @@ using namespace std;
 #endif
 #ifndef MAX_THREADS
 /** Maximum number of threads to use. */
-#define MAX_THREADS 32
+#define MAX_THREADS 64
 #endif
 #ifndef REPEAT_BATCH
 /** Number of times to repeat each batch. */
@@ -28,7 +28,7 @@ using namespace std;
 #endif
 #ifndef REPEAT_METHOD
 /** Number of times to repeat each method. */
-#define REPEAT_METHOD 1
+#define REPEAT_METHOD 5
 #endif
 #pragma endregion
 
