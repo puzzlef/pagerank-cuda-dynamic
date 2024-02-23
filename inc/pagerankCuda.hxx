@@ -146,7 +146,7 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, const O *xoff, const
     V rv = r[v];
     cache[t] = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, t, B);
     __syncthreads();
-    sumValuesBlockCudU(cache, B, t);
+    sumValuesBlockReduceCudU(cache, B, t);
     V cv = cache[0];
     V av = C0 + P * cv;
     if (t==0) a[v] = av;
