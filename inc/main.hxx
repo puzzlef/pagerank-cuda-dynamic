@@ -5,6 +5,7 @@
 #include "_main.hxx"
 #include "Graph.hxx"
 #include "mtx.hxx"
+#include "snap.hxx"
 #include "csr.hxx"
 #include "properties.hxx"
 #include "duplicate.hxx"
