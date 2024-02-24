@@ -9,7 +9,7 @@
 #include "properties.hxx"
 #include "duplicate.hxx"
 #include "transpose.hxx"
-#include "symmetricize.hxx"
+#include "symmetrize.hxx"
 #include "selfLoop.hxx"
 #include "dfs.hxx"
 #include "bfs.hxx"
