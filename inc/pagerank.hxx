@@ -291,11 +291,13 @@ inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const P
   int L  = o.maxIterations, l = 0;
   vector<V> r(S), a;
   if (!ASYNC) a.resize(S);
-  float t = measureDuration([&]() {
-    fi(a, r);
+  float ti = 0;
+  float t  = measureDuration([&]() {
+    // Intitialize rank of each vertex.
+    ti += measureDuration([&]() { fi(a, r); });
     l = fl(ASYNC? r : a, r, xt, P, E, L);
   }, o.repeat);
-  return {r, l, t};
+  return {r, l, t, ti/o.repeat};
 }
 
 
@@ -318,11 +320,13 @@ inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, cons
   int L  = o.maxIterations, l = 0;
   vector<V> r(S), a;
   if (!ASYNC) a.resize(S);
-  float t = measureDuration([&]() {
-    fi(a, r);
+  float ti = 0;
+  float t  = measureDuration([&]() {
+    // Intitialize rank of each vertex.
+    ti += measureDuration([&]() { fi(a, r); });
     l = fl(ASYNC? r : a, r, xt, P, E, L);
   }, o.repeat);
-  return {r, l, t};
+  return {r, l, t, ti/o.repeat};
 }
 #endif
 #pragma endregion
