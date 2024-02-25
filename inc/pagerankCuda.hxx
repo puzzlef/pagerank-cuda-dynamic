@@ -63,6 +63,7 @@ inline void __device__ pagerankMarkNeighborsCudU(F *vaff, const O *xoff, const K
  * Update ranks for vertices in a graph, using thread-per-vertex approach [kernel].
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @param a current rank of each vertex (updated)
  * @param vaff vertex affected flags (updated)
@@ -79,19 +80,22 @@ inline void __device__ pagerankMarkNeighborsCudU(F *vaff, const O *xoff, const K
  * @param P damping factor [0.85]
  * @param E iteration tolerance [10^-10]
  * @param D frontier tolerance
+ * @param C prune tolerance
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class O, class K, class V, class F>
-void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D) {
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
+void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
   V et = V();
   for (K v=NB+B*b+t; v<NE; v+=G*B) {
     if (DYNAMIC && !vaff[v]) continue;  // Skip unaffected vertices
     // Update rank for vertex v.
+    K d  = xtdat[v];
     V rv = r[v];
     V cv = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, 0, 1);
-    V av = C0 + P * cv;
+    V av = PRUNE? (C0 + P * (cv - rv/d)) * (1/(1-(P/d))) : C0 + P * cv;
     a[v] = av;
     if (ASYNC) et = max(et, abs(av - rv));
+    if (PRUNE && abs(av - rv)/max(rv, av) <= C) vaff[v] = F();
     if (!FRONTIER || abs(av - rv) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
     pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, 0, 1);
@@ -104,6 +108,7 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *x
  * Update ranks for vertices in a graph, using thread-per-vertex approach.
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @param a current rank of each vertex (updated)
  * @param vaff vertex affected flags (updated)
@@ -120,12 +125,13 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *x
  * @param P damping factor [0.85]
  * @param E iteration tolerance [10^-10]
  * @param D frontier tolerance
+ * @param C prune tolerance
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class O, class K, class V, class F>
-inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D) {
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
+inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   const int B = blockSizeCu(NE-NB, 512);
   const int G = gridSizeCu (NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankUpdateRanksThreadCukU<DYNAMIC, FRONTIER, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D);
+  pagerankUpdateRanksThreadCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
 }
 
 
@@ -133,6 +139,7 @@ inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, 
  * Update ranks for vertices in a graph, using block-per-vertex approach [kernel].
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @tparam CACHE size of shared memory cache
  * @param a current rank of each vertex (updated)
@@ -150,23 +157,26 @@ inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, 
  * @param P damping factor [0.85]
  * @param E iteration tolerance [10^-10]
  * @param D frontier tolerance
+ * @param C prune tolerance
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class O, class K, class V, class F>
-void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D) {
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class O, class K, class V, class F>
+void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
   __shared__ V cache[CACHE];
   V eb = V();
   for (K v=NB+b; v<NE; v+=G) {
     if (DYNAMIC && !vaff[v]) continue;  // Skip unaffected vertices
     // Update rank for vertex v.
+    K d  = xtdat[v];
     V rv = r[v];
     cache[t] = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, t, B);
     __syncthreads();
     sumValuesBlockReduceCudU(cache, B, t);
     V cv = cache[0];
-    V av = C0 + P * cv;
+    V av = PRUNE? (C0 + P * (cv - rv/d)) * (1/(1-(P/d))) : C0 + P * cv;
     if (t==0) a[v] = av;
     if (ASYNC && t==0) eb = max(eb, abs(av - rv));
+    if (PRUNE && abs(av - rv)/max(rv, av) <= C) vaff[v] = F();
     if (!FRONTIER || abs(av - rv) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
     pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, t, B);
@@ -179,6 +189,7 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xo
  * Update ranks for vertices in a graph, using block-per-vertex approach.
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @param a current rank of each vertex (updated)
  * @param vaff vertex affected flags (updated)
@@ -195,12 +206,13 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xo
  * @param P damping factor [0.85]
  * @param E iteration tolerance [10^-10]
  * @param D frontier tolerance
+ * @param C prune tolerance
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class O, class K, class V, class F>
-inline void pagerankUpdateRanksBlockCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D) {
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
+inline void pagerankUpdateRanksBlockCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   const int B = blockSizeCu<true>(NE-NB, BLOCK_LIMIT_REDUCE_CUDA);
   const int G = gridSizeCu <true>(NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankUpdateRanksBlockCukU<DYNAMIC, FRONTIER, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D);
+  pagerankUpdateRanksBlockCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
 }
 #pragma endregion
 
@@ -277,6 +289,7 @@ inline K pagerankPartitionVerticesCudaU(vector<K>& ks, const H& xt) {
  * Perform PageRank iterations upon a graph.
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @param a current rank of each vertex (output)
  * @param r previous rank of each vertex (output)
@@ -295,10 +308,11 @@ inline K pagerankPartitionVerticesCudaU(vector<K>& ks, const H& xt) {
  * @param E tolerance [10^-10]
  * @param L max. iterations [500]
  * @param D frontier tolerance
+ * @param C prune tolerance
  * @returns number of iterations performed
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class O, class K, class V, class F>
-inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K N, K NB, K NM, K NE, V P, V E, int L, V D) {
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
+inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K N, K NB, K NM, K NE, V P, V E, int L, V D, V C) {
   int l = 0;
   V  el = V();
   V  C0 = (1-P)/N;
@@ -306,8 +320,8 @@ inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K 
   F  updtH = F();
   while (l<L) {
     if ( ASYNC) fillValueCuW(updt, 1, F());  // Reset vertices under update flag
-    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D);
-    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D); ++l;
+    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D, C);
+    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D, C); ++l;
     if ( ASYNC) TRY_CUDA( cudaMemcpy(&updtH, updt, sizeof(F), cudaMemcpyDeviceToHost) );
     if (!ASYNC) liNormDeltaInplaceCuW(bufv, a, r, N);  // Compare previous and current ranks
     if (!ASYNC) TRY_CUDA( cudaMemcpy(&el, bufv, sizeof(V), cudaMemcpyDeviceToHost) );
@@ -327,6 +341,7 @@ inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K 
  * Setup environment and find the rank of each vertex in a graph.
  * @tparam DYNAMIC is a dynamic algorithm?
  * @tparam FRONTIER dynamic frontier approach?
+ * @tparam PRUNE dynamic frontier with pruning?
  * @tparam ASYNC asynchronous computation?
  * @tparam FLAG type of vertex affected flags
  * @param x original graph
@@ -336,7 +351,7 @@ inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K 
  * @param fm function to mark affected vertices
  * @returns pagerank result
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class FLAG=char, class G, class H, class V, class FM>
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class FLAG=char, class G, class H, class V, class FM>
 inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FM fm) {
   using  K = typename H::key_type;
   using  O = uint32_t;
@@ -347,6 +362,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   V   P  = o.damping;
   V   E  = o.tolerance;
   V   D  = o.frontierTolerance;
+  V   C  = o.pruneTolerance;
   int L  = o.maxIterations, l = 0;
   int R  = reduceSizeCu(N);
   vector<K> xoff, xedg;
@@ -406,7 +422,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
     if (DYNAMIC) gatherValuesW(vaffc, vaff, ks);
     if (DYNAMIC) TRY_CUDA( cudaMemcpy(vaffD, vaffc.data(), N * sizeof(F), cudaMemcpyHostToDevice) );
     // Perform PageRank iterations.
-    mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D); });
+    mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
   }, o.repeat);
   // Obtain final ranks.
   TRY_CUDA( cudaMemcpy(rc.data(), rD, N * sizeof(V), cudaMemcpyDeviceToHost) );
@@ -441,7 +457,7 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const Pager
   if  (xt.empty()) return {};
   vector<V> *q = nullptr;
   auto fm = [&](auto& vaff) {};
-  return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, fm);
+  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, q, o, fm);
 }
 #pragma endregion
 
@@ -461,7 +477,7 @@ template <bool ASYNC=false, class FLAG=char, class G, class H, class V>
 inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   if  (xt.empty()) return {};
   auto fm = [&](auto& vaff) {};
-  return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, fm);
+  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, q, o, fm);
 }
 #pragma endregion
 
@@ -485,7 +501,7 @@ template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   if (xt.empty()) return {};
   auto fm = [&](auto& vaff) { pagerankAffectedTraversalOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, false, ASYNC, FLAG>(y, yt, q, o, fm);
+  return pagerankInvokeCuda<true, false, false, ASYNC, FLAG>(y, yt, q, o, fm);
 }
 #pragma endregion
 
@@ -509,7 +525,31 @@ template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   if (xt.empty()) return {};
   auto fm = [&](auto& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, true, ASYNC, FLAG>(y, yt, q, o, fm);
+  return pagerankInvokeCuda<true, true, false, ASYNC, FLAG>(y, yt, q, o, fm);
+}
+#pragma endregion
+
+
+
+
+#pragma region DYNAMIC FRONTIER WITH PRUNING
+/**
+ * Find the rank of each vertex in a dynamic graph with Dynamic Frontier approach.
+ * @param x original graph
+ * @param xt transpose of original graph
+ * @param y updated graph
+ * @param yt transpose of updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ * @param q initial ranks
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankPruneDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  if (xt.empty()) return {};
+  auto fm = [&](auto& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
+  return pagerankInvokeCuda<true, true, true, ASYNC, FLAG>(y, yt, q, o, fm);
 }
 #pragma endregion
 #pragma endregion
