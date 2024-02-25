@@ -385,13 +385,14 @@ inline vector<char> communitiesDisconnectedOmp(const G& x, const vector<K>& vcom
   #pragma omp parallel
   {
     for (K u=0; u<S; ++u) {
+      if (!x.hasVertex(u)) continue;
       int t = omp_get_thread_num();
       K   c = vcom[u], reached = K();
       if (coms[c]==0 || !belongsOmp(c)) continue;
       auto ft = [&](auto v, auto d) { return vcom[v]==c; };
       auto fp = [&](auto v, auto d) { ++reached; };
       us[t].clear(); vs[t].clear(); us[t].push_back(u);
-      bfsVisitedForEachW(vis, us[t], vs[t], x, ft, fp);
+      bfsVisitedForEachU(vis, us[t], vs[t], x, ft, fp);
       if (reached < coms[c]) a[c] = 1;
       coms[c] = 0;
     }
