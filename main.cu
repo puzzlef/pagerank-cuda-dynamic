@@ -137,21 +137,21 @@ inline void runExperiment(const G& x, const H& xt) {
     );
   };
   // Get ranks of vertices on original graph (static).
-  auto r0   = pagerankStaticOmp(xt, init, {1, 1e-100});
+  auto r0   = pagerankStaticOmp(xt, PagerankOptions<V>(1, 1e-100));
   // Get ranks of vertices on updated graph (dynamic).
   runBatches(x, rnd, [&](const auto& y, const auto& yt, double deletionsf, const auto& deletions, double insertionsf, const auto& insertions, int sequence, int epoch) {
     runThreads(epoch, [&](int numThreads) {
       auto flog = [&](const auto& ans, const auto& ref, const char *technique) {
         glog(ans, ref, technique, deletionsf, insertionsf, numThreads);
       };
-      auto s0 = pagerankStaticOmp(yt, init, {1, 1e-100});
+      auto s0 = pagerankStaticOmp(yt, PagerankOptions<V>(1, 1e-100));
       // Find multi-threaded OpenMP-based Static PageRank (synchronous, no dead ends).
-      auto a0 = pagerankStaticOmp(yt, init, {repeat});
+      auto a0 = pagerankStaticOmp(yt, PagerankOptions<V>(repeat));
       flog(a0, s0, "pagerankStaticOmp");
       auto b0 = pagerankStaticCuda(y, yt, init, {repeat});
       flog(b0, s0, "pagerankStaticCuda");
       // Find multi-threaded OpenMP-based Naive-dynamic PageRank (synchronous, no dead ends).
-      auto a1 = pagerankStaticOmp(yt, &r0.ranks, {repeat});
+      auto a1 = pagerankNaiveDynamicOmp(yt, &r0.ranks, {repeat});
       flog(a1, s0, "pagerankNaiveDynamicOmp");
       auto b1 = pagerankStaticCuda(y, yt, &r0.ranks, {repeat});
       flog(b1, s0, "pagerankNaiveDynamicCuda");

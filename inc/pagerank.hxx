@@ -392,16 +392,60 @@ inline int pagerankLoopOmp(vector<V>& a, vector<V>& r, const H& xt, V P, V E, in
 
 
 
-#pragma region STATIC/NAIVE-DYNAMIC
+#pragma region STATIC
 /**
- * Find the rank of each vertex in a dynamic graph with Static/Naive-dynamic approach.
+ * Find the rank of each vertex in a dynamic graph with Static approach.
+ * @param xt transpose of original graph
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class H, class V>
+inline PagerankResult<V> pagerankStatic(const H& xt, const PagerankOptions<V>& o) {
+  using K = typename H::key_type;
+  if  (xt.empty()) return {};
+  vector<V> *q = nullptr;
+  return pagerankInvoke<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
+    auto fa = [](K u) { return true; };
+    auto fr = [](K u, V eu) {};
+    return pagerankLoop<ASYNC>(a, r, xt, P, E, L, fa, fr);
+  });
+}
+
+
+#ifdef OPENMP
+/**
+ * Find the rank of each vertex in a dynamic graph with Static approach.
+ * @param xt transpose of original graph
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class H, class V>
+inline PagerankResult<V> pagerankStaticOmp(const H& xt, const PagerankOptions<V>& o) {
+  using K = typename H::key_type;
+  if  (xt.empty()) return {};
+  vector<V> *q = nullptr;
+  return pagerankInvokeOmp<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
+    auto fa = [](K u) { return true; };
+    auto fr = [](K u, V eu) {};
+    return pagerankLoopOmp<ASYNC>(a, r, xt, P, E, L, fa, fr);
+  });
+}
+#endif
+#pragma endregion
+
+
+
+
+#pragma region NAIVE-DYNAMIC
+/**
+ * Find the rank of each vertex in a dynamic graph with Naive-dynamic approach.
  * @param xt transpose of original graph
  * @param q initial ranks
  * @param o pagerank options
  * @returns pagerank result
  */
 template <bool ASYNC=false, class H, class V>
-inline PagerankResult<V> pagerankStatic(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
+inline PagerankResult<V> pagerankNaiveDynamic(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   return pagerankInvoke<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
@@ -414,14 +458,14 @@ inline PagerankResult<V> pagerankStatic(const H& xt, const vector<V> *q, const P
 
 #ifdef OPENMP
 /**
- * Find the rank of each vertex in a dynamic graph with Static/Naive-dynamic approach.
+ * Find the rank of each vertex in a dynamic graph with Naive-dynamic approach.
  * @param xt transpose of original graph
  * @param q initial ranks
  * @param o pagerank options
  * @returns pagerank result
  */
 template <bool ASYNC=false, class H, class V>
-inline PagerankResult<V> pagerankStaticOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
+inline PagerankResult<V> pagerankNaiveDynamicOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   return pagerankInvokeOmp<ASYNC>(xt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
