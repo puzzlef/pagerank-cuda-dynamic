@@ -436,6 +436,58 @@ inline PagerankResult<V> pagerankStaticOmp(const H& xt, const vector<V> *q, cons
 
 
 
+#pragma region DYNAMIC TRAVERSAL
+/**
+ * Find affected vertices due to a batch update with Dynamic Traversal approach.
+ * @param vis affected flags (output)
+ * @param x original graph
+ * @param y updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ */
+template <class B, class G, class K>
+inline void pagerankAffectedTraversalW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions) {
+  auto ft = [](auto u, auto d) { return true; };
+  auto fp = [](auto u, auto d) { };
+  for (const auto& [u, v] : deletions)
+    x.forEachEdgeKey(u, [&](auto v) { bfsVisitedForEachU(vis, y, v, ft, fp); });
+  for (const auto& [u, v] : insertions)
+    y.forEachEdgeKey(u, [&](auto v) { bfsVisitedForEachU(vis, y, v, ft, fp); });
+}
+
+
+#ifdef OPENMP
+/**
+ * Find affected vertices due to a batch update with Dynamic Traversal approach (using OpenMP).
+ * @param vis affected flags (output)
+ * @param x original graph
+ * @param y updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ */
+template <class B, class G, class K>
+inline void pagerankAffectedTraversalOmpW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions) {
+  auto  ft = [](auto u, auto d) { return true; };
+  auto  fp = [](auto u, auto d) { };
+  size_t D = deletions.size();
+  size_t I = insertions.size();
+  #pragma omp parallel for schedule(auto)
+  for (size_t i=0; i<D; ++i) {
+    K u = get<0>(deletions[i]);
+    x.forEachEdgeKey(u, [&](auto v) { bfsVisitedForEachU(vis, y, v, ft, fp); });
+  }
+  #pragma omp parallel for schedule(auto)
+  for (size_t i=0; i<I; ++i) {
+    K u = get<0>(insertions[i]);
+    y.forEachEdgeKey(u, [&](auto v) { bfsVisitedForEachU(vis, y, v, ft, fp); });
+  }
+}
+#endif
+#pragma endregion
+
+
+
+
 #pragma region DYNAMIC FRONTIER
 /**
  * Find affected vertices due to a batch update with Dynamic Frontier approach.
