@@ -434,8 +434,8 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const vecto
  * @param o pagerank options
  * @returns pagerank result
  */
-template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V, class W>
-inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, W>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   using F = FLAG;
   V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
   if (xt.empty()) return {};

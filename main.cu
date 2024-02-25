@@ -1,9 +1,8 @@
+#include <cstdint>
+#include <cstdio>
 #include <random>
 #include <string>
 #include <vector>
-#include <cstdio>
-#include <fstream>
-#include <iostream>
 #include <algorithm>
 #include <omp.h>
 #include "inc/main.hxx"
@@ -45,17 +44,21 @@ using namespace std;
  */
 template <class G, class R, class F>
 inline void runBatches(const G& x, R& rnd, F fn) {
-  auto  fl = [](auto u) { return true; };
+  auto fl = [](auto u) { return true; };
   double d = BATCH_DELETIONS_BEGIN;
   double i = BATCH_INSERTIONS_BEGIN;
-  while (true) {
+  for (int epoch=0;; ++epoch) {
     for (int r=0; r<REPEAT_BATCH; ++r) {
       auto y  = duplicate(x);
-      auto deletions  = removeRandomEdges(y, rnd, size_t(d * x.size() + 0.5), 1, x.span()-1);
-      auto insertions = addRandomEdges   (y, rnd, size_t(i * x.size() + 0.5), 1, x.span()-1, None());
-      addSelfLoopsOmpU(y, None(), fl);
-      auto yt = transposeWithDegreeOmp(y);
-      fn(y, yt, d, deletions, i, insertions);
+      for (int sequence=0; sequence<BATCH_LENGTH; ++sequence) {
+        auto deletions  = generateEdgeDeletions (rnd, y, size_t(d * x.size()), 1, x.span()-1, false);
+        auto insertions = generateEdgeInsertions(rnd, y, size_t(i * x.size()), 1, x.span()-1, false, None());
+        tidyBatchUpdateU(deletions, insertions, y);
+        applyBatchUpdateOmpU(y, deletions, insertions);
+        addSelfLoopsOmpU(y, None(), fl);
+        auto yt = transposeWithDegreeOmp(y);
+        fn(y, yt, d, deletions, i, insertions, sequence, epoch);
+      }
     }
     if (d>=BATCH_DELETIONS_END && i>=BATCH_INSERTIONS_END) break;
     d BATCH_DELETIONS_STEP;
@@ -67,16 +70,44 @@ inline void runBatches(const G& x, R& rnd, F fn) {
 
 
 /**
+ * Run a function on each number of threads, for a specific epoch.
+ * @param epoch epoch number
+ * @param fn function to run on each number of threads
+ */
+template <class F>
+inline void runThreadsWithBatch(int epoch, F fn) {
+  int t = NUM_THREADS_BEGIN;
+  for (int l=0; l<epoch && t<=NUM_THREADS_END; ++l)
+    t NUM_THREADS_STEP;
+  omp_set_num_threads(t);
+  fn(t);
+  omp_set_num_threads(MAX_THREADS);
+}
+
+
+/**
  * Run a function on each number of threads, with a specified range of thread counts.
  * @param fn function to run on each number of threads
  */
 template <class F>
-inline void runThreads(F fn) {
+inline void runThreadsAll(F fn) {
   for (int t=NUM_THREADS_BEGIN; t<=NUM_THREADS_END; t NUM_THREADS_STEP) {
     omp_set_num_threads(t);
     fn(t);
     omp_set_num_threads(MAX_THREADS);
   }
+}
+
+
+/**
+ * Run a function on each number of threads, with a specified range of thread counts or for a specific epoch (depending on NUM_THREADS_MODE).
+ * @param epoch epoch number
+ * @param fn function to run on each number of threads
+ */
+template <class F>
+inline void runThreads(int epoch, F fn) {
+  if (NUM_THREADS_MODE=="with-batch") runThreadsWithBatch(epoch, fn);
+  else runThreadsAll(fn);
 }
 #pragma endregion
 
@@ -108,8 +139,8 @@ inline void runExperiment(const G& x, const H& xt) {
   // Get ranks of vertices on original graph (static).
   auto r0   = pagerankStaticOmp(xt, init, {1, 1e-100});
   // Get ranks of vertices on updated graph (dynamic).
-  runBatches(x, rnd, [&](const auto& y, const auto& yt, double deletionsf, const auto& deletions, double insertionsf, const auto& insertions) {
-    runThreads([&](int numThreads) {
+  runBatches(x, rnd, [&](const auto& y, const auto& yt, double deletionsf, const auto& deletions, double insertionsf, const auto& insertions, int sequence, int epoch) {
+    runThreads(epoch, [&](int numThreads) {
       auto flog = [&](const auto& ans, const auto& ref, const char *technique) {
         glog(ans, ref, technique, deletionsf, insertionsf, numThreads);
       };

@@ -427,8 +427,8 @@ inline PagerankResult<V> pagerankStaticOmp(const H& xt, const vector<V> *q, cons
  * @param deletions edge deletions in batch update
  * @param insertions edge insertions in batch update
  */
-template <class B, class G, class K, class E>
-inline void pagerankAffectedFrontierW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, E>>& insertions) {
+template <class B, class G, class K>
+inline void pagerankAffectedFrontierW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions) {
   for (const auto& [u, v]    : deletions)
     x.forEachEdgeKey(u, [&](auto v) { vis[v] = B(1); });
   for (const auto& [u, v, w] : insertions)
@@ -445,8 +445,8 @@ inline void pagerankAffectedFrontierW(vector<B>& vis, const G& x, const G& y, co
  * @param deletions edge deletions in batch update
  * @param insertions edge insertions in batch update
  */
-template <class B, class G, class K, class E>
-inline void pagerankAffectedFrontierOmpW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, E>>& insertions) {
+template <class B, class G, class K>
+inline void pagerankAffectedFrontierOmpW(vector<B>& vis, const G& x, const G& y, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions) {
   size_t D = deletions.size();
   size_t I = insertions.size();
   #pragma omp parallel for schedule(auto)
@@ -475,8 +475,8 @@ inline void pagerankAffectedFrontierOmpW(vector<B>& vis, const G& x, const G& y,
  * @param o pagerank options
  * @returns pagerank result
  */
-template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V, class W>
-inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, W>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
@@ -502,8 +502,8 @@ inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const 
  * @param o pagerank options
  * @returns pagerank result
  */
-template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V, class W>
-inline PagerankResult<V> pagerankDynamicFrontierOmp(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K, W>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicFrontierOmp(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
