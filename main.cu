@@ -131,8 +131,8 @@ inline void runExperiment(const G& x, const H& xt) {
   auto glog  = [&](const auto& ans, const auto& ref, const char *technique, auto deletionsf, auto insertionsf, int numThreads) {
     auto err = liNormDeltaOmp(ans.ranks, ref.ranks);
     printf(
-      "{-%.3e/+%.3e batchf, %03d threads} -> {%09.1fms, %03d iter, %.2e err} %s\n",
-      deletionsf, insertionsf, numThreads, ans.time, ans.iterations, err, technique
+      "{-%.3e/+%.3e batchf, %03d threads} -> {%09.1fms, %09.1fms init, %09.1fms mark, %09.1fms comp, %03d iter, %.2e err} %s\n",
+      deletionsf, insertionsf, numThreads, ans.time, ans.initializationTime, ans.markingTime, ans.computationTime, ans.iterations, err, technique
     );
   };
   // Get ranks of vertices on original graph (static).

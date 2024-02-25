@@ -413,18 +413,21 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaMemcpy(xtedgD, xtedg.data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtdatD, xtdat.data(),  N    * sizeof(K), cudaMemcpyHostToDevice) );
   // Perform PageRank algorithm on device.
-  float t = measureDurationMarked([&](auto mark) {
+  float ti = 0, tm = 0, tc = 0;
+  float t  = measureDurationMarked([&](auto mark) {
     // Setup initial ranks.
     if (q) TRY_CUDA( cudaMemcpy(rD, qc.data(), N   * sizeof(V), cudaMemcpyHostToDevice) );
-    if (q && !ASYNC) copyValuesCuW(aD, rD, N);
-    else   pagerankInitializeRanksCuW<ASYNC>(aD, rD, K(N), K(0), K(N));
-    TRY_CUDA( cudaDeviceSynchronize() );
+    ti += measureDuration([&]() {
+      if (q && !ASYNC) copyValuesCuW(aD, rD, N);
+      else   pagerankInitializeRanksCuW<ASYNC>(aD, rD, K(N), K(0), K(N));
+      TRY_CUDA( cudaDeviceSynchronize() );
+    });
     // Mark initial affected vertices.
-    if (DYNAMIC) mark([&]() { fm(vaff); });
+    if (DYNAMIC) tm += mark([&]() { fm(vaff); });
     if (DYNAMIC) gatherValuesW(vaffc, vaff, ks);
     if (DYNAMIC) TRY_CUDA( cudaMemcpy(vaffD, vaffc.data(), N * sizeof(F), cudaMemcpyHostToDevice) );
     // Perform PageRank iterations.
-    mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
+    tc += mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
   }, o.repeat);
   // Obtain final ranks.
   TRY_CUDA( cudaMemcpy(rc.data(), rD, N * sizeof(V), cudaMemcpyDeviceToHost) );
@@ -439,7 +442,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaFree(rD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(vaffD) );
   TRY_CUDA( cudaFree(bufvD) );
-  return {r, l, t};
+  return {r, l, t, ti/o.repeat, tm/o.repeat, tc/o.repeat};
 }
 #pragma endregion
 
