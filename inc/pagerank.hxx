@@ -289,7 +289,8 @@ inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const P
   V   P  = o.damping;
   V   E  = o.tolerance;
   int L  = o.maxIterations, l = 0;
-  vector<V> a(S), r(S);
+  vector<V> r(S), a;
+  if (!ASYNC) a.resize(S);
   float t = measureDuration([&]() {
     fi(a, r);
     l = fl(ASYNC? r : a, r, xt, P, E, L);
@@ -315,7 +316,8 @@ inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, cons
   V   P  = o.damping;
   V   E  = o.tolerance;
   int L  = o.maxIterations, l = 0;
-  vector<V> a(S), r(S);
+  vector<V> r(S), a;
+  if (!ASYNC) a.resize(S);
   float t = measureDuration([&]() {
     fi(a, r);
     l = fl(ASYNC? r : a, r, xt, P, E, L);
