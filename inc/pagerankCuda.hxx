@@ -310,12 +310,11 @@ inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K 
  * @param xt transposed graph
  * @param q initial ranks
  * @param o pagerank options
- * @param D frontier tolerance
  * @param fm function to mark affected vertices
  * @returns pagerank result
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool ASYNC=false, class FLAG=char, class G, class H, class V, class FM>
-inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o, V D, FM fm) {
+inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FM fm) {
   using  K = typename H::key_type;
   using  O = uint32_t;
   using  F = FLAG;
@@ -324,6 +323,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   size_t M = xt.size();
   V   P  = o.damping;
   V   E  = o.tolerance;
+  V   D  = o.frontierTolerance;
   int L  = o.maxIterations, l = 0;
   int R  = reduceSizeCu(N);
   vector<K> xoff, xedg;
@@ -420,7 +420,7 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const vecto
   using F = FLAG;
   if  (xt.empty()) return {};
   auto fm = [&](vector<F>& vaff) {};
-  return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, V(), fm);
+  return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, fm);
 }
 #pragma endregion
 
@@ -443,10 +443,9 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const vecto
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
   using F = FLAG;
-  V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
   if (xt.empty()) return {};
   auto fm = [&](vector<F>& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, true, ASYNC, FLAG>(y, yt, q, o, D, fm);
+  return pagerankInvokeCuda<true, true, ASYNC, FLAG>(y, yt, q, o, fm);
 }
 #pragma endregion
 #pragma endregion
