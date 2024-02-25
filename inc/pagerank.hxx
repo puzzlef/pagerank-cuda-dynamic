@@ -28,6 +28,10 @@ struct PagerankOptions {
   int repeat;
   /** Tolerance for convergence [10^-10]. */
   V   tolerance;
+  /** Tolerance for marking neighbors of a vertex as affected [10^-15]. */
+  V   frontierTolerance;
+  /** Tolerance for pruning an affected vertex [10^-15]. */
+  V   pruneTolerance;
   /** Damping factor [0.85]. */
   V   damping;
   /** Maximum number of iterations [500]. */
@@ -40,10 +44,12 @@ struct PagerankOptions {
    * Define a set of PageRank options.
    * @param repeat number of times to repeat the algorithm [1]
    * @param tolerance tolerance for convergence [10^-10]
+   * @param frontierTolerance tolerance for marking neighbors of a vertex as affected [10^-15]
+   * @param pruneTolerance tolerance for pruning an affected vertex [10^-15]
    * @param damping damping factor [0.85]
    * @param maxIterations maximum number of iterations [500]
    */
-  PagerankOptions(int repeat=1, V tolerance=1e-10, V damping=0.85, int maxIterations=500) :
+  PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-15, V pruneTolerance=1e-15, V damping=0.85, int maxIterations=500) :
   repeat(repeat), tolerance(tolerance), damping(damping), maxIterations(maxIterations) {}
   #pragma endregion
 };
