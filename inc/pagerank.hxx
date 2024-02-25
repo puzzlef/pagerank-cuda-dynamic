@@ -126,7 +126,7 @@ struct PagerankResult {
  * @param v given vertex
  * @param C0 common teleport rank contribution to each vertex
  * @param P damping factor [0.85]
- * @returns change between previous and current rank value
+ * @returns previous rank of given vertex
  */
 template <class H, class K, class V>
 inline V pagerankUpdateRank(vector<V>& a, const H& xt, const vector<V>& r, K v, V C0, V P) {
@@ -136,9 +136,8 @@ inline V pagerankUpdateRank(vector<V>& a, const H& xt, const vector<V>& r, K v, 
     K d = xt.vertexValue(u);
     cv += r[u]/d;
   });
-  V av = C0 + P * cv;
-  a[v] = av;
-  return abs(av - rv);
+  a[v] = C0 + P * cv;
+  return rv;
 }
 
 
@@ -156,8 +155,8 @@ template <class H, class V, class FA, class FU>
 inline void pagerankUpdateRanks(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
   xt.forEachVertexKey([&](auto v) {
     if (!fa(v)) return;
-    V ev = pagerankUpdateRank(a, xt, r, v, C0, P);
-    fu(v, ev);
+    V rv = pagerankUpdateRank(a, xt, r, v, C0, P);
+    fu(v, abs(a[v]-rv));
   });
 }
 
@@ -180,8 +179,8 @@ inline void pagerankUpdateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r
   #pragma omp parallel for schedule(dynamic, 2048)
   for (K v=0; v<S; ++v) {
     if (!xt.hasVertex(v) || !fa(v)) continue;
-    V ev = pagerankUpdateRank(a, xt, r, v, C0, P);
-    fu(v, ev);
+    V rv = pagerankUpdateRank(a, xt, r, v, C0, P);
+    fu(v, abs(a[v]-rv));
   }
 }
 #endif
