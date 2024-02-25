@@ -468,6 +468,30 @@ inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const
 
 
 
+#pragma region DYNAMIC TRAVERSAL
+/**
+ * Find the rank of each vertex in a dynamic graph with Dynamic Traversal approach.
+ * @param x original graph
+ * @param xt transpose of original graph
+ * @param y updated graph
+ * @param yt transpose of updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ * @param q initial ranks
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  if (xt.empty()) return {};
+  auto fm = [&](auto& vaff) { pagerankAffectedTraversalOmpW(vaff, x, y, deletions, insertions); };
+  return pagerankInvokeCuda<true, false, ASYNC, FLAG>(y, yt, q, o, fm);
+}
+#pragma endregion
+
+
+
+
 #pragma region DYNAMIC FRONTIER
 /**
  * Find the rank of each vertex in a dynamic graph with Dynamic Frontier approach.

@@ -162,6 +162,8 @@ inline void runExperiment(const G& x, const H& xt) {
       // Find multi-threaded OpenMP-based Dynamic Traversal PageRank (synchronous, no dead ends).
       auto a3 = pagerankDynamicTraversalOmp(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
       flog(a3, s0, "pagerankDynamicTraversalOmp");
+      auto b3 = pagerankDynamicTraversalCuda(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
+      flog(b3, s0, "pagerankDynamicTraversalCuda");
     });
   });
 }
