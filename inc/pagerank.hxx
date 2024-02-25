@@ -579,6 +579,56 @@ inline void pagerankAffectedTraversalOmpW(vector<B>& vis, const G& x, const G& y
   }
 }
 #endif
+
+
+/**
+ * Find the rank of each vertex in a dynamic graph with Dynamic Traversal approach.
+ * @param x original graph
+ * @param xt transpose of original graph
+ * @param y updated graph
+ * @param yt transpose of updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ * @param q initial ranks
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicTraversal(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  if (xt.empty()) return {};
+  vector<FLAG> vaff(max(x.span(), y.span()));
+  auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFrom<ASYNC>(a, r, xt, *q); };
+  auto fm = [&]() { pagerankAffectedTraversalW(vaff, x, y, deletions, insertions); };
+  auto fa = [&](auto u) { return vaff[u]==FLAG(1); };
+  auto fu = [&](auto u, auto ru, auto au) {};
+  return pagerankInvoke<ASYNC>(yt, q, o, fi, fm, fa, fu);
+}
+
+
+#ifdef OPENMP
+/**
+ * Find the rank of each vertex in a dynamic graph with Dynamic Traversal approach (using OpenMP).
+ * @param x original graph
+ * @param xt transpose of original graph
+ * @param y updated graph
+ * @param yt transpose of updated graph
+ * @param deletions edge deletions in batch update
+ * @param insertions edge insertions in batch update
+ * @param q initial ranks
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
+inline PagerankResult<V> pagerankDynamicTraversalOmp(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  if (xt.empty()) return {};
+  vector<FLAG> vaff(max(x.span(), y.span()));
+  auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFromOmp<ASYNC>(a, r, xt, *q); };
+  auto fm = [&]() { pagerankAffectedTraversalOmpW(vaff, x, y, deletions, insertions); };
+  auto fa = [&](auto u) { return vaff[u]==FLAG(1); };
+  auto fu = [&](auto u, auto ru, auto au) {};
+  return pagerankInvokeOmp<ASYNC>(yt, q, o, fi, fm, fa, fu);
+}
+#endif
 #pragma endregion
 
 
