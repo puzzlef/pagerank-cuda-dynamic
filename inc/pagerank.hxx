@@ -49,7 +49,7 @@ struct PagerankOptions {
    * @param damping damping factor [0.85]
    * @param maxIterations maximum number of iterations [500]
    */
-  PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-15, V pruneTolerance=1e-15, V damping=0.85, int maxIterations=500) :
+  PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-13, V pruneTolerance=1e-13, V damping=0.85, int maxIterations=500) :
   repeat(repeat), tolerance(tolerance), damping(damping), maxIterations(maxIterations) {}
   #pragma endregion
 };
@@ -547,7 +547,7 @@ inline void pagerankAffectedFrontierOmpW(vector<B>& vis, const G& x, const G& y,
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
-  V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
+  V D = o.frontierTolerance;
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
   return pagerankInvoke<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
@@ -574,7 +574,7 @@ inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const 
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontierOmp(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
-  V D = 0.001 * o.tolerance;  // Frontier tolerance = Tolerance/1000
+  V D = o.frontierTolerance;
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
   return pagerankInvokeOmp<ASYNC>(yt, q, o, [&](vector<V>& a, vector<V>& r, const H& xt, V P, V E, int L) {
