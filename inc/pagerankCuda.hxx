@@ -94,9 +94,10 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *x
     V cv = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, 0, 1);
     V av = PRUNE? (C0 + P * (cv - rv/d)) * (1/(1-(P/d))) : C0 + P * cv;
     a[v] = av;
-    if (ASYNC) et = max(et, abs(av - rv));
-    if (PRUNE && abs(av - rv)/max(rv, av) <= C) vaff[v] = F();
-    if (!FRONTIER || abs(av - rv) <= D) continue;
+    const auto ev = abs(av - rv);
+    if (ASYNC) et = max(et, ev);
+    if (PRUNE && ev/max(rv, av) <= C) vaff[v] = F();
+    if (!FRONTIER || ev/max(rv, av) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
     pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, 0, 1);
   }
@@ -175,9 +176,10 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xo
     V cv = cache[0];
     V av = PRUNE? (C0 + P * (cv - rv/d)) * (1/(1-(P/d))) : C0 + P * cv;
     if (t==0) a[v] = av;
-    if (ASYNC && t==0) eb = max(eb, abs(av - rv));
-    if (PRUNE && abs(av - rv)/max(rv, av) <= C) vaff[v] = F();
-    if (!FRONTIER || abs(av - rv) <= D) continue;
+    const auto ev = abs(av - rv);
+    if (ASYNC && t==0) eb = max(eb, ev);
+    if (PRUNE && ev/max(rv, av) <= C) vaff[v] = F();
+    if (!FRONTIER || ev/max(rv, av) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
     pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, t, B);
   }

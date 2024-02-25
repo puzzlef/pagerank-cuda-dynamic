@@ -28,9 +28,9 @@ struct PagerankOptions {
   int repeat;
   /** Tolerance for convergence [10^-10]. */
   V   tolerance;
-  /** Tolerance for marking neighbors of a vertex as affected [10^-15]. */
+  /** Tolerance for marking neighbors of a vertex as affected [10^-6]. */
   V   frontierTolerance;
-  /** Tolerance for pruning an affected vertex [10^-15]. */
+  /** Tolerance for pruning an affected vertex [10^-6]. */
   V   pruneTolerance;
   /** Damping factor [0.85]. */
   V   damping;
@@ -49,7 +49,7 @@ struct PagerankOptions {
    * @param damping damping factor [0.85]
    * @param maxIterations maximum number of iterations [500]
    */
-  PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-13, V pruneTolerance=1e-13, V damping=0.85, int maxIterations=500) :
+  PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-6, V pruneTolerance=1e-6, V damping=0.85, int maxIterations=500) :
   repeat(repeat), tolerance(tolerance), frontierTolerance(frontierTolerance), pruneTolerance(pruneTolerance), damping(damping), maxIterations(maxIterations) {}
   #pragma endregion
 };
@@ -697,7 +697,7 @@ inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const 
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFrom<ASYNC>(a, r, xt, *q); };
   auto fm = [&]() { pagerankAffectedFrontierW(vaff, x, y, deletions, insertions); };
   auto fa = [&](auto u) { return vaff[u]==FLAG(1); };
-  auto fu = [&](auto u, auto ru, auto au) { if (abs(au-ru)>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
+  auto fu = [&](auto u, auto ru, auto au) { if (abs(ru - au)/max(ru, au) > D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
   return pagerankInvoke<ASYNC>(yt, o, fi, fm, fa, fu);
 }
 
@@ -723,7 +723,7 @@ inline PagerankResult<V> pagerankDynamicFrontierOmp(const G& x, const H& xt, con
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFromOmp<ASYNC>(a, r, xt, *q); };
   auto fm = [&]() { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
   auto fa = [&](auto u) { return vaff[u]==FLAG(1); };
-  auto fu = [&](auto u, auto ru, auto au) { if (abs(au-ru)>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
+  auto fu = [&](auto u, auto ru, auto au) { if (abs(ru - au)/max(ru, au) > D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
   return pagerankInvokeOmp<ASYNC>(yt, o, fi, fm, fa, fu);
 }
 #endif
