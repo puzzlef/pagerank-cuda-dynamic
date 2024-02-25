@@ -70,6 +70,12 @@ struct PagerankResult {
   int   iterations;
   /** Average time taken to perform the algorithm. */
   float time;
+  /** Average time taken to initialize ranks. */
+  float initializationTime;
+  /** Average time taken to mark affected vertices. */
+  float markingTime;
+  /** Average time taken to compute ranks. */
+  float computationTime;
   #pragma endregion
 
 
@@ -78,25 +84,31 @@ struct PagerankResult {
    * Define empty PageRank result.
    */
   PagerankResult() :
-  ranks(), iterations(0), time(0) {}
+  ranks(), iterations(0), time(0), initializationTime(0), markingTime(0), computationTime(0) {}
 
   /**
    * Define a PageRank result.
    * @param ranks rank of each vertex
    * @param iterations number of iterations performed
    * @param time average time taken to perform the algorithm
+   * @param initializationTime average time taken to initialize ranks
+   * @param markingTime average time taken to mark affected vertices
+   * @param computationTime average time taken to compute ranks
    */
-  PagerankResult(vector<V>&& ranks, int iterations=0, float time=0) :
-  ranks(ranks), iterations(iterations), time(time) {}
+  PagerankResult(vector<V>&& ranks, int iterations=0, float time=0, float initializationTime=0, float markingTime=0, float computationTime=0) :
+  ranks(ranks), iterations(iterations), time(time), initializationTime(initializationTime), markingTime(markingTime), computationTime(computationTime) {}
 
   /**
    * Define a PageRank result.
    * @param ranks rank of each vertex (moved)
    * @param iterations number of iterations performed
    * @param time average time taken to perform the algorithm
+   * @param initializationTime average time taken to initialize ranks
+   * @param markingTime average time taken to mark affected vertices
+   * @param computationTime average time taken to compute ranks
    */
-  PagerankResult(vector<V>& ranks, int iterations=0, float time=0) :
-  ranks(move(ranks)), iterations(iterations), time(time) {}
+  PagerankResult(vector<V>& ranks, int iterations=0, float time=0, float initializationTime=0, float markingTime=0, float computationTime=0) :
+  ranks(move(ranks)), iterations(iterations), time(time), initializationTime(initializationTime), markingTime(markingTime), computationTime(computationTime) {}
   #pragma endregion
 };
 #pragma endregion
