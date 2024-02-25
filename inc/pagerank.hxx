@@ -152,12 +152,53 @@ inline V pagerankUpdateRank(vector<V>& a, const H& xt, const vector<V>& r, K v, 
  * @param fu called with previous and current vertex rank (v, rv, av)
  */
 template <class H, class V, class FA, class FU>
-inline void pagerankUpdateRanks(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
+inline V pagerankUpdateRanksSync(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
   xt.forEachVertexKey([&](auto v) {
     if (!fa(v)) return;
     V rv = pagerankUpdateRank(a, xt, r, v, C0, P);
     fu(v, rv, a[v]);
   });
+  return V();
+}
+
+
+/**
+ * Update ranks for vertices in a graph.
+ * @param a current rank of each vertex (updated)
+ * @param xt transpose of original graph
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (v)
+ * @param fu called with previous and current vertex rank (v, rv, av)
+ * @returns maximum change between previous and current rank values
+ */
+template <class H, class V, class FA, class FU>
+inline V pagerankUpdateRanksAsync(vector<V>& a, const H& xt, V C0, V P, FA fa, FU fu) {
+  V el = V();
+  xt.forEachVertexKey([&](auto v) {
+    if (!fa(v)) return;
+    V rv = pagerankUpdateRank(a, xt, a, v, C0, P);
+    fu(v, rv, a[v]);
+    el = max(el, abs(rv - a[v]));
+  });
+  return el;
+}
+
+
+/**
+ * Update ranks for vertices in a graph.
+ * @param a current rank of each vertex (updated)
+ * @param xt transpose of original graph
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (v)
+ * @param fu called with previous and current vertex rank (v, rv, av)
+ * @returns maximum change between previous and current rank values
+ */
+template <bool ASYNC=false, class H, class V, class FA, class FU>
+inline V pagerankUpdateRanks(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
+  if (ASYNC) return pagerankUpdateRanksAsync(a, xt, C0, P, fa, fu);
+  else       return pagerankUpdateRanksSync (a, xt, r, C0, P, fa, fu);
 }
 
 
@@ -173,7 +214,7 @@ inline void pagerankUpdateRanks(vector<V>& a, const H& xt, const vector<V>& r, V
  * @param fu called with previous and current vertex rank (v, rv, av)
  */
 template <class H, class V, class FA, class FU>
-inline void pagerankUpdateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
+inline V pagerankUpdateRanksSyncOmp(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
   using  K = typename H::key_type;
   size_t S = xt.span();
   #pragma omp parallel for schedule(dynamic, 2048)
@@ -182,6 +223,50 @@ inline void pagerankUpdateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r
     V rv = pagerankUpdateRank(a, xt, r, v, C0, P);
     fu(v, rv, a[v]);
   }
+  return V();
+}
+
+
+/**
+ * Update ranks for vertices in a graph (using OpenMP).
+ * @param a current rank of each vertex (updated)
+ * @param xt transpose of original graph
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (v)
+ * @param fu called with previous and current vertex rank (v, rv, av)
+ * @returns maximum change between previous and current rank values
+ */
+template <class H, class V, class FA, class FU>
+inline V pagerankUpdateRanksAsyncOmp(vector<V>& a, const H& xt, V C0, V P, FA fa, FU fu) {
+  using  K = typename H::key_type;
+  size_t S = xt.span();
+  V el = V();
+  #pragma omp parallel for schedule(dynamic, 2048) reduction(max:el)
+  for (K v=0; v<S; ++v) {
+    if (!xt.hasVertex(v) || !fa(v)) continue;
+    V rv = pagerankUpdateRank(a, xt, a, v, C0, P);
+    fu(v, rv, a[v]);
+    el = max(el, abs(rv - a[v]));
+  }
+  return el;
+}
+
+
+/**
+ * Update ranks for vertices in a graph (using OpenMP).
+ * @param a current rank of each vertex (output)
+ * @param xt transpose of original graph
+ * @param r previous rank of each vertex
+ * @param C0 common teleport rank contribution to each vertex
+ * @param P damping factor [0.85]
+ * @param fa is vertex affected? (v)
+ * @param fu called with previous and current vertex rank (v, rv, av)
+ */
+template <bool ASYNC=false, class H, class V, class FA, class FU>
+inline V pagerankUpdateRanksOmp(vector<V>& a, const H& xt, const vector<V>& r, V C0, V P, FA fa, FU fu) {
+  if (ASYNC) return pagerankUpdateRanksAsyncOmp(a, xt, C0, P, fa, fu);
+  else       return pagerankUpdateRanksSyncOmp (a, xt, r, C0, P, fa, fu);
 }
 #endif
 #pragma endregion
@@ -302,8 +387,8 @@ inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const P
     tc += measureDuration([&]() {
       const V C0 = (1-P)/N;
       for (l=0; l<L;) {
-        pagerankUpdateRanks(a, xt, r, C0, P, fa, fu); ++l;  // Update ranks of vertices
-        V el = liNormDelta(a, r);  // Compare previous and current ranks
+        V el = pagerankUpdateRanks<ASYNC>(ASYNC? r : a, xt, r, C0, P, fa, fu); ++l;  // Update ranks of vertices
+        if (!ASYNC) el = liNormDelta(a, r);  // Compare previous and current ranks
         if (!ASYNC) swap(a, r);    // Final ranks in (r)
         if (el<E) break;           // Check tolerance
       }
@@ -344,8 +429,8 @@ inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, cons
     tc += measureDuration([&]() {
       const V C0 = (1-P)/N;
       for (l=0; l<L;) {
-        pagerankUpdateRanksOmp(a, xt, r, C0, P, fa, fu); ++l;  // Update ranks of vertices
-        V el = liNormDeltaOmp(a, r);  // Compare previous and current ranks
+        V el = pagerankUpdateRanksOmp<ASYNC>(ASYNC? r : a, xt, r, C0, P, fa, fu); ++l;  // Update ranks of vertices
+        if (!ASYNC) el = liNormDeltaOmp(a, r);  // Compare previous and current ranks
         if (!ASYNC) swap(a, r);       // Final ranks in (r)
         if (el<E) break;              // Check tolerance
       }
