@@ -446,7 +446,7 @@ inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const PagerankOptions<V>
 
 #pragma region STATIC
 /**
- * Find the rank of each vertex in a dynamic graph with Static approach.
+ * Find the rank of each vertex in a static graph with Static approach.
  * @param xt transpose of original graph
  * @param o pagerank options
  * @returns pagerank result
@@ -465,7 +465,7 @@ inline PagerankResult<V> pagerankStatic(const H& xt, const PagerankOptions<V>& o
 
 #ifdef OPENMP
 /**
- * Find the rank of each vertex in a dynamic graph with Static approach.
+ * Find the rank of each vertex in a static graph with Static approach.
  * @param xt transpose of original graph
  * @param o pagerank options
  * @returns pagerank result

@@ -428,9 +428,29 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
 
 
 
-#pragma region STATIC/NAIVE-DYNAMIC
+#pragma region STATIC
 /**
- * Find the rank of each vertex in a dynamic graph with Static/Naive-dynamic approach.
+ * Find the rank of each vertex in a static graph with Static approach.
+ * @param x original graph
+ * @param xt transposed graph
+ * @param o pagerank options
+ * @returns pagerank result
+ */
+template <bool ASYNC=false, class FLAG=char, class G, class H, class V>
+inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const PagerankOptions<V>& o) {
+  if  (xt.empty()) return {};
+  vector<V> *q = nullptr;
+  auto fm = [&](auto& vaff) {};
+  return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, fm);
+}
+#pragma endregion
+
+
+
+
+#pragma region NAIVE-DYNAMIC
+/**
+ * Find the rank of each vertex in a dynamic graph with Naive-dynamic approach.
  * @param x original graph
  * @param xt transposed graph
  * @param q initial ranks
@@ -438,11 +458,9 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
  * @returns pagerank result
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class V>
-inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
-  using K = typename G::key_type;
-  using F = FLAG;
+inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
   if  (xt.empty()) return {};
-  auto fm = [&](vector<F>& vaff) {};
+  auto fm = [&](auto& vaff) {};
   return pagerankInvokeCuda<false, false, ASYNC, FLAG>(x, xt, q, o, fm);
 }
 #pragma endregion
@@ -465,9 +483,8 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const vecto
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
-  using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](vector<F>& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
+  auto fm = [&](auto& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
   return pagerankInvokeCuda<true, true, ASYNC, FLAG>(y, yt, q, o, fm);
 }
 #pragma endregion

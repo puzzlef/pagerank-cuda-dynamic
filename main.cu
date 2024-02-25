@@ -124,7 +124,6 @@ template <class G, class H>
 inline void runExperiment(const G& x, const H& xt) {
   using  K = typename G::key_type;
   using  V = TYPE;
-  vector<V> *init = nullptr;
   random_device dev;
   default_random_engine rnd(dev());
   int repeat = REPEAT_METHOD;
@@ -148,12 +147,12 @@ inline void runExperiment(const G& x, const H& xt) {
       // Find multi-threaded OpenMP-based Static PageRank (synchronous, no dead ends).
       auto a0 = pagerankStaticOmp(yt, PagerankOptions<V>(repeat));
       flog(a0, s0, "pagerankStaticOmp");
-      auto b0 = pagerankStaticCuda(y, yt, init, {repeat});
+      auto b0 = pagerankStaticCuda(y, yt, PagerankOptions<V>(repeat));
       flog(b0, s0, "pagerankStaticCuda");
       // Find multi-threaded OpenMP-based Naive-dynamic PageRank (synchronous, no dead ends).
       auto a1 = pagerankNaiveDynamicOmp(yt, &r0.ranks, {repeat});
       flog(a1, s0, "pagerankNaiveDynamicOmp");
-      auto b1 = pagerankStaticCuda(y, yt, &r0.ranks, {repeat});
+      auto b1 = pagerankNaiveDynamicCuda(y, yt, &r0.ranks, {repeat});
       flog(b1, s0, "pagerankNaiveDynamicCuda");
       // Find multi-threaded OpenMP-based Frontier-based Dynamic PageRank (synchronous, no dead ends).
       auto a2 = pagerankDynamicFrontierOmp(x, xt, y, yt, deletions, insertions, &r0.ranks, {repeat});
