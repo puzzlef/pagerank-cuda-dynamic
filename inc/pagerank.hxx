@@ -281,8 +281,8 @@ inline void pagerankInitializeRanksFromOmp(vector<V>& a, vector<V>& r, const H& 
  * @param fl update loop
  * @returns pagerank result
  */
-template <bool ASYNC=false, class H, class V, class FI, class FA, class FR, class FM>
-inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FI fi, FA fa, FR fr, FM fm) {
+template <bool ASYNC=false, class H, class V, class FI, class FM, class FA, class FR>
+inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FI fi, FM fm, FA fa, FR fr) {
   using  K = typename H::key_type;
   size_t S = xt.span();
   size_t N = xt.order();
@@ -321,8 +321,8 @@ inline PagerankResult<V> pagerankInvoke(const H& xt, const vector<V> *q, const P
  * @param fl update loop
  * @returns pagerank result
  */
-template <bool ASYNC=false, class H, class V, class FI, class FA, class FR, class FM>
-inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FI fi, FA fa, FR fr, FM fm) {
+template <bool ASYNC=false, class H, class V, class FI, class FM, class FA, class FR>
+inline PagerankResult<V> pagerankInvokeOmp(const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FI fi, FM fm, FA fa, FR fr) {
   using  K = typename H::key_type;
   size_t S = xt.span();
   size_t N = xt.order();
@@ -369,10 +369,10 @@ inline PagerankResult<V> pagerankStatic(const H& xt, const PagerankOptions<V>& o
   if  (xt.empty()) return {};
   vector<V> *q = nullptr;
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanks<ASYNC>(a, r, xt); };
+  auto fm = []() {};
   auto fa = [](K u) { return true; };
   auto fr = [](K u, V eu) {};
-  auto fm = []() {};
-  return pagerankInvoke<ASYNC>(xt, q, o, fi, fa, fr, fm);
+  return pagerankInvoke<ASYNC>(xt, q, o, fi, fm, fa, fr);
 }
 
 
@@ -389,10 +389,10 @@ inline PagerankResult<V> pagerankStaticOmp(const H& xt, const PagerankOptions<V>
   if  (xt.empty()) return {};
   vector<V> *q = nullptr;
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksOmp<ASYNC>(a, r, xt); };
+  auto fm = []() {};
   auto fa = [](K u) { return true; };
   auto fr = [](K u, V eu) {};
-  auto fm = []() {};
-  return pagerankInvokeOmp<ASYNC>(xt, q, o, fi, fa, fr, fm);
+  return pagerankInvokeOmp<ASYNC>(xt, q, o, fi, fm, fa, fr);
 }
 #endif
 #pragma endregion
@@ -413,10 +413,10 @@ inline PagerankResult<V> pagerankNaiveDynamic(const H& xt, const vector<V> *q, c
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFrom<ASYNC>(a, r, xt, *q); };
+  auto fm = []() {};
   auto fa = [](K u) { return true; };
   auto fr = [](K u, V eu) {};
-  auto fm = []() {};
-  return pagerankInvoke<ASYNC>(xt, q, o, fi, fa, fr, fm);
+  return pagerankInvoke<ASYNC>(xt, q, o, fi, fm, fa, fr);
 }
 
 
@@ -433,10 +433,10 @@ inline PagerankResult<V> pagerankNaiveDynamicOmp(const H& xt, const vector<V> *q
   using K = typename H::key_type;
   if  (xt.empty()) return {};
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFromOmp<ASYNC>(a, r, xt, *q); };
+  auto fm = []() {};
   auto fa = [](K u) { return true; };
   auto fr = [](K u, V eu) {};
-  auto fm = []() {};
-  return pagerankInvokeOmp<ASYNC>(xt, q, o, fi, fa, fr, fm);
+  return pagerankInvokeOmp<ASYNC>(xt, q, o, fi, fm, fa, fr);
 }
 #endif
 #pragma endregion
@@ -559,10 +559,10 @@ inline PagerankResult<V> pagerankDynamicFrontier(const G& x, const H& xt, const 
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFrom<ASYNC>(a, r, xt, *q); };
+  auto fm = [&]() { pagerankAffectedFrontierW(vaff, x, y, deletions, insertions); };
   auto fa = [&](K u) { return vaff[u]==FLAG(1); };
   auto fr = [&](K u, V eu) { if (eu>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
-  auto fm = [&]() { pagerankAffectedFrontierW(vaff, x, y, deletions, insertions); };
-  return pagerankInvoke<ASYNC>(yt, q, o, fi, fa, fr, fm);
+  return pagerankInvoke<ASYNC>(yt, q, o, fi, fm, fa, fr);
 }
 
 
@@ -585,10 +585,10 @@ inline PagerankResult<V> pagerankDynamicFrontierOmp(const G& x, const H& xt, con
   if (xt.empty()) return {};
   vector<FLAG> vaff(max(x.span(), y.span()));
   auto fi = [&](auto& a, auto& r) { pagerankInitializeRanksFromOmp<ASYNC>(a, r, xt, *q); };
+  auto fm = [&]() { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
   auto fa = [&](K u) { return vaff[u]==FLAG(1); };
   auto fr = [&](K u, V eu) { if (eu>D) y.forEachEdgeKey(u, [&](K v) { vaff[v] = FLAG(1); }); };
-  auto fm = [&]() { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeOmp<ASYNC>(yt, q, o, fi, fa, fr, fm);
+  return pagerankInvokeOmp<ASYNC>(yt, q, o, fi, fm, fa, fr);
 }
 #endif
 #pragma endregion
