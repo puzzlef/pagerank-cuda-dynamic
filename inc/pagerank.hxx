@@ -50,7 +50,7 @@ struct PagerankOptions {
    * @param maxIterations maximum number of iterations [500]
    */
   PagerankOptions(int repeat=1, V tolerance=1e-10, V frontierTolerance=1e-13, V pruneTolerance=1e-13, V damping=0.85, int maxIterations=500) :
-  repeat(repeat), tolerance(tolerance), damping(damping), maxIterations(maxIterations) {}
+  repeat(repeat), tolerance(tolerance), frontierTolerance(frontierTolerance), pruneTolerance(pruneTolerance), damping(damping), maxIterations(maxIterations) {}
   #pragma endregion
 };
 
