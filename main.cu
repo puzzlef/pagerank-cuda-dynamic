@@ -65,12 +65,16 @@ inline void runExperiment(G& x, H& xt, istream& fstream, size_t rows, size_t siz
   auto r0  = pagerankStaticOmp(xt, PagerankOptions<V>(1, 1e-100));
   auto R10 = r0.ranks;
   auto R12 = r0.ranks;
+  auto R16 = r0.ranks;
   auto R20 = r0.ranks;
   auto R22 = r0.ranks;
+  auto R26 = r0.ranks;
   auto R30 = r0.ranks;
   auto R31 = r0.ranks;
   auto R32 = r0.ranks;
   auto R33 = r0.ranks;
+  auto R36 = r0.ranks;
+  auto R37 = r0.ranks;
   // Get ranks of vertices on updated graph (dynamic).
   for (int batchIndex=0; batchIndex<BATCH_LENGTH; ++batchIndex) {
     auto y = duplicate(x);
@@ -90,32 +94,44 @@ inline void runExperiment(G& x, H& xt, istream& fstream, size_t rows, size_t siz
     auto c0 = pagerankStaticCuda(y, yt, PagerankOptions<V>(repeat));
     glog(c0, s0, "pagerankStaticCuda", numThreads, 0.0, batchFraction, batchIndex);
     // Find multi-threaded OpenMP-based Naive-dynamic PageRank (synchronous, no dead ends).
-    auto a1 = pagerankNaiveDynamicOmp(yt, &R10, {repeat});
+    auto a1 = pagerankNaiveDynamicOmp<true>(yt, &R10, {repeat});
     glog(a1, s0, "pagerankNaiveDynamicOmp", numThreads, 0.0, batchFraction, batchIndex);
-    auto c1 = pagerankNaiveDynamicCuda(y, yt, &R12, {repeat});
-    glog(c1, s0, "pagerankNaiveDynamicCuda", numThreads, 0.0, batchFraction, batchIndex);
+    auto c1 = pagerankNaiveDynamicCuda<false>(y, yt, &R12, {repeat});
+    glog(c1, s0, "pagerankNaiveDynamicCudaSync", numThreads, 0.0, batchFraction, batchIndex);
+    auto g1 = pagerankNaiveDynamicCuda<true> (y, yt, &R16, {repeat});
+    glog(g1, s0, "pagerankNaiveDynamicCudaAsync", numThreads, 0.0, batchFraction, batchIndex);
     // Find multi-threaded OpenMP-based Frontier-based Dynamic PageRank (synchronous, no dead ends).
-    auto a3 = pagerankDynamicFrontierOmp(x, xt, y, yt, deletions, insertions, &R30, {repeat});
+    auto a3 = pagerankDynamicFrontierOmp<true>(x, xt, y, yt, deletions, insertions, &R30, {repeat});
     glog(a3, s0, "pagerankDynamicFrontierOmp", numThreads, 0.0, batchFraction, batchIndex);
-    auto c3 = pagerankDynamicFrontierCuda(x, xt, y, yt, deletions, insertions, &R32, {repeat});
-    glog(c3, s0, "pagerankDynamicFrontierCuda", numThreads, 0.0, batchFraction, batchIndex);
-    auto b3 = pagerankPruneDynamicFrontierOmp(x, xt, y, yt, deletions, insertions, &R31, {repeat});
+    auto c3 = pagerankDynamicFrontierCuda<false>(x, xt, y, yt, deletions, insertions, &R32, {repeat});
+    glog(c3, s0, "pagerankDynamicFrontierCudaSync", numThreads, 0.0, batchFraction, batchIndex);
+    auto g3 = pagerankDynamicFrontierCuda<true> (x, xt, y, yt, deletions, insertions, &R36, {repeat});
+    glog(g3, s0, "pagerankDynamicFrontierCudaAsync", numThreads, 0.0, batchFraction, batchIndex);
+    auto b3 = pagerankPruneDynamicFrontierOmp<true>(x, xt, y, yt, deletions, insertions, &R31, {repeat});
     glog(b3, s0, "pagerankPruneDynamicFrontierOmp", numThreads, 0.0, batchFraction, batchIndex);
-    auto d3 = pagerankPruneDynamicFrontierCuda(x, xt, y, yt, deletions, insertions, &R33, {repeat});
-    glog(d3, s0, "pagerankPruneDynamicFrontierCuda", numThreads, 0.0, batchFraction, batchIndex);
+    auto d3 = pagerankPruneDynamicFrontierCuda<false>(x, xt, y, yt, deletions, insertions, &R33, {repeat});
+    glog(d3, s0, "pagerankPruneDynamicFrontierCudaSync", numThreads, 0.0, batchFraction, batchIndex);
+    auto h3 = pagerankPruneDynamicFrontierCuda<true> (x, xt, y, yt, deletions, insertions, &R37, {repeat});
+    glog(h3, s0, "pagerankPruneDynamicFrontierCudaAsync", numThreads, 0.0, batchFraction, batchIndex);
     // Find multi-threaded OpenMP-based Dynamic Traversal PageRank (synchronous, no dead ends).
-    auto a2 = pagerankDynamicTraversalOmp(x, xt, y, yt, deletions, insertions, &R20, {repeat});
+    auto a2 = pagerankDynamicTraversalOmp<true>(x, xt, y, yt, deletions, insertions, &R20, {repeat});
     glog(a2, s0, "pagerankDynamicTraversalOmp", numThreads, 0.0, batchFraction, batchIndex);
-    auto c2 = pagerankDynamicTraversalCuda(x, xt, y, yt, deletions, insertions, &R22, {repeat});
-    glog(c2, s0, "pagerankDynamicTraversalCuda", numThreads, 0.0, batchFraction, batchIndex);
+    auto c2 = pagerankDynamicTraversalCuda<false>(x, xt, y, yt, deletions, insertions, &R22, {repeat});
+    glog(c2, s0, "pagerankDynamicTraversalCudaSync", numThreads, 0.0, batchFraction, batchIndex);
+    auto g2 = pagerankDynamicTraversalCuda<true> (x, xt, y, yt, deletions, insertions, &R26, {repeat});
+    glog(g2, s0, "pagerankDynamicTraversalCudaAsync", numThreads, 0.0, batchFraction, batchIndex);
     copyValuesOmpW(R10, a1.ranks);
     copyValuesOmpW(R12, c1.ranks);
+    copyValuesOmpW(R16, g1.ranks);
     copyValuesOmpW(R20, a2.ranks);
     copyValuesOmpW(R22, c2.ranks);
+    copyValuesOmpW(R26, g2.ranks);
     copyValuesOmpW(R30, a3.ranks);
     copyValuesOmpW(R31, b3.ranks);
     copyValuesOmpW(R32, c3.ranks);
     copyValuesOmpW(R33, d3.ranks);
+    copyValuesOmpW(R36, g3.ranks);
+    copyValuesOmpW(R37, h3.ranks);
     swap(x, y);
     swap(xt, yt);
   }
