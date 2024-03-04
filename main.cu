@@ -79,12 +79,10 @@ inline void runExperiment(G& x, H& xt, istream& fstream, size_t rows, size_t siz
   for (int batchIndex=0; batchIndex<BATCH_LENGTH; ++batchIndex) {
     auto y = duplicate(x);
     insertions.clear();
-    auto fb = [&](auto u, auto v, auto w) {
-      insertions.push_back({u, v});
-      y.addEdge(u, v);
-    };
+    auto fb = [&](auto u, auto v, auto w) { insertions.push_back({u, v}); };
     readTemporalDo(fstream, false, false, rows, size_t(batchFraction * size), fb);
-    updateOmpU(y);
+    tidyBatchUpdateU(deletions, insertions, y);
+    applyBatchUpdateOmpU(y, deletions, insertions);
     auto yt = transposeWithDegreeOmp(y);
     LOG(""); print(y); printf(" (insertions=%zu)\n", insertions.size());
     auto s0 = pagerankStaticOmp(yt, PagerankOptions<V>(1, 1e-100));
