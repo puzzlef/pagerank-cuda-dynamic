@@ -261,6 +261,218 @@ inline void pagerankInitializeRanksCuW(V *a, V *r, K N, K NB, K NE) {
 
 
 
+#pragma region MARK AFFECTED DYNAMIC FRONTIER
+/**
+ * Find affected vertices due to a batch update with Dynamic Frontier approach, using thread-per-vertex approach [kernel].
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ */
+template <class F, class O, class K>
+void __global__ pagerankAffectedFrontierThreadCukU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
+  DEFINE_CUDA(t, b, B, G);
+  for (size_t i=B*b+t; i<ND+NI; i+=G*B) {
+    K u = i<ND? delu[i] : insu[i-ND];
+    K v = i<ND? delv[i] : K();
+    if (i<ND) vaff[v] = F(1);
+    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, 0, 1);
+  }
+}
+
+
+/**
+ * Find affected vertices due to a batch update with Dynamic Frontier approach, using thread-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ */
+template <class F, class O, class K>
+inline void pagerankAffectedFrontierThreadCuU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
+  const int B = blockSizeCu(ND+NI, BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (ND+NI, B, GRID_LIMIT_MAP_CUDA);
+  pagerankAffectedFrontierThreadCukU<<<G, B>>>(vaff, xoff, xedg, delu, delv, insu, ND, NI);
+}
+
+
+/**
+ * Find affected vertices due to a batch update with Dynamic Frontier approach, using block-per-vertex approach [kernel].
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ */
+template <class F, class O, class K>
+void __global__ pagerankAffectedFrontierBlockCukU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
+  DEFINE_CUDA(t, b, B, G);
+  for (size_t i=b; i<ND+NI; i+=G) {
+    K u = i<ND? delu[i] : insu[i-ND];
+    K v = i<ND? delv[i] : K();
+    if (i<ND) vaff[v] = F(1);
+    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, t, B);
+  }
+}
+
+
+/**
+ * Find affected vertices due to a batch update with Dynamic Frontier approach, using block-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ */
+template <class F, class O, class K>
+inline void pagerankAffectedFrontierBlockCuU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
+  const int B = blockSizeCu<true>(ND+NI, BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu <true>(ND+NI, B, GRID_LIMIT_MAP_CUDA);
+  pagerankAffectedFrontierBlockCukU<<<G, B>>>(vaff, xoff, xedg, delu, delv, insu, ND, NI);
+}
+
+
+/**
+ * Find affected vertices due to a batch update with Dynamic Frontier approach, using switched-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ * @param NB begin vertex (inclusive)
+ * @param NE end vertex (exclusive)
+ */
+template <bool BLOCK=false, class F, class O, class K>
+inline void pagerankAffectedFrontierCuW(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, size_t NB, size_t NE) {
+  fillValueCuW(vaff+NB, NE-NB, F());
+  if (BLOCK) pagerankAffectedFrontierBlockCuU (vaff, xoff, xedg, delu, delv, insu, ND, NI);
+  else       pagerankAffectedFrontierThreadCuU(vaff, xoff, xedg, delu, delv, insu, ND, NI);
+}
+#pragma endregion
+
+
+
+
+#pragma region MARK AFFECTED DYNAMIC TRAVERSAL
+/**
+ * Find affected vertices due to current set of affected vertices, using thread-per-vertex approach [kernel].
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param NB begin vertex (inclusive)
+ * @param NE end vertex (exclusive)
+ */
+template <class F, class O, class K>
+void __global__ pagerankAffectedExtendThreadCukU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+  DEFINE_CUDA(t, b, B, G);
+  for (K u=NB+B*b+t; u<NE; u+=G*B) {
+    if (!vaff[u]) continue;
+    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, 0, 1);
+  }
+}
+
+
+/**
+ * Find affected vertices due to current set of affected vertices, using thread-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param NB begin vertex (inclusive)
+ * @param NE end vertex (exclusive)
+ */
+template <class F, class O, class K>
+inline void pagerankAffectedExtendThreadCuU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+  const int B = blockSizeCu(NE-NB, BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (NE-NB, B, GRID_LIMIT_MAP_CUDA);
+  pagerankAffectedExtendThreadCukU<<<G, B>>>(vaff, xoff, xedg, NB, NE);
+}
+
+
+/**
+ * Find affected vertices due to current set of affected vertices, using block-per-vertex approach [kernel].
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param NB begin vertex (inclusive)
+ * @param NE end vertex (exclusive)
+ */
+template <class F, class O, class K>
+void __global__ pagerankAffectedExtendBlockCukU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+  DEFINE_CUDA(t, b, B, G);
+  for (K u=NB+b; u<NE; u+=G) {
+    if (!vaff[u]) continue;
+    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, t, B);
+  }
+}
+
+
+/**
+ * Find affected vertices due to current set of affected vertices, using block-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param NB begin vertex (inclusive)
+ * @param NE end vertex (exclusive)
+ */
+template <class F, class O, class K>
+inline void pagerankAffectedExtendBlockCuU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+  const int B = blockSizeCu<true>(NE-NB, BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu <true>(NE-NB, B, GRID_LIMIT_MAP_CUDA);
+  pagerankAffectedExtendBlockCukU<<<G, B>>>(vaff, xoff, xedg, NB, NE);
+}
+
+
+/**
+ * Find affected vertices due to a batch update with Dynamic Traversal approach, using switched-per-vertex approach.
+ * @param vaff vertex affected flags (updated)
+ * @param xoff offsets of original graph
+ * @param xedg edge keys of original graph
+ * @param delu source vertices of edge deletions
+ * @param delv target vertices of edge deletions
+ * @param insu source vertices of edge insertions
+ * @param ND number of edge deletions
+ * @param NI number of edge insertions
+ * @param NB begin vertex (inclusive)
+ * @param NM middle vertex
+ * @param NE end vertex (exclusive)
+ */
+template <class F, class O, class K>
+inline void pagerankAffectedTraversalCuW(F *vaff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NM, K NE) {
+  uint64_cu count = 0, countNew = 0;
+  pagerankAffectedFrontierCuW(vaff, xoff, xedg, delu, delv, insu, ND, NI, NB, NE);
+  countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
+  TRY_CUDA( cudaMemcpy(&count, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
+  while (true) {
+    pagerankAffectedExtendThreadCuU(vaff, xoff, xedg, NB, NM);
+    pagerankAffectedExtendBlockCuU (vaff, xoff, xedg, NM, NE);
+    countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
+    TRY_CUDA( cudaMemcpy(&countNew, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
+    if (countNew==count) break;
+    count = countNew;
+  }
+}
+#pragma endregion
+
+
+
+
 #pragma region PARTITION
 /**
  * Partition vertices into low-degree and high-degree sets.
@@ -353,14 +565,15 @@ inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K 
  * @param fm function to mark affected vertices
  * @returns pagerank result
  */
-template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class FLAG=char, class G, class H, class V, class FM>
-inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o, FM fm) {
-  using  K = typename H::key_type;
+template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class FLAG=char, class G, class H, class K, class V, class FM>
+inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vector<tuple<K, K>> deletions, const vector<tuple<K, K>> insertions, const vector<V> *q, const PagerankOptions<V>& o, FM fm) {
   using  O = uint32_t;
   using  F = FLAG;
   size_t S = xt.span();
   size_t N = xt.order();
   size_t M = xt.size();
+  size_t ND = deletions.size();
+  size_t NI = insertions.size();
   V   P  = o.damping;
   V   E  = o.tolerance;
   V   D  = o.frontierTolerance;
@@ -371,10 +584,11 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   vector<K> xtoff(N+1), xtedg(M), xtdat(N);
   vector<V> r(S), rc(N), qc(N);
   vector<F> vaff, vaffc;
+  vector<K> delu(ND), delv(ND), insu(NI);
   if (FRONTIER) xoff.resize(N+1);
   if (FRONTIER) xedg.resize(M);
-  if (DYNAMIC) vaff.resize(S);
-  if (DYNAMIC) vaffc.resize(N);
+  // if (DYNAMIC) vaff.resize(S);
+  // if (DYNAMIC) vaffc.resize(N);
   O *xoffD  = nullptr;
   K *xedgD  = nullptr;
   O *xtoffD = nullptr;
@@ -383,7 +597,11 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   V *aD     = nullptr;
   V *rD     = nullptr;
   F *vaffD  = nullptr;
+  K *deluD  = nullptr;
+  K *delvD  = nullptr;
+  K *insuD  = nullptr;
   V *bufvD  = nullptr;
+  uint64_cu* bufsD = nullptr;
   // Partition vertices into low-degree and high-degree sets.
   vector<K> ks = vertexKeys(xt);
   K NL = pagerankPartitionVerticesCudaU(ks, xt);
@@ -395,6 +613,14 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   csrCreateVertexValuesW(xtdat, xt, ks);
   // Obtain initial ranks.
   if (q) gatherValuesW(qc, *q, ks);
+  // Obtain batch update data.
+  for (size_t i=0; i<ND; ++i) {
+    delu[i] = get<0>(deletions[i]);
+    delv[i] = get<1>(deletions[i]);
+  }
+  for (size_t i=0; i<NI; ++i) {
+    insu[i] = get<0>(insertions[i]);
+  }
   // Allocate device memory.
   TRY_CUDA( cudaSetDeviceFlags(cudaDeviceMapHost) );
   if (FRONTIER) TRY_CUDA( cudaMalloc(&xoffD,  (N+1) * sizeof(O)) );
@@ -405,13 +631,20 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaMalloc(&aD,    N * sizeof(V)) );
   TRY_CUDA( cudaMalloc(&rD,    N * sizeof(V)) );
   if (DYNAMIC) TRY_CUDA( cudaMalloc(&vaffD, N * sizeof(F)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&deluD, ND * sizeof(K)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&delvD, ND * sizeof(K)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&insuD, NI * sizeof(K)) );
   TRY_CUDA( cudaMalloc(&bufvD, R * sizeof(V)) );
+  TRY_CUDA( cudaMalloc(&bufsD, R * sizeof(uint64_cu)) );
   // Copy data to device.
   if (FRONTIER) TRY_CUDA( cudaMemcpy(xoffD,  xoff .data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
   if (FRONTIER) TRY_CUDA( cudaMemcpy(xedgD,  xedg .data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtoffD, xtoff.data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtedgD, xtedg.data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtdatD, xtdat.data(),  N    * sizeof(K), cudaMemcpyHostToDevice) );
+  if (DYNAMIC) TRY_CUDA( cudaMemcpy(deluD, delu.data(), ND * sizeof(K), cudaMemcpyHostToDevice) );
+  if (DYNAMIC) TRY_CUDA( cudaMemcpy(delvD, delv.data(), ND * sizeof(K), cudaMemcpyHostToDevice) );
+  if (DYNAMIC) TRY_CUDA( cudaMemcpy(insuD, insu.data(), NI * sizeof(K), cudaMemcpyHostToDevice) );
   // Perform PageRank algorithm on device.
   float ti = 0, tm = 0, tc = 0;
   float t  = measureDurationMarked([&](auto mark) {
@@ -420,12 +653,9 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
     ti += measureDuration([&]() {
       if (q && !ASYNC) copyValuesCuW(aD, rD, N);
       else   pagerankInitializeRanksCuW<ASYNC>(aD, rD, K(N), K(0), K(N));
-      TRY_CUDA( cudaDeviceSynchronize() );
     });
     // Mark initial affected vertices.
-    if (DYNAMIC) tm += mark([&]() { fm(vaff); });
-    if (DYNAMIC) gatherValuesW(vaffc, vaff, ks);
-    if (DYNAMIC) TRY_CUDA( cudaMemcpy(vaffD, vaffc.data(), N * sizeof(F), cudaMemcpyHostToDevice) );
+    if (DYNAMIC) tm += mark([&]() { fm(vaffD, bufsD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, K(0), K(NL), K(N)); });
     // Perform PageRank iterations.
     tc += mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
   }, o.repeat);
@@ -441,7 +671,11 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaFree(aD) );
   TRY_CUDA( cudaFree(rD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(vaffD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(deluD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(delvD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(insuD) );
   TRY_CUDA( cudaFree(bufvD) );
+  TRY_CUDA( cudaFree(bufsD) );
   return {r, l, t, ti/o.repeat, tm/o.repeat, tc/o.repeat};
 }
 #pragma endregion
@@ -459,10 +693,15 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class V>
 inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const PagerankOptions<V>& o) {
-  if  (xt.empty()) return {};
+  using K = typename G::key_type;
+  using O = uint32_t;
+  using F = FLAG;
+  if (xt.empty()) return {};
+  vector<tuple<K, K>> deletions;
+  vector<tuple<K, K>> insertions;
   vector<V> *q = nullptr;
-  auto fm = [&](auto& vaff) {};
-  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, q, o, fm);
+  auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {};
+  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
 
@@ -480,9 +719,14 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const Pager
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class V>
 inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const vector<V> *q, const PagerankOptions<V>& o) {
-  if  (xt.empty()) return {};
-  auto fm = [&](auto& vaff) {};
-  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, q, o, fm);
+  using K = typename G::key_type;
+  using O = uint32_t;
+  using F = FLAG;
+  if (xt.empty()) return {};
+  vector<tuple<K, K>> deletions;
+  vector<tuple<K, K>> insertions;
+  auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {};
+  return pagerankInvokeCuda<false, false, false, ASYNC, FLAG>(x, xt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
 
@@ -504,9 +748,13 @@ inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  using O = uint32_t;
+  using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](auto& vaff) { pagerankAffectedTraversalOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, false, false, ASYNC, FLAG>(y, yt, q, o, fm);
+  auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
+    pagerankAffectedTraversalCuW(vaffD, bufsD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NM, NE);
+  };
+  return pagerankInvokeCuda<true, false, false, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
 
@@ -528,9 +776,13 @@ inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, c
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  using O = uint32_t;
+  using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](auto& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, true, false, ASYNC, FLAG>(y, yt, q, o, fm);
+  auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
+    pagerankAffectedFrontierCuW<true>(vaffD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NE);
+  };
+  return pagerankInvokeCuda<true, true, false, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
 
@@ -552,9 +804,13 @@ inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, co
  */
 template <bool ASYNC=false, class FLAG=char, class G, class H, class K, class V>
 inline PagerankResult<V> pagerankPruneDynamicFrontierCuda(const G& x, const H& xt, const G& y, const H& yt, const vector<tuple<K, K>>& deletions, const vector<tuple<K, K>>& insertions, const vector<V> *q, const PagerankOptions<V>& o) {
+  using O = uint32_t;
+  using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](auto& vaff) { pagerankAffectedFrontierOmpW(vaff, x, y, deletions, insertions); };
-  return pagerankInvokeCuda<true, true, true, ASYNC, FLAG>(y, yt, q, o, fm);
+  auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
+    pagerankAffectedFrontierCuW<true>(vaffD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NE);
+  };
+  return pagerankInvokeCuda<true, true, true, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
 #pragma endregion

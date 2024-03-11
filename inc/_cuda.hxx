@@ -556,6 +556,87 @@ inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
 
 
 
+#pragma region COUNT
+/**
+ * Count the number of times a given value appears in an array, from a thread [device function].
+ * @param x array to count in
+ * @param N size of array
+ * @param v value to count
+ * @param i start index
+ * @param DI index stride
+ * @returns count of v in x[i..DI..N]
+ */
+template <class TA=size_t, class TX, class TV>
+inline TA __device__ countValueThreadCud(const TX *x, size_t N, TV v, size_t i, size_t DI) {
+  ASSERT(x && DI);
+  TA a = TA();
+  for (; i<N; i+=DI)
+    a += x[i];
+  return a;
+}
+
+
+/**
+ * Count the number of times a given value appears in an array [kernel].
+ * @tparam CACHE size of shared memory cache
+ * @param a partial result array (output)
+ * @param x array to count in
+ * @param N size of array to count in
+ * @param v value to count
+ */
+template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class TA, class TX, class TV>
+void __global__ countValueCukW(TA *a, const TX *x, size_t N, TV v) {
+  ASSERT(a && x);
+  DEFINE_CUDA(t, b, B, G);
+  __shared__ TA cache[CACHE];
+  // Store per-thread sum in shared cache (for further reduction).
+  cache[t] = countValueThreadCud(x, N, v, B*b+t, G*B);
+  // Wait for all threads within the block to finish.
+  __syncthreads();
+  // Reduce the sum in the cache to a single value in reverse binary tree fashion.
+  sumValuesBlockReduceCudU(cache, B, t);
+  // Store this per-block sum into a partial result array.
+  if (t==0) a[b] = cache[0];
+}
+
+
+/**
+ * Count the number of times a given value appears in an array, using memcpy approach.
+ * @param a partial result array (output)
+ * @param x array to count in
+ * @param N size of array to count in
+ * @param v value to count
+ */
+template <class TA, class TX, class TV>
+inline void countValueMemcpyCuW(TA *a, const TX *x, size_t N, TV v) {
+  ASSERT(a && x);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  countValueCukW<<<G, B>>>(a, x, N, v);
+}
+
+
+/**
+ * Count the number of times a given value appears in an array, using inplace approach.
+ * @param a result array (output, a[0] is the result)
+ * @param x array to count in
+ * @param N size of array to count in
+ * @param v value to count
+ */
+template <class TA, class TX, class TV>
+inline void countValuesInplaceCuW(TA *a, const TX *x, size_t N, TV v) {
+  ASSERT(a && x);
+  const int B = blockSizeCu(N ,  BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  countValueCukW<<<G, B>>>(a, x, N, v);
+  TRY_CUDA( cudaDeviceSynchronize() );
+  sumValuesCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+}
+#pragma endregion
+
+
+
+
 #pragma region LI-NORM
 /**
  * Compute the L∞-norm of an array, from a thread [device function].
