@@ -1,12 +1,16 @@
 #pragma once
+#include <tuple>
 #include <vector>
+#include <unordered_map>
 #include <algorithm>
 #include "_main.hxx"
 #include "properties.hxx"
 #include "csr.hxx"
 #include "pagerank.hxx"
 
+using std::tuple;
 using std::vector;
+using std::unordered_map;
 using std::partition;
 
 
@@ -318,10 +322,17 @@ inline void pagerankAffectedFrontierThreadCuU(F *vaff, const O *xoff, const K *x
 template <class F, class O, class K>
 void __global__ pagerankAffectedFrontierBlockCukU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
   DEFINE_CUDA(t, b, B, G);
+  assert(vaff);
+  assert(xoff);
+  assert(xedg);
+  assert(!ND || delu);
+  assert(!ND || delv);
+  assert(!NI || insu);
   for (size_t i=b; i<ND+NI; i+=G) {
     K u = i<ND? delu[i] : insu[i-ND];
     K v = i<ND? delv[i] : K();
     if (i<ND) vaff[v] = F(1);
+    if (t==0) printf("pagerankAffectedFrontierBlockCukU(): i=%lld, u=%d, v=%d\n", i, u, v);
     pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, t, B);
   }
 }
@@ -342,6 +353,7 @@ template <class F, class O, class K>
 inline void pagerankAffectedFrontierBlockCuU(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
   const int B = blockSizeCu<true>(ND+NI, BLOCK_LIMIT_MAP_CUDA);
   const int G = gridSizeCu <true>(ND+NI, B, GRID_LIMIT_MAP_CUDA);
+  printf("pagerankAffectedFrontierBlockCuU(): ND=%zu, NI=%zu\n", ND, NI);
   pagerankAffectedFrontierBlockCukU<<<G, B>>>(vaff, xoff, xedg, delu, delv, insu, ND, NI);
 }
 
@@ -362,8 +374,10 @@ inline void pagerankAffectedFrontierBlockCuU(F *vaff, const O *xoff, const K *xe
 template <bool BLOCK=false, class F, class O, class K>
 inline void pagerankAffectedFrontierCuW(F *vaff, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, size_t NB, size_t NE) {
   fillValueCuW(vaff+NB, NE-NB, F());
+  TRY_CUDA( cudaDeviceSynchronize() );
   if (BLOCK) pagerankAffectedFrontierBlockCuU (vaff, xoff, xedg, delu, delv, insu, ND, NI);
   else       pagerankAffectedFrontierThreadCuU(vaff, xoff, xedg, delu, delv, insu, ND, NI);
+  TRY_CUDA( cudaDeviceSynchronize() );
 }
 #pragma endregion
 
@@ -455,14 +469,20 @@ inline void pagerankAffectedExtendBlockCuU(F *vaff, const O *xoff, const K *xedg
  */
 template <class F, class O, class K>
 inline void pagerankAffectedTraversalCuW(F *vaff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NM, K NE) {
+  assert(xoff);
   uint64_cu count = 0, countNew = 0;
-  pagerankAffectedFrontierCuW(vaff, xoff, xedg, delu, delv, insu, ND, NI, NB, NE);
+  pagerankAffectedFrontierCuW<true>(vaff, xoff, xedg, delu, delv, insu, ND, NI, NB, NE);
+  TRY_CUDA( cudaDeviceSynchronize() );
   countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
+  TRY_CUDA( cudaDeviceSynchronize() );
   TRY_CUDA( cudaMemcpy(&count, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
   while (true) {
     pagerankAffectedExtendThreadCuU(vaff, xoff, xedg, NB, NM);
+    TRY_CUDA( cudaDeviceSynchronize() );
     pagerankAffectedExtendBlockCuU (vaff, xoff, xedg, NM, NE);
+    TRY_CUDA( cudaDeviceSynchronize() );
     countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
+    TRY_CUDA( cudaDeviceSynchronize() );
     TRY_CUDA( cudaMemcpy(&countNew, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
     if (countNew==count) break;
     count = countNew;
@@ -585,10 +605,8 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   vector<V> r(S), rc(N), qc(N);
   vector<F> vaff, vaffc;
   vector<K> delu(ND), delv(ND), insu(NI);
-  if (FRONTIER) xoff.resize(N+1);
-  if (FRONTIER) xedg.resize(M);
-  // if (DYNAMIC) vaff.resize(S);
-  // if (DYNAMIC) vaffc.resize(N);
+  if (DYNAMIC) xoff.resize(N+1);
+  if (DYNAMIC) xedg.resize(M);
   O *xoffD  = nullptr;
   K *xedgD  = nullptr;
   O *xtoffD = nullptr;
@@ -606,25 +624,29 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   vector<K> ks = vertexKeys(xt);
   K NL = pagerankPartitionVerticesCudaU(ks, xt);
   // Obtain data for CSR.
-  if (FRONTIER) csrCreateOffsetsW (xoff,  x,  ks);
-  if (FRONTIER) csrCreateEdgeKeysW(xedg,  x,  ks);
+  if (DYNAMIC) csrCreateOffsetsW (xoff,  x,  ks);
+  if (DYNAMIC) csrCreateEdgeKeysW(xedg,  x,  ks);
   csrCreateOffsetsW (xtoff, xt, ks);
   csrCreateEdgeKeysW(xtedg, xt, ks);
   csrCreateVertexValuesW(xtdat, xt, ks);
   // Obtain initial ranks.
   if (q) gatherValuesW(qc, *q, ks);
   // Obtain batch update data.
+  unordered_map<K, K> ksMap;
+  for (K i=0; i<ks.size(); ++i)
+    ksMap[ks[i]] = K(i);
   for (size_t i=0; i<ND; ++i) {
-    delu[i] = get<0>(deletions[i]);
-    delv[i] = get<1>(deletions[i]);
+    delu[i] = ksMap[get<0>(deletions[i])];
+    delv[i] = ksMap[get<1>(deletions[i])];
   }
   for (size_t i=0; i<NI; ++i) {
-    insu[i] = get<0>(insertions[i]);
+    insu[i] = ksMap[get<0>(insertions[i])];
   }
+  ksMap.clear();
   // Allocate device memory.
   TRY_CUDA( cudaSetDeviceFlags(cudaDeviceMapHost) );
-  if (FRONTIER) TRY_CUDA( cudaMalloc(&xoffD,  (N+1) * sizeof(O)) );
-  if (FRONTIER) TRY_CUDA( cudaMalloc(&xedgD,   M    * sizeof(K)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&xoffD,  (N+1) * sizeof(O)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&xedgD,   M    * sizeof(K)) );
   TRY_CUDA( cudaMalloc(&xtoffD, (N+1) * sizeof(O)) );
   TRY_CUDA( cudaMalloc(&xtedgD,  M    * sizeof(K)) );
   TRY_CUDA( cudaMalloc(&xtdatD,  N    * sizeof(K)) );
@@ -637,8 +659,8 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaMalloc(&bufvD, R * sizeof(V)) );
   TRY_CUDA( cudaMalloc(&bufsD, R * sizeof(uint64_cu)) );
   // Copy data to device.
-  if (FRONTIER) TRY_CUDA( cudaMemcpy(xoffD,  xoff .data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
-  if (FRONTIER) TRY_CUDA( cudaMemcpy(xedgD,  xedg .data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
+  if (DYNAMIC) TRY_CUDA( cudaMemcpy(xoffD,  xoff .data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
+  if (DYNAMIC) TRY_CUDA( cudaMemcpy(xedgD,  xedg .data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtoffD, xtoff.data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtedgD, xtedg.data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
   TRY_CUDA( cudaMemcpy(xtdatD, xtdat.data(),  N    * sizeof(K), cudaMemcpyHostToDevice) );
@@ -653,6 +675,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
     ti += measureDuration([&]() {
       if (q && !ASYNC) copyValuesCuW(aD, rD, N);
       else   pagerankInitializeRanksCuW<ASYNC>(aD, rD, K(N), K(0), K(N));
+      TRY_CUDA( cudaDeviceSynchronize() );
     });
     // Mark initial affected vertices.
     if (DYNAMIC) tm += mark([&]() { fm(vaffD, bufsD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, K(0), K(NL), K(N)); });
@@ -663,8 +686,8 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaMemcpy(rc.data(), rD, N * sizeof(V), cudaMemcpyDeviceToHost) );
   scatterValuesW(r, rc, ks);
   // Free device memory.
-  if (FRONTIER) TRY_CUDA( cudaFree(xoffD) );
-  if (FRONTIER) TRY_CUDA( cudaFree(xedgD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(xoffD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(xedgD) );
   TRY_CUDA( cudaFree(xtoffD) );
   TRY_CUDA( cudaFree(xtedgD) );
   TRY_CUDA( cudaFree(xtdatD) );
@@ -752,7 +775,9 @@ inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, c
   using F = FLAG;
   if (xt.empty()) return {};
   auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
+    assert(xoffD);
     pagerankAffectedTraversalCuW(vaffD, bufsD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NM, NE);
+    TRY_CUDA( cudaDeviceSynchronize() );
   };
   return pagerankInvokeCuda<true, false, false, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
@@ -781,6 +806,7 @@ inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, co
   if (xt.empty()) return {};
   auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
     pagerankAffectedFrontierCuW<true>(vaffD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NE);
+    TRY_CUDA( cudaDeviceSynchronize() );
   };
   return pagerankInvokeCuda<true, true, false, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
@@ -809,6 +835,7 @@ inline PagerankResult<V> pagerankPruneDynamicFrontierCuda(const G& x, const H& x
   if (xt.empty()) return {};
   auto fm = [&](F *vaffD, uint64_cu *bufsD, O *xoffD, K *xedgD, K *deluD, K *delvD, K *insuD, size_t ND, size_t NI, K NB, K NM, K NE) {
     pagerankAffectedFrontierCuW<true>(vaffD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, NB, NE);
+    TRY_CUDA( cudaDeviceSynchronize() );
   };
   return pagerankInvokeCuda<true, true, true, ASYNC, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
