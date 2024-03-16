@@ -87,11 +87,12 @@ inline void __device__ pagerankMarkNeighborsCudU(F *vaff, const O *xoff, const K
  * @param C prune tolerance
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
-void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
+void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vafe, const F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
   V et = V();
   for (K v=NB+B*b+t; v<NE; v+=G*B) {
     if (DYNAMIC && !vaff[v]) continue;  // Skip unaffected vertices
+    if (!ASYNC  && FRONTIER) vafe[v] = F(1);
     // Update rank for vertex v.
     K d  = xtdat[v];
     V rv = r[v];
@@ -100,10 +101,10 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *x
     a[v] = av;
     const auto ev = abs(av - rv);
     if (ASYNC) et = max(et, ev);
-    if (PRUNE && ev/max(rv, av) <= C) vaff[v] = F();
+    if (ASYNC && PRUNE && ev/max(rv, av) <= C) vafe[v] = F();
     if (!FRONTIER || ev/max(rv, av) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
-    pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, 0, 1);
+    pagerankMarkNeighborsCudU(vafe, xoff, xedg, v, 0, 1);
   }
   if (ASYNC && et>E && !updt[0]) updt[0] = F(1);
 }
@@ -133,10 +134,10 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vaff, F *updt, const O *x
  * @param C prune tolerance
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
-inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
+inline void pagerankUpdateRanksThreadCuU(V *a, F *vafe, const F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   const int B = blockSizeCu(NE-NB, 512);
   const int G = gridSizeCu (NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankUpdateRanksThreadCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
+  pagerankUpdateRanksThreadCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
 }
 
 
@@ -165,12 +166,13 @@ inline void pagerankUpdateRanksThreadCuU(V *a, F *vaff, F *updt, const O *xoff, 
  * @param C prune tolerance
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class O, class K, class V, class F>
-void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
+void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vafe, const F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
   __shared__ V cache[CACHE];
   V eb = V();
   for (K v=NB+b; v<NE; v+=G) {
     if (DYNAMIC && !vaff[v]) continue;  // Skip unaffected vertices
+    if (!ASYNC  && FRONTIER) vafe[v] = F(1);
     // Update rank for vertex v.
     K d  = xtdat[v];
     V rv = r[v];
@@ -182,10 +184,10 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xo
     if (t==0) a[v] = av;
     const auto ev = abs(av - rv);
     if (ASYNC && t==0) eb = max(eb, ev);
-    if (PRUNE && ev/max(rv, av) <= C) vaff[v] = F();
+    if (ASYNC && PRUNE && ev/max(rv, av) <= C) vafe[v] = F();
     if (!FRONTIER || ev/max(rv, av) <= D) continue;
     // Mark neighbors as affected, if rank change significant.
-    pagerankMarkNeighborsCudU(vaff, xoff, xedg, v, t, B);
+    pagerankMarkNeighborsCudU(vafe, xoff, xedg, v, t, B);
   }
   if (ASYNC && t==0 && eb>E && !updt[0]) updt[0] = F(1);
 }
@@ -215,10 +217,10 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vaff, F *updt, const O *xo
  * @param C prune tolerance
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
-inline void pagerankUpdateRanksBlockCuU(V *a, F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
+inline void pagerankUpdateRanksBlockCuU(V *a, F *vafe, const F *vaff, F *updt, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K NB, K NE, const V *r, V C0, V P, V E, V D, V C) {
   const int B = blockSizeCu<true>(NE-NB, BLOCK_LIMIT_REDUCE_CUDA);
   const int G = gridSizeCu <true>(NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankUpdateRanksBlockCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
+  pagerankUpdateRanksBlockCukU<DYNAMIC, FRONTIER, PRUNE, ASYNC><<<G, B>>>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NE, r, C0, P, E, D, C);
 }
 #pragma endregion
 
@@ -530,19 +532,21 @@ inline K pagerankPartitionVerticesCudaU(vector<K>& ks, const H& xt) {
  * @returns number of iterations performed
  */
 template <bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, bool ASYNC=false, class O, class K, class V, class F>
-inline int pagerankLoopCuU(V *a, V *r, F *vaff, V *bufv, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K N, K NB, K NM, K NE, V P, V E, int L, V D, V C) {
+inline int pagerankLoopCuU(V *a, V *r, F *vafe, F *vaff, V *bufv, const O *xoff, const K *xedg, const O *xtoff, const K *xtdat, const K *xtedg, K N, K NB, K NM, K NE, V P, V E, int L, V D, V C) {
   int l = 0;
   V  el = V();
   V  C0 = (1-P)/N;
   F *updt  = (F*) bufv;
   F  updtH = F();
   while (l<L) {
-    if ( ASYNC) fillValueCuW(updt, 1, F());  // Reset vertices under update flag
-    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D, C);
-    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D, C); ++l;
+    if ( ASYNC) fillValueCuW(updt, 1, F());              // Reset vertices under update flag
+    if (!ASYNC && FRONTIER) fillValueCuW(vafe, N, F());  // Reset vertex affected flags
+    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D, C);
+    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D, C); ++l;
     if ( ASYNC) TRY_CUDA( cudaMemcpy(&updtH, updt, sizeof(F), cudaMemcpyDeviceToHost) );
     if (!ASYNC) liNormDeltaInplaceCuW(bufv, a, r, N);  // Compare previous and current ranks
     if (!ASYNC) TRY_CUDA( cudaMemcpy(&el, bufv, sizeof(V), cudaMemcpyDeviceToHost) );
+    if (!ASYNC && FRONTIER) swap(vafe, vaff);
     if (!ASYNC) swap(a, r);  // Final ranks in (r)
     if (ASYNC) { if (!updtH) break; }  // Check convergence
     else       { if (el<E)   break; }
@@ -587,7 +591,6 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   vector<K> xoff, xedg;
   vector<K> xtoff(N+1), xtedg(M), xtdat(N);
   vector<V> r(S), rc(N), qc(N);
-  vector<F> vaff, vaffc;
   vector<K> delu(ND), delv(ND), insu(NI);
   if (DYNAMIC) xoff.resize(N+1);
   if (DYNAMIC) xedg.resize(M);
@@ -598,6 +601,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   K *xtdatD = nullptr;
   V *aD     = nullptr;
   V *rD     = nullptr;
+  F *vafeD  = nullptr;
   F *vaffD  = nullptr;
   K *deluD  = nullptr;
   K *delvD  = nullptr;
@@ -636,6 +640,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaMalloc(&xtdatD,  N    * sizeof(K)) );
   TRY_CUDA( cudaMalloc(&aD,    N * sizeof(V)) );
   TRY_CUDA( cudaMalloc(&rD,    N * sizeof(V)) );
+  if (DYNAMIC) TRY_CUDA( cudaMalloc(&vafeD, N * sizeof(F)) );
   if (DYNAMIC) TRY_CUDA( cudaMalloc(&vaffD, N * sizeof(F)) );
   if (DYNAMIC) TRY_CUDA( cudaMalloc(&deluD, ND * sizeof(K)) );
   if (DYNAMIC) TRY_CUDA( cudaMalloc(&delvD, ND * sizeof(K)) );
@@ -663,7 +668,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
     // Mark initial affected vertices.
     if (DYNAMIC) tm += mark([&]() { fm(vaffD, bufsD, xoffD, xedgD, deluD, delvD, insuD, ND, NI, K(0), K(NL), K(N)); });
     // Perform PageRank iterations.
-    tc += mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(ASYNC? rD : aD, rD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
+    tc += mark([&]() { l = pagerankLoopCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(ASYNC? rD : aD, rD, ASYNC? vaffD : vafeD, vaffD, bufvD, xoffD, xedgD, xtoffD, xtdatD, xtedgD, K(N), K(0), K(NL), K(N), P, E, L, D, C); });
   }, o.repeat);
   // Obtain final ranks.
   TRY_CUDA( cudaMemcpy(rc.data(), rD, N * sizeof(V), cudaMemcpyDeviceToHost) );
@@ -676,6 +681,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   TRY_CUDA( cudaFree(xtdatD) );
   TRY_CUDA( cudaFree(aD) );
   TRY_CUDA( cudaFree(rD) );
+  if (DYNAMIC) TRY_CUDA( cudaFree(vafeD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(vaffD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(deluD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(delvD) );
