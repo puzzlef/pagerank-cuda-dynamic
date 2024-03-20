@@ -103,8 +103,8 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *vafe, const F *vaff, F *u
     if (ASYNC) et = max(et, ev);
     if (ASYNC && PRUNE && ev/max(rv, av) <= C) vafe[v] = F();
     if (!FRONTIER || ev/max(rv, av) <= D) continue;
-    // Mark neighbors as affected, if rank change significant.
-    pagerankMarkNeighborsCudU(vafe, xoff, xedg, v, 0, 1);
+    // Mark neighbors as affected (lazy), if rank change significant.
+    vafe[v] = F(1);
   }
   if (ASYNC && et>E && !updt[0]) updt[0] = F(1);
 }
@@ -186,8 +186,8 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *vafe, const F *vaff, F *up
     if (ASYNC && t==0) eb = max(eb, ev);
     if (ASYNC && PRUNE && ev/max(rv, av) <= C) vafe[v] = F();
     if (!FRONTIER || ev/max(rv, av) <= D) continue;
-    // Mark neighbors as affected, if rank change significant.
-    pagerankMarkNeighborsCudU(vafe, xoff, xedg, v, t, B);
+    // Mark neighbors as affected (lazy), if rank change significant.
+    vafe[v] = F(1);
   }
   if (ASYNC && t==0 && eb>E && !updt[0]) updt[0] = F(1);
 }
@@ -386,11 +386,12 @@ inline void pagerankAffectedFrontierCuW(F *vaff, const O *xoff, const K *xedg, c
  * @param NE end vertex (exclusive)
  */
 template <class F, class O, class K>
-void __global__ pagerankAffectedExtendThreadCukU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+void __global__ pagerankAffectedExtendThreadCukU(F *vafe, const F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
   DEFINE_CUDA(t, b, B, G);
   for (K u=NB+B*b+t; u<NE; u+=G*B) {
-    if (!vaff[u]) continue;
-    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, 0, 1);
+    size_t EN = xoff[u+1] - xoff[u];
+    if (!vaff[u] || EN>64) continue;
+    pagerankMarkNeighborsCudU(vafe, xoff, xedg, u, 0, 1);
   }
 }
 
@@ -404,10 +405,10 @@ void __global__ pagerankAffectedExtendThreadCukU(F *vaff, const O *xoff, const K
  * @param NE end vertex (exclusive)
  */
 template <class F, class O, class K>
-inline void pagerankAffectedExtendThreadCuU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+inline void pagerankAffectedExtendThreadCuU(F *vafe, const F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
   const int B = blockSizeCu(NE-NB, BLOCK_LIMIT_MAP_CUDA);
   const int G = gridSizeCu (NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankAffectedExtendThreadCukU<<<G, B>>>(vaff, xoff, xedg, NB, NE);
+  pagerankAffectedExtendThreadCukU<<<G, B>>>(vafe, vaff, xoff, xedg, NB, NE);
 }
 
 
@@ -420,11 +421,12 @@ inline void pagerankAffectedExtendThreadCuU(F *vaff, const O *xoff, const K *xed
  * @param NE end vertex (exclusive)
  */
 template <class F, class O, class K>
-void __global__ pagerankAffectedExtendBlockCukU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+void __global__ pagerankAffectedExtendBlockCukU(F *vafe, const F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
   DEFINE_CUDA(t, b, B, G);
   for (K u=NB+b; u<NE; u+=G) {
-    if (!vaff[u]) continue;
-    pagerankMarkNeighborsCudU(vaff, xoff, xedg, u, t, B);
+    size_t EN = xoff[u+1] - xoff[u];
+    if (!vaff[u] || EN<=64) continue;
+    pagerankMarkNeighborsCudU(vafe, xoff, xedg, u, t, B);
   }
 }
 
@@ -438,10 +440,10 @@ void __global__ pagerankAffectedExtendBlockCukU(F *vaff, const O *xoff, const K 
  * @param NE end vertex (exclusive)
  */
 template <class F, class O, class K>
-inline void pagerankAffectedExtendBlockCuU(F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
+inline void pagerankAffectedExtendBlockCuU(F *vafe, const F *vaff, const O *xoff, const K *xedg, K NB, K NE) {
   const int B = blockSizeCu<true>(NE-NB, BLOCK_LIMIT_MAP_CUDA);
   const int G = gridSizeCu <true>(NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankAffectedExtendBlockCukU<<<G, B>>>(vaff, xoff, xedg, NB, NE);
+  pagerankAffectedExtendBlockCukU<<<G, B>>>(vafe, vaff, xoff, xedg, NB, NE);
 }
 
 
@@ -466,8 +468,8 @@ inline void pagerankAffectedTraversalCuW(F *vaff, uint64_cu* bufs, const O *xoff
   countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
   TRY_CUDA( cudaMemcpy(&count, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
   while (true) {
-    pagerankAffectedExtendThreadCuU(vaff, xoff, xedg, NB, NM);
-    pagerankAffectedExtendBlockCuU (vaff, xoff, xedg, NM, NE);
+    pagerankAffectedExtendThreadCuU(vaff, vaff, xoff, xedg, NB, NM);
+    pagerankAffectedExtendBlockCuU (vaff, vaff, xoff, xedg, NM, NE);
     countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
     TRY_CUDA( cudaMemcpy(&countNew, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
     if (countNew==count) break;
@@ -541,12 +543,14 @@ inline int pagerankLoopCuU(V *a, V *r, F *vafe, F *vaff, V *bufv, const O *xoff,
   while (l<L) {
     if ( ASYNC) fillValueCuW(updt, 1, F());              // Reset vertices under update flag
     if (!ASYNC && FRONTIER) fillValueCuW(vafe, N, F());  // Reset vertex affected flags
-    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D, C);
-    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D, C); ++l;
+    pagerankUpdateRanksThreadCuU<DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, ASYNC? vaff : vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NB, NM, r, C0, P, E, D, C);
+    pagerankUpdateRanksBlockCuU <DYNAMIC, FRONTIER, PRUNE, ASYNC>(a, ASYNC? vaff : vafe, vaff, updt, xoff, xedg, xtoff, xtdat, xtedg, NM, NE, r, C0, P, E, D, C); ++l;
     if ( ASYNC) TRY_CUDA( cudaMemcpy(&updtH, updt, sizeof(F), cudaMemcpyDeviceToHost) );
     if (!ASYNC) liNormDeltaInplaceCuW(bufv, a, r, N);  // Compare previous and current ranks
     if (!ASYNC) TRY_CUDA( cudaMemcpy(&el, bufv, sizeof(V), cudaMemcpyDeviceToHost) );
-    if (!ASYNC && FRONTIER) swap(vafe, vaff);
+    if (!ASYNC && FRONTIER) pagerankAffectedExtendThreadCuU(vaff, vafe, xoff, xedg, NB, NM);
+    if (!ASYNC && FRONTIER) pagerankAffectedExtendBlockCuU (vaff, vafe, xoff, xedg, NM, NE);
+    // if (!ASYNC && FRONTIER) swap(vafe, vaff);
     if (!ASYNC) swap(a, r);  // Final ranks in (r)
     if (ASYNC) { if (!updtH) break; }  // Check convergence
     else       { if (el<E)   break; }
