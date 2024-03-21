@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cuda_runtime.h>
+#include <cub/cub.cuh>
 #include "_debug.hxx"
 #include "_cmath.hxx"
 
@@ -636,6 +637,76 @@ inline void countValuesInplaceCuW(TA *a, const TX *x, size_t N, TV v) {
 
 
 
+#pragma region TEST LESS OR EQUAL
+/**
+ * Test if each value in an array is less than or equal to a given value, from a thread [device function].
+ * @param a result array (output)
+ * @param x array to test
+ * @param N size of array to test
+ * @param v value to test against
+ * @param i start index
+ * @param DI index stride
+ */
+template <class TA, class TX, class TV>
+inline void __device__ testLessOrEqualCudW(TA *a, const TX *x, size_t N, TV v, size_t i, size_t DI) {
+  ASSERT(a && x && DI);
+  for (; i<N; i+=DI)
+    a[i] = x[i] <= v;
+}
+
+
+/**
+ * Test if each value in an array is less than or equal to a given value [kernel].
+ * @param a result array (output)
+ * @param x array to test
+ * @param N size of array to test
+ * @param v value to test against
+ */
+template <class TA, class TX, class TV>
+void __global__ testLessOrEqualCukW(TA *a, const TX *x, size_t N, TV v) {
+  ASSERT(a && x);
+  DEFINE_CUDA(t, b, B, G);
+  testLessOrEqualCudW(a, x, N, v, B*b+t, G*B);
+}
+#pragma endregion
+
+
+
+#pragma region TEST GREATER
+/**
+ * Test if each value in an array is greater than a given value, from a thread [device function].
+ * @param a result array (output)
+ * @param x array to test
+ * @param N size of array to test
+ * @param v value to test against
+ * @param i start index
+ * @param DI index stride
+ */
+template <class TA, class TX, class TV>
+inline void __device__ testGreaterCudW(TA *a, const TX *x, size_t N, TV v, size_t i, size_t DI) {
+  ASSERT(a && x && DI);
+  for (; i<N; i+=DI)
+    a[i] = x[i] > v;
+}
+
+
+/**
+ * Test if each value in an array is greater than a given value [kernel].
+ * @param a result array (output)
+ * @param x array to test
+ * @param N size of array to test
+ * @param v value to test against
+ */
+template <class TA, class TX, class TV>
+void __global__ testGreaterCukW(TA *a, const TX *x, size_t N, TV v) {
+  ASSERT(a && x);
+  DEFINE_CUDA(t, b, B, G);
+  testGreaterCudW(a, x, N, v, B*b+t, G*B);
+}
+#pragma endregion
+
+
+
 
 #pragma region LI-NORM
 /**
@@ -809,5 +880,73 @@ inline void liNormDeltaInplaceCuW(T *a, const T *x, const T *y, size_t N) {
   TRY_CUDA( cudaDeviceSynchronize() );
   liNormCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
+#pragma endregion
+
+
+
+
+#pragma region INCLUSIVE SCAN
+/**
+ * Perform inclusive scan of an array into another array.
+ * @param a output array (updated)
+ * @param buf temporary buffer (output)
+ * @param x input array
+ * @param N size of arrays
+ * @param B size of temporary buffer
+ */
+template <class TA, class TX>
+inline void inclusiveScanCubW(TA *a, TA *buf, const TX *x, size_t N, size_t B) {
+  cub::DeviceScan::InclusiveSum(buf, B, x, a, N);
+}
+
+
+#if 0
+/**
+ * Perform inclusive scan of an array into another array.
+ * @param a output array (updated)
+ * @param x input array
+ * @param N size of arrays
+ */
+template <class TA, class TX>
+inline void inclusiveScanThrustW(TA *a, const TX *x, size_t N) {
+  thrust::device_ptr<TA> aD(a);
+  thrust::device_ptr<TX> xD((TX*) x);
+  thrust::inclusive_scan(xD, xD+N, aD);
+}
+#pragma endregion
+#endif
+
+
+
+
+#pragma region EXCLUSIVE SCAN
+/**
+ * Perform exclusive scan of an array into another array.
+ * @param a output array (updated)
+ * @param buf temporary buffer (output)
+ * @param x input array
+ * @param N size of arrays
+ * @param B size of temporary buffer
+ */
+template <class TA, class TX>
+inline void exclusiveScanCubW(TA *a, TA *buf, const TX *x, size_t N, size_t B) {
+  cub::DeviceScan::ExclusiveSum(buf, B, x, a, N);
+}
+
+
+#if 0
+/**
+ * Perform exclusive scan of an array into another array.
+ * @param a output array (updated)
+ * @param x input array
+ * @param N size of arrays
+ */
+template <class TA, class TX>
+inline void exclusiveScanThrustW(TA *a, const TX *x, size_t N) {
+  thrust::device_ptr<TA> aD(a);
+  thrust::device_ptr<TX> xD((TX*) x);
+  thrust::exclusive_scan(xD, xD+N, aD);
+}
+#endif
 #pragma endregion
 #pragma endregion
