@@ -87,7 +87,6 @@ inline void __device__ pagerankMarkNeighborsCudU(F *vaff, const O *xoff, const K
 template <bool PARTITION=false, bool DYNAMIC=false, bool FRONTIER=false, bool PRUNE=false, class O, class K, class V, class F>
 void __global__ pagerankUpdateRanksThreadCukU(V *a, F *naff, F *vaff, const V *r, const O *xtoff, const K *xtdat, const K *xtedg, const K *xtpar, K NB, K NE, V C0, V P, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
-  V et = V();
   for (K i=NB+B*b+t; i<NE; i+=G*B) {
     K v = PARTITION? xtpar[i] : i;
     size_t EN = xtoff[v+1] - xtoff[v];
@@ -161,7 +160,6 @@ template <bool PARTITION=false, bool DYNAMIC=false, bool FRONTIER=false, bool PR
 void __global__ pagerankUpdateRanksBlockCukU(V *a, F *naff, F *vaff, const V *r, const O *xtoff, const K *xtdat, const K *xtedg, const K *xtpar, K NB, K NE, V C0, V P, V D, V C) {
   DEFINE_CUDA(t, b, B, G);
   __shared__ V cache[CACHE];
-  V eb = V();
   for (K i=NB+b; i<NE; i+=G) {
     K v = PARTITION? xtpar[i] : i;
     size_t EN = xtoff[v+1] - xtoff[v];
@@ -208,7 +206,7 @@ template <bool PARTITION=false, bool DYNAMIC=false, bool FRONTIER=false, bool PR
 inline void pagerankUpdateRanksBlockCuU(V *a, F *naff, F *vaff, const V *r, const O *xtoff, const K *xtdat, const K *xtedg, const K *xtpar, K NB, K NE, V C0, V P, V D, V C) {
   const int B = blockSizeCu<true>(NE-NB, BLOCK_LIMIT_REDUCE_CUDA);
   const int G = gridSizeCu <true>(NE-NB, B, GRID_LIMIT_MAP_CUDA);
-  pagerankUpdateRanksBlockCukU<PARTITION, DYNAMIC, FRONTIER, PRUNE><<<G, B>>>(a, naff, vaff, r, updt, xtoff, xtdat, xtedg, xtpar, NB, NE, C0, P, D, C);
+  pagerankUpdateRanksBlockCukU<PARTITION, DYNAMIC, FRONTIER, PRUNE><<<G, B>>>(a, naff, vaff, r, xtoff, xtdat, xtedg, xtpar, NB, NE, C0, P, D, C);
 }
 #pragma endregion
 
@@ -264,7 +262,7 @@ inline void pagerankInitializeRanksCuW(V *a, V *r, K N, K NB, K NE) {
  * @param ND number of edge deletions
  * @param NI number of edge insertions
  */
-template <class F, class O, class K>
+template <class K, class F>
 void __global__ pagerankAffectedFrontierPartialCukU(F *naff, F *vaff, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
   DEFINE_CUDA(t, b, B, G);
   for (size_t i=B*b+t; i<ND+NI; i+=G*B) {
@@ -286,7 +284,7 @@ void __global__ pagerankAffectedFrontierPartialCukU(F *naff, F *vaff, const K *d
  * @param ND number of edge deletions
  * @param NI number of edge insertions
  */
-template <class F, class O, class K>
+template <class K, class F>
 inline void pagerankAffectedFrontierPartialCuU(F *naff, F *vaff, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI) {
   const int B = blockSizeCu(ND+NI, BLOCK_LIMIT_MAP_CUDA);
   const int G = gridSizeCu (ND+NI, B, GRID_LIMIT_MAP_CUDA);
@@ -669,8 +667,8 @@ inline int pagerankLoopCuU(V *a, V *r, F *naff, F *vaff, V *bufv, const O *xoff,
   V  C0 = (1-P)/N;
   while (l<L) {
     if (FRONTIER) fillValueCuW(naff, N, F());
-    pagerankUpdateRanksThreadCuU<PARTITION, DYNAMIC, FRONTIER, PRUNE>(a, naff, vaff, r, xtoff, xtdat, xtedg, xtpar, NB, PARTITION? NQ : NE, C0, P, E, D, C);
-    pagerankUpdateRanksBlockCuU <PARTITION, DYNAMIC, FRONTIER, PRUNE>(a, naff, vaff, r, xtoff, xtdat, xtedg, xtpar, PARTITION? NQ : NB, NE, C0, P, E, D, C); ++l;
+    pagerankUpdateRanksThreadCuU<PARTITION, DYNAMIC, FRONTIER, PRUNE>(a, naff, vaff, r, xtoff, xtdat, xtedg, xtpar, NB, PARTITION? NQ : NE, C0, P, D, C);
+    pagerankUpdateRanksBlockCuU <PARTITION, DYNAMIC, FRONTIER, PRUNE>(a, naff, vaff, r, xtoff, xtdat, xtedg, xtpar, PARTITION? NQ : NB, NE, C0, P, D, C); ++l;
     liNormDeltaInplaceCuW(bufv, a, r, N);  // Compare previous and current ranks
     TRY_CUDA( cudaMemcpy(&el, bufv, sizeof(V), cudaMemcpyDeviceToHost) );
     if (FRONTIER) pagerankAffectedExtendThreadCuU<PARTITION>(vaff, naff, xoff, xedg, xpar, NB, PARTITION? NP : NE);
@@ -792,13 +790,13 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   if (DYNAMIC) TRY_CUDA( cudaMemcpy(delvD, delv.data(), ND * sizeof(K), cudaMemcpyHostToDevice) );
   if (DYNAMIC) TRY_CUDA( cudaMemcpy(insuD, insu.data(), NI * sizeof(K), cudaMemcpyHostToDevice) );
   // Perform PageRank algorithm on device.
-  float tp = 0, ti = 0, tm = 0, tc = 0;
+  float ti = 0, tm = 0, tc = 0;
   float t  = measureDurationMarked([&](auto mark) {
     // Partition vertices into low-degree and high-degree sets.
     if (q) TRY_CUDA( cudaMemcpy(rD, qc.data(), N * sizeof(V), cudaMemcpyHostToDevice) );
     ti += mark([&]() {
-      if (PARTITION) NQ = pagerankPartitionVerticesCuW(xtparD, bufkD, bufkxD, xtoffD, N);
-      if (DYNAMIC && PARTITION) NP = pagerankPartitionVerticesCuW(xparD, bufkD, bufkxD, xoffD, N);
+      if (PARTITION) NQ = pagerankPartitionVerticesCuW(xtparD, bufkD, bufkxD, xtoffD, K(N));
+      if (DYNAMIC && PARTITION) NP = pagerankPartitionVerticesCuW(xparD, bufkD, bufkxD, xoffD, K(N));
     });
     // Setup initial ranks.
     ti += mark([&]() {
