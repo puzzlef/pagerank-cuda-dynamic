@@ -907,7 +907,7 @@ inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, c
   using F = FLAG;
   if (xt.empty()) return {};
   auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
-    pagerankAffectedTraversalCuW<PARTITION>(vaff, naff, bufs, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
+    if (ND>0 || NI>0) pagerankAffectedTraversalCuW<PARTITION>(vaff, naff, bufs, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, false, false, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
@@ -936,7 +936,7 @@ inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, co
   using F = FLAG;
   if (xt.empty()) return {};
   auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
-    pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
+    if (ND>0 || NI>0) pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, true, false, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
@@ -965,7 +965,7 @@ inline PagerankResult<V> pagerankPruneDynamicFrontierCuda(const G& x, const H& x
   using F = FLAG;
   if (xt.empty()) return {};
   auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
-    pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
+    if (ND>0 || NI>0) pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, true, true, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
