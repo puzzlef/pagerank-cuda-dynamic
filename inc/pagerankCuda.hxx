@@ -616,12 +616,12 @@ inline K pagerankPartitionVerticesCuW(K *xpar, K *bufk, K *bufkx, const O *xoff,
   testDegreeLessOrEqualCuW(bufk, xoff, N, switchDegree);
   fillValueCuW(bufk+N, 1, K());
   exclusiveScanCubW(bufk, bufkx, bufk, N+1, N);
-  fillVerticesLessOrEqualCuW(xpar, xoff, bufkx, N, switchDegree);
+  fillVerticesLessOrEqualCuW(xpar, xoff, bufk, N, switchDegree);
   K NP = K();
   TRY_CUDA( cudaMemcpy(&NP, bufk+N, sizeof(K), cudaMemcpyDeviceToHost) );
   testDegreeGreaterCuW(bufk, xoff, N, switchDegree);
   exclusiveScanCubW(bufk, bufkx, bufk, N, N);
-  fillVerticesGreaterCuW(xpar+NP, xoff, bufkx, N, switchDegree);
+  fillVerticesGreaterCuW(xpar+NP, xoff, bufk, N, switchDegree);
   return NP;
 }
 #pragma endregion
