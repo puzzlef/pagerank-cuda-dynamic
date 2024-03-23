@@ -826,6 +826,8 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   if (DYNAMIC) TRY_CUDA( cudaFree(deluD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(delvD) );
   if (DYNAMIC) TRY_CUDA( cudaFree(insuD) );
+  if (PARTITION) TRY_CUDA( cudaFree(bufkD) );
+  if (PARTITION) TRY_CUDA( cudaFree(bufkxD) );
   TRY_CUDA( cudaFree(bufvD) );
   TRY_CUDA( cudaFree(bufsD) );
   return {r, l, t, ti/o.repeat, tm/o.repeat, tc/o.repeat};
