@@ -742,6 +742,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   K *bufkD  = nullptr;
   K *bufkxD = nullptr;
   V *bufvD  = nullptr;
+  F *buffD  = nullptr;
   uint64_cu* bufsD = nullptr;
   K NB = K(), NE = K(N);
   K NP = K(), NQ = K();
@@ -786,6 +787,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   if (PARTITION) TRY_CUDA( cudaMalloc(&bufkxD,  N    * sizeof(K)) );
   TRY_CUDA( cudaMalloc(&bufvD, R * sizeof(V)) );
   TRY_CUDA( cudaMalloc(&bufsD, R * sizeof(uint64_cu)) );
+  if (DYNAMIC && !FRONTIER) TRY_CUDA( cudaMalloc(&buffD,  N * sizeof(F)) );
   // Copy data to device.
   if (DYNAMIC) TRY_CUDA( cudaMemcpy(xoffD,  xoff .data(), (N+1) * sizeof(O), cudaMemcpyHostToDevice) );
   if (DYNAMIC) TRY_CUDA( cudaMemcpy(xedgD,  xedg .data(),  M    * sizeof(K), cudaMemcpyHostToDevice) );
@@ -810,7 +812,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
       else   pagerankInitializeRanksCuW(aD, rD, K(N), NB, NE);
     });
     // Mark initial affected vertices.
-    if (DYNAMIC) tm += mark([&]() { fm(vaffD, naffD, (F*) bufkD, bufsD, xoffD, xedgD, xparD, deluD, delvD, insuD, ND, NI, NB, NE, NP); });
+    if (DYNAMIC) tm += mark([&]() { fm(vaffD, naffD, buffD, bufsD, xoffD, xedgD, xparD, deluD, delvD, insuD, ND, NI, NB, NE, NP); });
     // Perform PageRank iterations.
     tc += mark([&]() { l = pagerankLoopCuU<PARTITION, DYNAMIC, FRONTIER, PRUNE>(aD, rD, naffD, vaffD, bufvD, xoffD, xedgD, xparD, xtoffD, xtdatD, xtedgD, xtparD, K(N), NB, NE, NP, NQ, P, E, L, D, C); });
   }, o.repeat);
@@ -836,6 +838,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
   if (PARTITION) TRY_CUDA( cudaFree(bufkxD) );
   TRY_CUDA( cudaFree(bufvD) );
   TRY_CUDA( cudaFree(bufsD) );
+  if (DYNAMIC && !FRONTIER) TRY_CUDA( cudaFree(buffD) );
   return {r, l, t, ti/o.repeat, tm/o.repeat, tc/o.repeat};
 }
 #pragma endregion
