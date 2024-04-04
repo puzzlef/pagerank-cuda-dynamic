@@ -171,10 +171,11 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *naff, F *vaff, const V *r,
     cache[t] = pagerankCalculateContribCud(xtoff, xtdat, xtedg, r, v, t, B);
     __syncthreads();
     sumValuesBlockReduceCudU(cache, B, t);
+    if (t!=0) continue;
     V cv = cache[0];
     V av = PRUNE? (C0 + P * (cv - rv/d)) * (1/(1-(P/d))) : C0 + P * cv;
-    if (t==0) a[v] = av;
-    const auto ev = abs(av - rv);
+    V ev = abs(av - rv);
+    a[v] = av;
     if (FRONTIER && PRUNE && ev/max(rv, av) <= C) vaff[v] = F();
     if (FRONTIER && ev/max(rv, av) > D)           naff[v] = F(1);
   }
