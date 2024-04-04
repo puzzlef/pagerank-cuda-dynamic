@@ -415,6 +415,7 @@ inline void pagerankAffectedFrontierCuW(F *vaff, F *naff, const O *xoff, const K
  * @tparam PARTITION is partitioning enabled?
  * @param vaff vertex affected flags (output)
  * @param naff neighbor affected flags (scratch)
+ * @param buff buffer for affected flags (scratch)
  * @param bufs buffer for temporary values (scratch)
  * @param xoff offsets of original graph
  * @param xedg edge keys of original graph
@@ -429,14 +430,18 @@ inline void pagerankAffectedFrontierCuW(F *vaff, F *naff, const O *xoff, const K
  * @param NP partition point of original graph
  */
 template <bool PARTITION=false, class F, class O, class K>
-inline void pagerankAffectedTraversalCuW(F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
+inline void pagerankAffectedTraversalCuW(F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
   uint64_cu count = 0, countNew = 0;
   pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
+  copyValuesCuW(naff, vaff, NE-NB);
   countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
   TRY_CUDA( cudaMemcpy(&count, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
   while (true) {
-    pagerankAffectedExtendThreadCuU<PARTITION>(vaff, vaff, xoff, xedg, xpar, NB, PARTITION? NP : NE);
-    pagerankAffectedExtendBlockCuU <PARTITION>(vaff, vaff, xoff, xedg, xpar, PARTITION? NP : NB, NE);
+    fillValueCuW(buff, NE-NB, F());
+    pagerankAffectedExtendThreadCuU<PARTITION>(buff, naff, xoff, xedg, xpar, NB, PARTITION? NP : NE);
+    pagerankAffectedExtendBlockCuU <PARTITION>(buff, naff, xoff, xedg, xpar, PARTITION? NP : NB, NE);
+    bitwiseOrCuW(vaff, vaff, buff, NE-NB);
+    swap(naff, buff);
     countValuesInplaceCuW(bufs, vaff, NE-NB, F(1));
     TRY_CUDA( cudaMemcpy(&countNew, bufs, sizeof(uint64_cu), cudaMemcpyDeviceToHost) );
     if (countNew==count) break;
@@ -805,7 +810,7 @@ inline PagerankResult<V> pagerankInvokeCuda(const G& x, const H& xt, const vecto
       else   pagerankInitializeRanksCuW(aD, rD, K(N), NB, NE);
     });
     // Mark initial affected vertices.
-    if (DYNAMIC) tm += mark([&]() { fm(vaffD, naffD, bufsD, xoffD, xedgD, xparD, deluD, delvD, insuD, ND, NI, NB, NE, NP); });
+    if (DYNAMIC) tm += mark([&]() { fm(vaffD, naffD, (F*) bufkD, bufsD, xoffD, xedgD, xparD, deluD, delvD, insuD, ND, NI, NB, NE, NP); });
     // Perform PageRank iterations.
     tc += mark([&]() { l = pagerankLoopCuU<PARTITION, DYNAMIC, FRONTIER, PRUNE>(aD, rD, naffD, vaffD, bufvD, xoffD, xedgD, xparD, xtoffD, xtdatD, xtedgD, xtparD, K(N), NB, NE, NP, NQ, P, E, L, D, C); });
   }, o.repeat);
@@ -856,7 +861,7 @@ inline PagerankResult<V> pagerankStaticCuda(const G& x, const H& xt, const Pager
   vector<tuple<K, K>> deletions;
   vector<tuple<K, K>> insertions;
   vector<V> *q = nullptr;
-  auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {};
+  auto fm = [&](F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {};
   return pagerankInvokeCuda<PARTITION, false, false, false, FLAG>(x, xt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
@@ -882,7 +887,7 @@ inline PagerankResult<V> pagerankNaiveDynamicCuda(const G& x, const H& xt, const
   if (xt.empty()) return {};
   vector<tuple<K, K>> deletions;
   vector<tuple<K, K>> insertions;
-  auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {};
+  auto fm = [&](F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {};
   return pagerankInvokeCuda<PARTITION, false, false, false, FLAG>(x, xt, deletions, insertions, q, o, fm);
 }
 #pragma endregion
@@ -909,8 +914,8 @@ inline PagerankResult<V> pagerankDynamicTraversalCuda(const G& x, const H& xt, c
   using O = uint32_t;
   using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
-    if (ND>0 || NI>0) pagerankAffectedTraversalCuW<PARTITION>(vaff, naff, bufs, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
+  auto fm = [&](F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
+    if (ND>0 || NI>0) pagerankAffectedTraversalCuW<PARTITION>(vaff, naff, buff, bufs, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, false, false, FLAG>(y, yt, deletions, insertions, q, o, fm);
 }
@@ -938,7 +943,7 @@ inline PagerankResult<V> pagerankDynamicFrontierCuda(const G& x, const H& xt, co
   using O = uint32_t;
   using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
+  auto fm = [&](F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
     if (ND>0 || NI>0) pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, true, false, FLAG>(y, yt, deletions, insertions, q, o, fm);
@@ -967,7 +972,7 @@ inline PagerankResult<V> pagerankPruneDynamicFrontierCuda(const G& x, const H& x
   using O = uint32_t;
   using F = FLAG;
   if (xt.empty()) return {};
-  auto fm = [&](F *vaff, F *naff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
+  auto fm = [&](F *vaff, F *naff, F *buff, uint64_cu* bufs, const O *xoff, const K *xedg, const K *xpar, const K *delu, const K *delv, const K *insu, size_t ND, size_t NI, K NB, K NE, K NP) {
     if (ND>0 || NI>0) pagerankAffectedFrontierCuW<PARTITION>(vaff, naff, xoff, xedg, xpar, delu, delv, insu, ND, NI, NB, NE, NP);
   };
   return pagerankInvokeCuda<PARTITION, true, true, true, FLAG>(y, yt, deletions, insertions, q, o, fm);

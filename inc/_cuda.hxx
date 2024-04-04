@@ -461,6 +461,58 @@ inline void fillValueCuW(T *a, size_t N, T v) {
 
 
 
+#pragma region BITWISE OR
+/**
+ * Perform a bitwise OR between two arrays [device function].
+ * @param a array to update (output)
+ * @param x first array
+ * @param y second array
+ * @param N size of arrays
+ * @param i start index
+ * @param DI index stride
+ */
+template <class T>
+inline void __device__ bitwiseOrCudW(T *a, const T *x, const T *y, size_t N, size_t i, size_t DI) {
+  ASSERT(a && x && y DI);
+  for (; i<N; i+=DI)
+    a[i] = x[i] | y[i];
+}
+
+
+/**
+ * Perform a bitwise OR between two arrays [kernel].
+ * @param a array to update (output)
+ * @param x first array
+ * @param y second array
+ * @param N size of arrays
+ */
+template <class T>
+void __global__ bitwiseOrCukW(T *a, const T *x, const T *y, size_t N) {
+  ASSERT(a && x && y);
+  DEFINE_CUDA(t, b, B, G);
+  bitwiseOrCudW(a, x, y, N, B*b+t, G*B);
+}
+
+
+/**
+ * Perform a bitwise OR between two arrays.
+ * @param a array to update (output)
+ * @param x first array
+ * @param y second array
+ * @param N size of arrays
+ */
+template <class T>
+inline void bitwiseOrCuW(T *a, const T *x, const T *y, size_t N) {
+  ASSERT(a && x && y);
+  const int B = blockSizeCu(N,   BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (N, B, GRID_LIMIT_MAP_CUDA);
+  bitwiseOrCukW<<<G, B>>>(a, x, y, N);
+}
+#pragma endregion
+
+
+
+
 #pragma region SUM
 /**
  * Compute the sum of values in an array, from a thread [device function].
