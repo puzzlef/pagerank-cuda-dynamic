@@ -91,7 +91,10 @@ void __global__ pagerankUpdateRanksThreadCukU(V *a, F *naff, F *vaff, const V *r
     K v = PARTITION? xtpar[i] : i;
     size_t EN = xtoff[v+1] - xtoff[v];
     if (!PARTITION && EN>64) continue;  // Skip high-degree vertices
-    if (DYNAMIC && !vaff[v]) continue;  // Skip unaffected vertices
+    if (DYNAMIC && !vaff[v]) {          // Skip unaffected vertices
+      a[v] = r[v];
+      continue;
+    }
     // Update rank for vertex v.
     K d  = xtdat[v];
     V rv = r[v];
@@ -164,7 +167,10 @@ void __global__ pagerankUpdateRanksBlockCukU(V *a, F *naff, F *vaff, const V *r,
     K v = PARTITION? xtpar[i] : i;
     size_t EN = xtoff[v+1] - xtoff[v];
     if (!PARTITION && EN<=64) continue;  // Skip low-degree vertices
-    if (DYNAMIC && !vaff[v])  continue;  // Skip unaffected vertices
+    if (DYNAMIC && !vaff[v]) {           // Skip unaffected vertices
+      if (t==0) a[v] = r[v];
+      continue;
+    }
     // Update rank for vertex v.
     K d  = xtdat[v];
     V rv = r[v];
