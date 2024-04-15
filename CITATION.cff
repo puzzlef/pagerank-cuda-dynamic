@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Sahu
+    given-names: Subhajit
+    orcid: https://orcid.org/0000-0001-5140-6578
+title: "Efficient GPU Implementation of Static and Incrementally Expanding DF-P PageRank for Dynamic Graphs"
+version: 1.0.0
+doi: 10.48550/arXiv.2404.08299
+date-released: 2024-04-12
